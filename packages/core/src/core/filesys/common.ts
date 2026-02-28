@@ -260,15 +260,16 @@ export class WorkspaceService {
         return Array.from(this.contributions.values());
     }
 
+    private static readonly DEFAULT_INDEXEDDB_FOLDER_NAME = 'My Folder';
+
     private async loadPersistedWorkspace(): Promise<void> {
         const raw = await persistenceService.getObject(LEGACY_WORKSPACE_KEY) as PersistedWorkspaceData | null;
         if (!raw) {
             this.workspace = Promise.resolve(undefined);
             this._currentWorkspace = undefined;
-            return;
         }
 
-        if (raw.folders && Array.isArray(raw.folders) && raw.folders.length > 0) {
+        if (raw?.folders && Array.isArray(raw.folders) && raw.folders.length > 0) {
             const normalized = raw.folders.map((f: { type: string; data: any }) => ({ type: f.type, data: f.data }));
             await this.resolveFolders(normalized);
             const composite = this.buildComposite();
@@ -280,7 +281,7 @@ export class WorkspaceService {
             return;
         }
 
-        if (raw.type && raw.data !== undefined) {
+        if (raw && raw.type && raw.data !== undefined) {
             const contribution = this.contributions.get(raw.type);
             if (contribution?.restore) {
                 try {
@@ -302,6 +303,14 @@ export class WorkspaceService {
         if (!this.workspace) {
             this.workspace = Promise.resolve(undefined);
             this._currentWorkspace = undefined;
+        }
+
+        if (this.folders.length === 0) {
+            try {
+                await this.connectFolder({ indexeddb: true, name: WorkspaceService.DEFAULT_INDEXEDDB_FOLDER_NAME });
+            } catch (e) {
+                console.warn('Failed to connect default IndexedDB folder', e);
+            }
         }
     }
 
