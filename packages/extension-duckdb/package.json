@@ -22,9 +22,9 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@duckdb/duckdb-wasm": "1.33.1-dev19.0",
     "@kispace-io/core": "*",
-    "@kispace-io/extension-monaco-editor": "*",
-    "@duckdb/duckdb-wasm": "^1.33.1-dev18.0"
+    "@kispace-io/extension-monaco-editor": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
