@@ -68,7 +68,7 @@ export interface DialogContribution extends Contribution {
 let dialogContainer: HTMLElement | null = null;
 
 function getDialogContainer(): HTMLElement {
-    if (!dialogContainer) {
+    if (!dialogContainer || !document.body.contains(dialogContainer)) {
         dialogContainer = document.createElement('div');
         dialogContainer.id = 'global-dialog-container';
         document.body.appendChild(dialogContainer);
