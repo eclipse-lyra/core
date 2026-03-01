@@ -4,6 +4,9 @@ import { EditorInput, editorRegistry, File } from "@kispace-io/core";
 import "./k-monaco-widget";
 
 editorRegistry.registerEditorInputHandler({
+    editorId: "system.monaco-editor",
+    label: "Code",
+    icon: "file-pen",
     lazyInit: async () => {
         await import('./k-monaco-editor');
     },
@@ -14,7 +17,6 @@ editorRegistry.registerEditorInputHandler({
             title: input.getName(),
             data: input,
             key: input.getName(),
-            editorId: "monaco-editor",
             icon: "file-pen",
             noOverflow: false,
             state: {},

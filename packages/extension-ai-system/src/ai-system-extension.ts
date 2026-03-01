@@ -48,10 +48,11 @@ contributionRegistry.registerContribution(TOOLBAR_BOTTOM, {
 } as HTMLContribution);
 
 editorRegistry.registerEditorInputHandler({
+    editorId: 'system.ai-config-editor',
+    label: 'AI Config',
     ranking: 1000,
     canHandle: (input: EditorInput) => input.key === '.system.ai-config',
     handle: async (input: EditorInput) => {
-        input.editorId = 'ai-config-editor';
         input.widgetFactory = () => html`<k-ai-config-editor .input="${input}"></k-ai-config-editor>`;
         return input;
     }

@@ -252,12 +252,18 @@ registerAll({
                 "name": "path",
                 "description": "The path of the file to open within the workspace; if omitted, the active selection is opened",
                 "required": false
+            },
+            {
+                "name": "editorId",
+                "description": "Open with this editor id; if omitted, use default editor",
+                "required": false
             }
         ]
     },
     handler: {
         execute: async context => {
             const path = context.params?.["path"]
+            const editorId = context.params?.["editorId"]
             let file: File | null = null
             if (path) {
                 const result = await getWorkspaceAndFile({ path })
@@ -267,7 +273,7 @@ registerAll({
                 file = selection instanceof File ? selection : null
             }
             if (!file) return
-            await editorRegistry.loadEditor(file)
+            await editorRegistry.loadEditor(file, editorId)
         }
     }
 })

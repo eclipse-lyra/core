@@ -8,6 +8,9 @@ export default function () {
   rootContext.put('duckdbService', duckdbService);
 
   editorRegistry.registerEditorInputHandler({
+    editorId: 'system.duckdb-editor',
+    label: 'DuckDB',
+    icon: 'database',
     canHandle: (input: unknown) =>
       input instanceof File && input.getName().toLowerCase().endsWith('.sql'),
     ranking: 1000,
@@ -16,7 +19,6 @@ export default function () {
         title: input.getName(),
         data: input,
         key: input.getName(),
-        editorId: 'duckdb-editor',
         icon: 'database',
         noOverflow: false,
         state: {},

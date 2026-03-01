@@ -116,18 +116,16 @@ registerAll({
     },
     handler: {
         execute: _context => {
-            const editorInput = {
+            const editorInput: EditorInput = {
                 title: "Extensions",
                 data: {},
                 key: "system.extensions",
-                editorId: "extensions-editor",
                 icon: "puzzle-piece",
                 state: {},
                 noOverflow: true,
-            } as EditorInput
-            editorInput.widgetFactory = () => html`
-                <k-extensions></k-extensions>`
-            editorRegistry.loadEditor(editorInput).then()
+                widgetFactory: () => html`<k-extensions></k-extensions>`,
+            }
+            editorRegistry.loadEditor(editorInput, "extensions-editor").then()
         }
     },
     contribution: {

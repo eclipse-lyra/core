@@ -1,5 +1,5 @@
 
-import { css, html, TemplateResult } from 'lit'
+import { css, html, TemplateResult, nothing } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 import { KPart } from "../parts/k-part";
 import {
@@ -32,6 +32,8 @@ export class KFileBrowser extends KPart {
 
     @state()
     private root?: TreeNode;
+    @state()
+    private fileEditorOptions: Array<{ editorId: string; title: string; icon?: string }> = [];
     private workspaceDir?: Directory
     private treeRef = createRef<HTMLElement>();
     private loadingNodes = new Set<TreeNode>();
@@ -90,8 +92,26 @@ export class KFileBrowser extends KPart {
     }
 
     protected renderContextMenu() {
+        const selection = activeSelectionSignal.get()
+        const file = selection instanceof File ? selection : null
+        const hasOpenWith = file && this.fileEditorOptions.length > 0
         return html`
             <k-command cmd="open_editor" icon="folder-open">${t('OPEN')}</k-command>
+            ${hasOpenWith ? html`
+                <wa-dropdown-item>
+                    <k-icon name="folder-open" slot="icon"></k-icon>
+                    ${t('OPEN_WITH')}
+                    ${this.fileEditorOptions.map(opt => html`
+                        <k-command
+                            slot="submenu"
+                            cmd="open_editor"
+                            icon="${opt.icon ?? 'file'}"
+                            .params=${{ path: file!.getWorkspacePath(), editorId: opt.editorId }}>
+                            ${opt.title}
+                        </k-command>
+                    `)}
+                </wa-dropdown-item>
+            ` : nothing}
             <k-command cmd="touch" icon="plus" dropdown="filebrowser.create">${t('CREATE_NEW')}</k-command>
         `;
     }
@@ -282,9 +302,19 @@ export class KFileBrowser extends KPart {
         const selection = event.detail.selection
         if (selection && selection.length > 0) {
             const node: TreeNode = selection[0].model
-            activeSelectionSignal.set(node.data)
+            const data = node.data
+            activeSelectionSignal.set(data)
+            if (data instanceof File) {
+                this.fileEditorOptions = editorRegistry.getEditorOptionsForInput(data)
+                this.updateContextMenu()
+            } else {
+                this.fileEditorOptions = []
+                this.updateContextMenu()
+            }
         } else {
             activeSelectionSignal.set(undefined)
+            this.fileEditorOptions = []
+            this.updateContextMenu()
         }
     }
 

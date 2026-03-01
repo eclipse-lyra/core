@@ -322,12 +322,13 @@ export default function ragSystemExtension(context: any) {
 
     // Register editor for document index manager
     editorRegistry.registerEditorInputHandler({
+        editorId: 'system.rag-system-manager',
+        label: 'RAG System Manager',
         ranking: 1000,
         canHandle: (input: EditorInput) => {
                     return input.key === '.system.rag-system';
         },
         handle: async (input: EditorInput) => {
-            input.editorId = 'rag-system-manager';
             input.widgetFactory = () => html`
                 <k-rag-system-manager .input=${input}></k-rag-system-manager>
             `;

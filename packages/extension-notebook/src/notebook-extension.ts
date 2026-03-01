@@ -50,6 +50,9 @@ export default ({editorRegistry, commandRegistry, contributionRegistry}: any) =>
     });
 
     editorRegistry.registerEditorInputHandler({
+        editorId: "system.notebook-editor",
+        label: "Jupyter Notebook",
+        icon: "k jupyter",
         lazyInit: () => import('./notebook-runtime'),
         canHandle: (input: any) => input instanceof File && input.getName().toLowerCase().endsWith(".ipynb"),
         handle: async (input: File) => {
@@ -57,7 +60,6 @@ export default ({editorRegistry, commandRegistry, contributionRegistry}: any) =>
                 title: input.getName(),
                 data: input,
                 key: input.getName(),
-                editorId: "notebook-editor",
                 icon: "k jupyter",
                 noOverflow: true,
                 state: {},

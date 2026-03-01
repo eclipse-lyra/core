@@ -50,13 +50,14 @@ export interface MaskOverlay {
 export type MediaViewerOverlay = BboxOverlay | MaskOverlay;
 
 editorRegistry.registerEditorInputHandler({
+    editorId: "system.media-viewer",
+    label: "Media viewer",
     canHandle: input => input instanceof File && isSupportedMediaFile(input),
     handle: async (input: File) => {
         const editorInput = {
             title: input.getName(),
             data: input,
             key: input.getName(),
-            editorId: "media-viewer",
             icon: getFileIcon(input.getName()),
             noOverflow: false,
             state: {},
@@ -196,11 +197,12 @@ export class KMediaViewer extends KPart {
         }
 
         return html`
-            <iframe
-                src="${this.mediaUrl}"
-                class="media-iframe"
-                title="Media Viewer">
-            </iframe>
+            <div class="media-iframe-container">
+                <iframe
+                    src="${this.mediaUrl}"
+                    class="media-iframe"
+                    title="Media Viewer"></iframe>
+            </div>
         `
     }
 
@@ -228,6 +230,19 @@ export class KMediaViewer extends KPart {
             position: relative;
             max-width: 100%;
             max-height: 100%;
+        }
+
+        .media-iframe-container {
+            position: absolute;
+            inset: 0;
+            min-height: 0;
+        }
+
+        .media-iframe {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
 
         .media-image {

@@ -7,13 +7,15 @@ import {unsafeHTML} from "lit/directives/unsafe-html.js";
 import {File} from "@kispace-io/core";
 
 editorRegistry.registerEditorInputHandler({
+    editorId: "system.md-editor",
+    label: "Markdown",
+    icon: "book",
     canHandle: input => input instanceof File && input.getName().toLowerCase().endsWith(".md"),
     handle: async (input: File) => {
         const editorInput = {
             title: input.getName(),
             data: input,
             key: input.getName(),
-            editorId: "md-editor",
             icon: "book",
             noOverflow: false,
             state: {},

@@ -66,6 +66,9 @@ registerAll({
 });
 
 editorRegistry.registerEditorInputHandler({
+    editorId: "system.python-editor",
+    label: "Python",
+    icon: "python",
     lazyInit: async () => {
         await import("./k-python-editor");
     },
@@ -77,7 +80,6 @@ editorRegistry.registerEditorInputHandler({
             title: input.getName(),
             data: input,
             key: input.getName(),
-            editorId: "python-editor",
             icon: "python",
             noOverflow: false,
             state: {},

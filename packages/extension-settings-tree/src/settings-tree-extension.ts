@@ -10,10 +10,11 @@ import "./k-settings-tree";
 
 export default (_uiContext: unknown) => {
     editorRegistry.registerEditorInputHandler({
+        editorId: "system.settings-tree",
+        label: "Settings",
         ranking: 1000,
         canHandle: (input: EditorInput) => input.key === '.system.settings',
         handle: async (input: EditorInput) => {
-            input.editorId = "settings-tree";
             input.widgetFactory = () => html`
                 <k-settings-tree .input=${input}></k-settings-tree>
             `;

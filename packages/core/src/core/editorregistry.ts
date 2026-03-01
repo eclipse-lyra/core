@@ -12,7 +12,6 @@ export const EVENT_SHOW_EDITOR = "editors/showEditor";
 
 export interface EditorInput {
     key: string;
-    editorId: string;
     title: string;
     icon?: string;
     data: any;
@@ -22,10 +21,13 @@ export interface EditorInput {
 }
 
 export interface EditorInputHandler {
+    editorId: string;
+    label: string;
+    icon?: string;
     canHandle: (input: any) => boolean;
     handle: (input: any) => Promise<EditorInput>;
     lazyInit?: () => Promise<void> | void;
-    ranking?: number;  // Higher ranking = higher priority (default: 0)
+    ranking?: number;
 }
 
 interface RegisteredEditorInputHandler {
@@ -194,14 +196,43 @@ class EditorRegistry {
         await entry.lazyInitPromise;
     }
 
-    async handleInput(input: any) {
-        // Handlers are already sorted by ranking, so iterate in order
+    getEditorOptionsForInput(input: any): Array<{ editorId: string; title: string; icon?: string }> {
+        const seen = new Set<string>();
+        const options: Array<{ editorId: string; title: string; icon?: string }> = [];
+        for (const entry of this.editorInputHandlers) {
+            const handler = entry.definition;
+            if (!handler.canHandle(input) || seen.has(handler.editorId)) continue;
+            seen.add(handler.editorId);
+            options.push({
+                editorId: handler.editorId,
+                title: handler.label,
+                icon: handler.icon
+            });
+        }
+        return options;
+    }
+
+    async handleInput(input: any, preferredEditorId?: string) {
+        if (preferredEditorId !== undefined) {
+            const entry = this.editorInputHandlers.find(
+                e => e.definition.editorId === preferredEditorId
+            );
+            if (entry) {
+                await this.ensureHandlerInitialized(entry);
+                const result = await entry.definition.handle(input);
+                if (result) (result as unknown as Record<string, unknown>).editorId = entry.definition.editorId;
+                return result;
+            }
+            return undefined;
+        }
         for (let i = 0; i < this.editorInputHandlers.length; i++) {
             const entry = this.editorInputHandlers[i];
             const editorInputHandler = entry.definition;
             if (editorInputHandler.canHandle(input)) {
                 await this.ensureHandlerInitialized(entry);
-                return await editorInputHandler.handle(input);
+                const result = await editorInputHandler.handle(input);
+                if (result) (result as unknown as Record<string, unknown>).editorId = editorInputHandler.editorId;
+                return result;
             }
         }
     }
@@ -210,22 +241,25 @@ class EditorRegistry {
         return document.querySelector(`k-tabs#${EDITOR_AREA_MAIN}`) as KTabs | null
     }
 
-    async loadEditor(editorInput: EditorInput | any) {
+    async loadEditor(editorInput: EditorInput | any, preferredEditorId?: string) {
         if (!editorInput) {
             return
         }
 
         if (!("widgetFactory" in editorInput)) {
-            editorInput = await this.handleInput(editorInput)
+            editorInput = await this.handleInput(editorInput, preferredEditorId)
         }
 
         if (!editorInput || !("widgetFactory" in editorInput)) {
             return
         }
 
+        const editorId = (editorInput as Record<string, unknown>).editorId as string | undefined ?? preferredEditorId;
+        if (editorId) (editorInput as Record<string, unknown>).editorId = editorId;
+
         await this.openTab({
             name: editorInput.key,
-            editorId: editorInput.editorId,
+            editorId,
             label: editorInput.title,
             icon: editorInput.icon,
             closable: true,
