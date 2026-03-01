@@ -287,7 +287,7 @@ export class KResizableGrid extends KElement {
             if (index === this.gridSizes.length - 1) {
                 return [size];
             }
-            return [size, '4px'];
+            return [size, '1px'];
         }).join(' ');
 
         // Apply grid layout to the custom element itself
