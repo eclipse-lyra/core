@@ -80,11 +80,21 @@ function joinPath(base: string, name: string): string {
     return `${cleanBase}/${cleanName}`;
 }
 
-async function idbGet(path: string): Promise<IDBEntry | undefined> {
+function storageKey(rootId: string, path: string): string {
+    const norm = normalizePath(path);
+    return norm ? `${rootId}/${norm}` : rootId;
+}
+
+function storagePrefix(rootId: string, path: string): string {
+    const norm = normalizePath(path);
+    return norm ? `${rootId}/${norm}/` : `${rootId}/`;
+}
+
+async function idbGet(rootId: string, path: string): Promise<IDBEntry | undefined> {
     const db = await getWorkspaceIDB();
     const tx = db.transaction(IDB_WORKSPACE_STORE_NAME, 'readonly');
     const store = tx.objectStore(IDB_WORKSPACE_STORE_NAME);
-    const key = normalizePath(path);
+    const key = path ? storageKey(rootId, path) : rootId;
     return await new Promise((resolve, reject) => {
         const req = store.get(key);
         req.onsuccess = () => resolve(req.result as IDBEntry | undefined);
@@ -92,11 +102,11 @@ async function idbGet(path: string): Promise<IDBEntry | undefined> {
     });
 }
 
-async function idbPut(path: string, entry: IDBEntry): Promise<void> {
+async function idbPut(rootId: string, path: string, entry: IDBEntry): Promise<void> {
     const db = await getWorkspaceIDB();
     const tx = db.transaction(IDB_WORKSPACE_STORE_NAME, 'readwrite');
     const store = tx.objectStore(IDB_WORKSPACE_STORE_NAME);
-    const key = normalizePath(path);
+    const key = path ? storageKey(rootId, path) : rootId;
     await new Promise<void>((resolve, reject) => {
         const req = store.put(entry, key);
         req.onsuccess = () => resolve();
@@ -104,11 +114,11 @@ async function idbPut(path: string, entry: IDBEntry): Promise<void> {
     });
 }
 
-async function idbDelete(path: string): Promise<void> {
+async function idbDelete(rootId: string, path: string): Promise<void> {
     const db = await getWorkspaceIDB();
     const tx = db.transaction(IDB_WORKSPACE_STORE_NAME, 'readwrite');
     const store = tx.objectStore(IDB_WORKSPACE_STORE_NAME);
-    const key = normalizePath(path);
+    const key = path ? storageKey(rootId, path) : rootId;
     await new Promise<void>((resolve, reject) => {
         const req = store.delete(key);
         req.onsuccess = () => resolve();
@@ -116,11 +126,12 @@ async function idbDelete(path: string): Promise<void> {
     });
 }
 
-async function idbDeleteTree(rootPath: string): Promise<void> {
+async function idbDeleteTree(rootId: string, rootPath: string): Promise<void> {
     const db = await getWorkspaceIDB();
     const tx = db.transaction(IDB_WORKSPACE_STORE_NAME, 'readwrite');
     const store = tx.objectStore(IDB_WORKSPACE_STORE_NAME);
-    const prefix = normalizePath(rootPath);
+    const prefix = storageKey(rootId, rootPath);
+    const prefixWithSlash = prefix + '/';
     const cursorReq = store.openCursor();
 
     await new Promise<void>((resolve, reject) => {
@@ -132,7 +143,7 @@ async function idbDeleteTree(rootPath: string): Promise<void> {
                 return;
             }
             const key = String(cursor.key);
-            if (!prefix || key === prefix || key.startsWith(prefix + '/')) {
+            if (key === prefix || key.startsWith(prefixWithSlash)) {
                 cursor.delete();
             }
             cursor.continue();
@@ -140,12 +151,12 @@ async function idbDeleteTree(rootPath: string): Promise<void> {
     });
 }
 
-async function idbRenameTree(oldPath: string, newPath: string): Promise<void> {
+async function idbRenameTree(rootId: string, oldPath: string, newPath: string): Promise<void> {
     const db = await getWorkspaceIDB();
     const tx = db.transaction(IDB_WORKSPACE_STORE_NAME, 'readwrite');
     const store = tx.objectStore(IDB_WORKSPACE_STORE_NAME);
-    const oldPrefix = normalizePath(oldPath);
-    const newPrefix = normalizePath(newPath);
+    const oldPrefix = storageKey(rootId, oldPath);
+    const newPrefix = storageKey(rootId, newPath);
     const cursorReq = store.openCursor();
 
     const operations: Array<() => void> = [];
@@ -177,12 +188,11 @@ async function idbRenameTree(oldPath: string, newPath: string): Promise<void> {
     }
 }
 
-async function idbListChildrenOfDir(dirPath: string): Promise<Array<{ name: string; entry: IDBEntry; type: IDBEntryType }>> {
+async function idbListChildrenOfDir(rootId: string, dirPath: string): Promise<Array<{ name: string; entry: IDBEntry; type: IDBEntryType }>> {
     const db = await getWorkspaceIDB();
     const tx = db.transaction(IDB_WORKSPACE_STORE_NAME, 'readonly');
     const store = tx.objectStore(IDB_WORKSPACE_STORE_NAME);
-    const dirKey = normalizePath(dirPath);
-    const prefix = dirKey ? dirKey + '/' : '';
+    const prefix = storagePrefix(rootId, dirPath);
     const cursorReq = store.openCursor();
 
     const dirNames = new Set<string>();
@@ -199,17 +209,12 @@ async function idbListChildrenOfDir(dirPath: string): Promise<Array<{ name: stri
             const key = String(cursor.key);
             const entry = cursor.value as IDBEntry;
 
-            if (dirKey && key === dirKey) {
+            if (!key.startsWith(prefix)) {
                 cursor.continue();
                 return;
             }
 
-            if (prefix && !key.startsWith(prefix)) {
-                cursor.continue();
-                return;
-            }
-
-            const rest = prefix ? key.slice(prefix.length) : key;
+            const rest = key.slice(prefix.length);
             if (!rest) {
                 cursor.continue();
                 return;
@@ -244,6 +249,10 @@ async function idbListChildrenOfDir(dirPath: string): Promise<Array<{ name: stri
     return result;
 }
 
+function getRootIdFromParent(parent: Directory): string {
+    return parent instanceof IDBDirectoryResource ? parent.getRootId() : '';
+}
+
 export class IDBFileResource extends File {
     private readonly path: string;
     private readonly parent: Directory;
@@ -263,13 +272,17 @@ export class IDBFileResource extends File {
         return this.parent;
     }
 
+    private getRootId(): string {
+        return getRootIdFromParent(this.parent);
+    }
+
     async delete(): Promise<void> {
-        await idbDelete(this.path);
+        await idbDelete(this.getRootId(), this.path);
         publish(TOPIC_WORKSPACE_CHANGED, workspaceService.getWorkspaceSync() ?? this.getWorkspace());
     }
 
     async getContents(options?: FileContentsOptions): Promise<any> {
-        const entry = await idbGet(this.path);
+        const entry = await idbGet(this.getRootId(), this.path);
         let raw = (entry as any)?.content as Blob | string | undefined;
 
         if (typeof raw === 'string') {
@@ -277,7 +290,7 @@ export class IDBFileResource extends File {
             raw = migratedBlob;
             if (entry) {
                 entry.content = migratedBlob;
-                await idbPut(this.path, entry);
+                await idbPut(this.getRootId(), this.path, entry);
             }
         }
 
@@ -322,12 +335,12 @@ export class IDBFileResource extends File {
             blob = new Blob([text], { type: mimeType });
         }
 
-        await idbPut(this.path, { type: 'file', content: blob, mimeType });
+        await idbPut(this.getRootId(), this.path, { type: 'file', content: blob, mimeType });
         publish(TOPIC_WORKSPACE_CHANGED, workspaceService.getWorkspaceSync() ?? this.getWorkspace());
     }
 
     async size(): Promise<number | null> {
-        const entry = await idbGet(this.path);
+        const entry = await idbGet(this.getRootId(), this.path);
         const content = entry?.content;
         if (!content) return null;
         return content.size;
@@ -350,23 +363,14 @@ export class IDBFileResource extends File {
         const parentPath = parentDir instanceof IDBDirectoryResource ? parentDir.getPath() : '';
         const newPath = joinPath(parentPath, newName);
 
-        const entry = await idbGet(this.path);
+        const rootId = this.getRootId();
+        const entry = await idbGet(rootId, this.path);
         if (!entry) {
             throw new Error('File not found in IndexedDB');
         }
 
-        const db = await getWorkspaceIDB();
-        const tx = db.transaction(IDB_WORKSPACE_STORE_NAME, 'readwrite');
-        const store = tx.objectStore(IDB_WORKSPACE_STORE_NAME);
-        await new Promise<void>((resolve, reject) => {
-            const delReq = store.delete(this.path);
-            delReq.onerror = () => reject(delReq.error);
-            delReq.onsuccess = () => {
-                const putReq = store.put(entry, normalizePath(newPath));
-                putReq.onerror = () => reject(putReq.error);
-                putReq.onsuccess = () => resolve();
-            };
-        });
+        await idbDelete(rootId, this.path);
+        await idbPut(rootId, newPath, entry);
 
         publish(TOPIC_WORKSPACE_CHANGED, workspaceService.getWorkspaceSync() ?? this.getWorkspace());
     }
@@ -398,8 +402,19 @@ export class IDBDirectoryResource extends Directory {
         return this.parent;
     }
 
+    getRoot(): IDBDirectoryResource {
+        const p = this.getParent();
+        if (!p) return this;
+        return (p as IDBDirectoryResource).getRoot();
+    }
+
+    getRootId(): string {
+        const r = this.getRoot();
+        return r instanceof IDBRootDirectory ? r.getRootId() : '';
+    }
+
     async listChildren(_forceRefresh: boolean): Promise<Resource[]> {
-        const childrenInfo = await idbListChildrenOfDir(this.path);
+        const childrenInfo = await idbListChildrenOfDir(this.getRootId(), this.path);
         const result: Resource[] = [];
         for (const child of childrenInfo) {
             const childPath = joinPath(this.path, child.name);
@@ -425,8 +440,9 @@ export class IDBDirectoryResource extends Directory {
             const isLast = i === segments.length - 1;
             const currentPath = currentDir.getPath();
             const candidatePath = joinPath(currentPath, segment);
+            const rootId = this.getRootId();
 
-            const entry = await idbGet(candidatePath);
+            const entry = await idbGet(rootId, candidatePath);
 
             if (!entry) {
                 if (!options?.create) {
@@ -434,12 +450,12 @@ export class IDBDirectoryResource extends Directory {
                 }
 
                 if (isLast) {
-                    await idbPut(candidatePath, { type: 'file', content: new Blob([]) });
+                    await idbPut(rootId, candidatePath, { type: 'file', content: new Blob([]) });
                     publish(TOPIC_WORKSPACE_CHANGED, workspaceService.getWorkspaceSync() ?? this.getWorkspace());
                     return new IDBFileResource(candidatePath, currentDir);
                 }
 
-                await idbPut(candidatePath, { type: 'dir' });
+                await idbPut(rootId, candidatePath, { type: 'dir' });
                 currentDir = new IDBDirectoryResource(candidatePath, currentDir);
                 continue;
             }
@@ -476,7 +492,7 @@ export class IDBDirectoryResource extends Directory {
         }
 
         const targetPath = joinPath(this.path, name);
-        await idbDeleteTree(targetPath);
+        await idbDeleteTree(this.getRootId(), targetPath);
         publish(TOPIC_WORKSPACE_CHANGED, workspaceService.getWorkspaceSync() ?? this.getWorkspace());
     }
 
@@ -497,17 +513,23 @@ export class IDBDirectoryResource extends Directory {
         }
         const oldPath = this.getPath();
         const newPath = joinPath(parentDir.getPath(), newName);
-        await idbRenameTree(oldPath, newPath);
+        await idbRenameTree(this.getRootId(), oldPath, newPath);
         publish(TOPIC_WORKSPACE_CHANGED, workspaceService.getWorkspaceSync() ?? this.getWorkspace());
     }
 }
 
 export class IDBRootDirectory extends IDBDirectoryResource {
     private readonly displayName: string;
+    private readonly rootId: string;
 
-    constructor(displayName: string) {
+    constructor(displayName: string, rootId: string) {
         super('');
         this.displayName = displayName || 'IndexedDB';
+        this.rootId = rootId;
+    }
+
+    getRootId(): string {
+        return this.rootId;
     }
 
     getName(): string {
@@ -529,6 +551,12 @@ export class IDBRootDirectory extends IDBDirectoryResource {
     }
 }
 
+function generateRootId(): string {
+    return typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : 'default-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
 // Register IndexedDB workspace contribution
 workspaceService.registerContribution({
     type: 'indexeddb',
@@ -544,21 +572,22 @@ workspaceService.registerContribution({
         const name = explicitName && explicitName.length > 0
             ? explicitName
             : await getNextIndexedDBName();
-        return new IDBRootDirectory(name);
+        const rootId = generateRootId();
+        return new IDBRootDirectory(name, rootId);
     },
 
     async restore(data: any): Promise<Directory | undefined> {
-        if (data && typeof data === 'object' && data.indexeddb === true) {
+        if (data && typeof data === 'object' && data.indexeddb === true && data.rootId) {
             await getWorkspaceIDB();
             const name = (data.name && String(data.name).trim()) || 'IndexedDB';
-            return new IDBRootDirectory(name);
+            return new IDBRootDirectory(name, String(data.rootId));
         }
         return undefined;
     },
 
     async persist(workspace: Directory): Promise<any> {
         if (workspace instanceof IDBRootDirectory) {
-            return { indexeddb: true, name: workspace.getName() };
+            return { indexeddb: true, name: workspace.getName(), rootId: workspace.getRootId() };
         }
         return null;
     }
