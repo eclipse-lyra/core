@@ -24,7 +24,7 @@
 
 ## Remaining (optional / product decisions)
 
-- **README.md**: Still “Appspace”, `kispace-io`, `app.kispace.de`, `k-standard-layout` → update to Eclipse Lyra and `lyra-standard-layout` when repo/domain are final.
+- **README.md**: Still “Appspace”, `kispace-io`, `app.kispace.de`, `k-standard-layout` → update to Eclipse Lyra and `lyra-standard-layout` when repo/domain are final. **Update:** README is now rebranded; repo and clone URL point to eclipse-lyra/core.
 - **docs/** (VitePress): Rebranded — title “Eclipse Lyra”, repo link `eclipse-lyra/core`, all examples use `@eclipse-lyra/core` and `lyra-standard-layout`.
 - **packages/app/package.json**: Description “Appspace”, marketplace catalog URLs `kispace-io/appspace-marketplace` — update when Eclipse Lyra marketplace exists.
 - **packages/core/package.json**: Description “Appspace platform core” — can be updated to “Eclipse Lyra core”.
@@ -35,4 +35,4 @@
 
 ## Doc references
 
-- Docs now use `lyra-standard-layout` and `@eclipse-lyra/*` throughout. README.md still has old names; update when repo/domain are final.
+- Docs and README use `lyra-standard-layout` and `@eclipse-lyra/*` throughout. Repo is at [eclipse-lyra/core](https://github.com/eclipse-lyra/core).

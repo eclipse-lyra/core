@@ -1,6 +1,16 @@
-# Appspace
+<p align="center">
+  <img src="packages/app/public/lyra-logo.svg" alt="Eclipse Lyra" width="280" />
+</p>
 
-A modular web framework for building IDE-like applications with a plugin architecture, AI integration, and workspace management.
+<p align="center">
+  <a href="https://github.com/eclipse-lyra/core/actions/workflows/ci.yml"><img src="https://github.com/eclipse-lyra/core/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://www.npmjs.com/package/@eclipse-lyra/core"><img src="https://img.shields.io/npm/v/@eclipse-lyra/core" alt="npm @eclipse-lyra/core" /></a>
+  <a href="https://github.com/eclipse-lyra/core/blob/main/LICENSE"><img src="https://img.shields.io/github/license/eclipse-lyra/core" alt="License EPL-2.0" /></a>
+</p>
+
+# Eclipse Lyra
+
+Eclipse Lyra provides a TypeScript- and Lit-based web framework for building extensible developer tools and applications. It includes an extension system with lifecycle management, a declarative way to add UI elements (such as tabs, toolbars, and commands), a context-aware command system usable by both users and AI agents, workspace and file-system abstractions, and services for editors and tasks, with optional components such as AI chat, notebooks, a terminal, and the Monaco editor.
 
 **Demo app:** [https://app.kispace.de](https://app.kispace.de)
 
@@ -65,7 +75,7 @@ Downstream domain-specific apps:
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  UI (core)                                                   │
-│  k-standard-layout · k-tabs · k-toolbar · k-filebrowser · …    │
+│  lyra-standard-layout · lyra-tabs · lyra-toolbar · lyra-filebrowser · …    │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -79,7 +89,7 @@ Downstream domain-specific apps:
 
 | Path | Role |
 |------|------|
-| **`packages/core`** (`@kispace-io/core`) | Platform: registries, services, parts, widgets, dialogs, default UI contributions. No extension logic; extensions are separate packages. |
+| **`packages/core`** (`@eclipse-lyra/core`) | Platform: registries, services, parts, widgets, dialogs, default UI contributions. No extension logic; extensions are separate packages. |
 | **`packages/extension-*`** | One package per extension (e.g. `extension-ai-system`, `extension-settings-tree`, `extension-monaco-editor`). Each depends on core and registers commands/contributions/editors. |
 | **`packages/app`** | Default app: imports core + extensions, defines `AppDefinition` and `extensions[]`, registers with app loader. Use as template for your own app. |
 | **Root** | Workspace root. Scripts: `dev`, `build`, `build:app`, `test`. |
@@ -103,8 +113,8 @@ Downstream domain-specific apps:
 ### Run the default app
 
 ```bash
-git clone https://github.com/kispace-io/appspace.git
-cd appspace
+git clone https://github.com/eclipse-lyra/core.git
+cd core
 npm install
 npm run dev
 ```
@@ -123,19 +133,19 @@ npm run build:app    # build the default app (depends on core)
 1. Use **`packages/app`** as a template: copy it or add a new workspace package.
 2. In your app entry (e.g. `main.ts`):
    - Call `applyAppHostConfig({ packageInfo, marketplaceCatalogUrls })` if you use marketplace.
-   - Import the extensions you need (`@kispace-io/extension-*`).
+   - Import the extensions you need (`@eclipse-lyra/extension-*`).
    - Call `appLoaderService.registerApp(appDefinition, { autoStart: true })`.
 3. **App definition** — Minimal example (no Lit in app):
 
 ```ts
-import { appLoaderService, type RenderDescriptor } from '@kispace-io/core';
+import { appLoaderService, type RenderDescriptor } from '@eclipse-lyra/core';
 
 appLoaderService.registerApp({
   id: 'my-app',
   name: 'My App',
   version: '1.0.0',
-  extensions: ['@kispace-io/extension-command-palette', '@kispace-io/extension-settings-tree', '@kispace-io/extension-ai-system'],
-  render: { tag: 'k-standard-layout', attributes: { 'show-bottom-panel': 'true' } } satisfies RenderDescriptor,
+  extensions: ['@eclipse-lyra/extension-command-palette', '@eclipse-lyra/extension-settings-tree', '@eclipse-lyra/extension-ai-system'],
+  render: { tag: 'lyra-standard-layout', attributes: { 'show-bottom-panel': 'true' } } satisfies RenderDescriptor,
 }, { autoStart: true });
 ```
 
@@ -157,12 +167,12 @@ Other extensions add: Pyodide, WebLLM, RxDB, Xenova transformers, etc.
 
 ## Comparison with other frameworks
 
-For those comparing frameworks, here is how Appspace lines up with Angular, React, and Vue on common dimensions.
+For those comparing frameworks, here is how Eclipse Lyra lines up with Angular, React, and Vue on common dimensions.
 
-| Dimension | **Appspace** | **Angular** | **React** | **Vue** |
+| Dimension | **Eclipse Lyra** | **Angular** | **React** | **Vue** |
 | --------- | ------------ | ----------- | --------- | ------- |
 | **Paradigm** | App framework for IDE-like and dashboard-like apps; declarative contributions (tabs, toolbars, commands) | Full framework; components + services + modules | Library; components + hooks | Progressive framework; SFCs + composition API |
-| **Component tech** | Lit web components (`k-*` custom elements) | Angular components (decorators/templates) | JSX/TSX components | Single-File Components (`.vue`) or JSX |
+| **Component tech** | Lit web components (`lyra-*` custom elements) | Angular components (decorators/templates) | JSX/TSX components | Single-File Components (`.vue`) or JSX |
 | **Templating** | Lit `html` tagged templates | HTML-like templates + directives | JSX | HTML-like template or JSX |
 | **TypeScript** | First-class; strict, declarations published | First-class; full TS support | Supported (TS + React types) | First-class; full TS in SFC and script |
 | **State management** | `@lit-labs/signals` in core; `watchSignal()`; signals for app state (active part, editor, selection, tasks) | RxJS + services; optional NgRx/Akita | useState/useReducer; ecosystem (Redux, Zustand, Jotai) | reactivity (ref, reactive); Pinia optional |
@@ -179,21 +189,21 @@ For those comparing frameworks, here is how Appspace lines up with Angular, Reac
 | **Dependency injection** | Built-in: `rootContext`, `uiContext`; services (appLoader, commandRegistry, workspace, settings, etc.) | Built-in hierarchical injector | Context API or external (Inversify, etc.) | provide/inject (composition API) |
 | **Plugin / Extension model** | Core feature: extensions (per-app), contribution + command registries; loaders; enable/disable at runtime; **marketplace**: install external extensions from catalog URLs (e.g. appspace-marketplace) | NgModules; lazy-loaded feature modules | No standard; plugin patterns ad-hoc | Plugins (use()); Nuxt modules |
 | **Commands / shortcuts** | Built-in: command registry, keybindings, command palette | No built-in; custom or libs | No built-in; custom or libs | No built-in; custom or libs |
-| **Layouts / App modes** | Flexible: `k-standard-layout` (IDE) or custom render (e.g. dashboard shell with nav + tabs); same contributions | App shell + router-outlet | App shell + router; layout is component tree | App shell + router; layout is component tree |
+| **Layouts / App modes** | Flexible: `lyra-standard-layout` (IDE) or custom render (e.g. dashboard shell with nav + tabs); same contributions | App shell + router-outlet | App shell + router; layout is component tree | App shell + router; layout is component tree |
 | **Primary use case** | IDE-like apps and dashboard-like apps (tabs, workspace, editors, views, AI, extensions) | Enterprise SPAs, large teams | SPAs, dashboards, content apps | SPAs, progressive enhancement |
 | **License** | EPL-2.0 | MIT | MIT | MIT |
 
 ### Summary
 
-- **Where Appspace aligns**: TypeScript, components, state (signals), i18n, testing (Vitest), Vite build, theming (via WebAwesome), DI, strong typing; **browser-native stack** (Lit, standard DOM, Web APIs) and **lightweight runtime footprint**.
-- **Where Appspace differs by design**: No URL routing (IDE-style navigation); no built-in forms/HTTP; no CLI; client-only (no SSR); focus on IDE-like experiences and extensions rather than content-focused SPAs.
-- **Unique to Appspace**: Focus on **browser-native, lightweight runtime**; contribution targets (sidebars, toolbars, editor area), command registry + keybindings, extension registry with enable/disable at runtime; **extension marketplace** — install external extensions from catalog URLs (e.g. [appspace-marketplace](https://github.com/kispace-io/appspace-marketplace)); workspace/service layer; flexible layouts (IDE with `k-standard-layout` or custom dashboard shell with nav + views); first-class IDE UX (tabs, resizable layout, file browser, Monaco) and dashboard-style views.
+- **Where Eclipse Lyra aligns**: TypeScript, components, state (signals), i18n, testing (Vitest), Vite build, theming (via WebAwesome), DI, strong typing; **browser-native stack** (Lit, standard DOM, Web APIs) and **lightweight runtime footprint**.
+- **Where Eclipse Lyra differs by design**: No URL routing (IDE-style navigation); no built-in forms/HTTP; no CLI; client-only (no SSR); focus on IDE-like experiences and extensions rather than content-focused SPAs.
+- **Unique to Eclipse Lyra**: Focus on **browser-native, lightweight runtime**; contribution targets (sidebars, toolbars, editor area), command registry + keybindings, extension registry with enable/disable at runtime; **extension marketplace** — install external extensions from catalog URLs; workspace/service layer; flexible layouts (IDE with `lyra-standard-layout` or custom dashboard shell with nav + views); first-class IDE UX (tabs, resizable layout, file browser, Monaco) and dashboard-style views.
 
 ---
 
 ## Repository and license
 
-- **Repository:** [github.com/kispace-io/appspace](https://github.com/kispace-io/appspace)
+- **Repository:** [github.com/eclipse-lyra/core](https://github.com/eclipse-lyra/core)
 - **License:** EPL-2.0
 
-Publishing of `@kispace-io/core` is done via GitHub Actions on version tags; see workflow and npm trusted publishing in the repo.
+Publishing of `@eclipse-lyra/core` and extensions is done via GitHub Actions on version tags; see workflow and npm trusted publishing in the repo.
