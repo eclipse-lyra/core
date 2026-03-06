@@ -1,9 +1,13 @@
 {
   "name": "@eclipse-lyra/core",
   "version": "0.0.0",
-  "description": "Appspace platform core: registries, services, parts, widgets, and API",
+  "description": "Eclipse Lyra platform core: registries, services, parts, widgets, and API",
   "type": "module",
   "license": "EPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eclipse-lyra/core"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
