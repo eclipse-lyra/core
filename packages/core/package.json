@@ -1,6 +1,6 @@
 {
   "name": "@eclipse-lyra/core",
-  "version": "0.8.7",
+  "version": "0.0.0",
   "description": "Appspace platform core: registries, services, parts, widgets, and API",
   "type": "module",
   "license": "EPL-2.0",
