@@ -1,5 +1,5 @@
-import { workspaceService, Directory } from '@kispace-io/core';
-import { createLogger } from '@kispace-io/core';
+import { workspaceService, Directory } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-lyra/core';
 
 const logger = createLogger('WorkspaceUtils');
 

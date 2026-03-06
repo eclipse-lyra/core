@@ -4,7 +4,7 @@ import {
     workspaceService,
     toastError,
     toastInfo,
-} from "@kispace-io/core";
+} from "@eclipse-lyra/core";
 import { getTextFileFromPath, readTextFile } from "../shared";
 
 async function getScriptUrl(params: { script?: string; code?: string }): Promise<string | null> {

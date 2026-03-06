@@ -171,10 +171,10 @@ export interface AppDefinition {
     
     /**
      * Root component to render. Can be:
-     * - A tag name string (e.g. "k-standard-layout") for a single custom element with no attributes.
+     * - A tag name string (e.g. "lyra-standard-layout") for a single custom element with no attributes.
      * - A descriptor { tag, attributes? } for a single custom element with optional attributes.
      * - A function returning a Lit TemplateResult for custom templates (requires lit in the app).
-     * If not provided, defaults to k-standard-layout.
+     * If not provided, defaults to lyra-standard-layout.
      */
     render?: string | RenderDescriptor | (() => TemplateResult);
 
@@ -502,7 +502,7 @@ class AppLoaderService {
             const template = r();
             render(template, container);
         } else {
-            render(html`<k-standard-layout></k-standard-layout>`, container);
+            render(html`<lyra-standard-layout></lyra-standard-layout>`, container);
         }
         logger.info(`Rendered ${this.currentApp.name}`);
     }

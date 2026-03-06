@@ -1,4 +1,4 @@
-import { File, workspaceService, registerAll } from "@kispace-io/core";
+import { File, workspaceService, registerAll } from "@eclipse-lyra/core";
 
 registerAll({
   command: {

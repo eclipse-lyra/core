@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-duckdb",
+  "name": "@eclipse-lyra/extension-duckdb",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@duckdb/duckdb-wasm": "1.33.1-dev19.0",
-    "@kispace-io/core": "*",
-    "@kispace-io/extension-monaco-editor": "*"
+    "@eclipse-lyra/core": "*",
+    "@eclipse-lyra/extension-monaco-editor": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

@@ -18,7 +18,7 @@ interface IDBEntry {
     mimeType?: string;
 }
 
-const IDB_WORKSPACE_DB_NAME = 'appspace-workspace-idb';
+const IDB_WORKSPACE_DB_NAME = 'eclipse-lyra-workspace-idb';
 const IDB_WORKSPACE_STORE_NAME = 'files';
 
 let idbWorkspacePromise: Promise<IDBDatabase> | null = null;

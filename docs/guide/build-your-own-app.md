@@ -8,7 +8,7 @@ Use **`packages/app`** as a template: copy it or add a new workspace package.
    Add a new package under `packages/` (e.g. `packages/my-app`) or duplicate `packages/app`. Ensure the root `package.json` `workspaces` includes `packages/*`.
 
 2. **Install and wire the app**  
-   In the app package, depend on `@kispace-io/core` and the extensions you need (`@kispace-io/extension-*`).
+   In the app package, depend on `@eclipse-lyra/core` and the extensions you need (`@eclipse-lyra/extension-*`).
 
 3. **Entry point**  
    In your app entry (e.g. `main.ts`):
@@ -20,7 +20,7 @@ Use **`packages/app`** as a template: copy it or add a new workspace package.
    Minimal example:
 
 ```ts
-import { appLoaderService, type RenderDescriptor } from '@kispace-io/core';
+import { appLoaderService, type RenderDescriptor } from '@eclipse-lyra/core';
 
 appLoaderService.registerApp(
   {
@@ -28,12 +28,12 @@ appLoaderService.registerApp(
     name: 'My App',
     version: '1.0.0',
     extensions: [
-      '@kispace-io/extension-command-palette',
-      '@kispace-io/extension-settings-tree',
-      '@kispace-io/extension-ai-system',
+      '@eclipse-lyra/extension-command-palette',
+      '@eclipse-lyra/extension-settings-tree',
+      '@eclipse-lyra/extension-ai-system',
     ],
     render: {
-      tag: 'k-standard-layout',
+      tag: 'lyra-standard-layout',
       attributes: { 'show-bottom-panel': 'true' },
     } satisfies RenderDescriptor,
   },

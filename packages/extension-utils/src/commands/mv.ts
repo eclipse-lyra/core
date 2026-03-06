@@ -1,4 +1,4 @@
-import { workspaceService, activeSelectionSignal, promptDialog, toastError, toastInfo, registerAll } from "@kispace-io/core";
+import { workspaceService, activeSelectionSignal, promptDialog, toastError, toastInfo, registerAll } from "@eclipse-lyra/core";
 
 registerAll({
   command: {

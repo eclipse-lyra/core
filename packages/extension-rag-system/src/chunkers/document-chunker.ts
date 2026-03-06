@@ -4,7 +4,7 @@ export { LangChainChunker } from './langchain-chunker';
 
 import { LangChainChunker } from './langchain-chunker';
 import { FallbackChunker } from './fallback-chunker';
-import { createLogger } from '@kispace-io/core';
+import { createLogger } from '@eclipse-lyra/core';
 import type { ChunkingOptions, IDocumentChunker, DocumentChunk } from './chunker-interface';
 
 const logger = createLogger('DocumentChunker');

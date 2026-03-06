@@ -1,5 +1,5 @@
-import { contributionRegistry } from "@kispace-io/core";
-import type { ExecutionContext } from "@kispace-io/core";
+import { contributionRegistry } from "@eclipse-lyra/core";
+import type { ExecutionContext } from "@eclipse-lyra/core";
 import type { AgentContribution } from "../core/interfaces";
 import { CID_AGENTS } from "../core/constants";
 

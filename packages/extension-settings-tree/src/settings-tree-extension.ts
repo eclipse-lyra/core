@@ -5,8 +5,8 @@ import {
     commandRegistry,
     contributionRegistry,
     TOOLBAR_MAIN_RIGHT,
-} from "@kispace-io/core";
-import "./k-settings-tree";
+} from "@eclipse-lyra/core";
+import "./settings-tree";
 
 export default (_uiContext: unknown) => {
     editorRegistry.registerEditorInputHandler({
@@ -16,7 +16,7 @@ export default (_uiContext: unknown) => {
         canHandle: (input: EditorInput) => input.key === '.system.settings',
         handle: async (input: EditorInput) => {
             input.widgetFactory = () => html`
-                <k-settings-tree .input=${input}></k-settings-tree>
+                <lyra-settings-tree .input=${input}></lyra-settings-tree>
             `;
             return input;
         },

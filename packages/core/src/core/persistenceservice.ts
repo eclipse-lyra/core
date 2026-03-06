@@ -1,6 +1,6 @@
 import {rootContext} from "./di";
 
-const DB_NAME = 'appspace-persistence';
+const DB_NAME = 'eclipse-lyra-persistence';
 const STORE_NAME = 'keyval';
 const DB_VERSION = 1;
 

@@ -1,4 +1,4 @@
-import { File, Directory, workspaceService, toastError } from "@kispace-io/core";
+import { File, Directory, workspaceService, toastError } from "@eclipse-lyra/core";
 
 export async function getTextFileFromPath(path: string): Promise<File | null> {
   const workspaceDir = await workspaceService.getWorkspace();

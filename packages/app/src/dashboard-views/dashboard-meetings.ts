@@ -1,4 +1,4 @@
-import { css, html, LitElement, customElement } from "@kispace-io/core/externals/lit";
+import { css, html, LitElement, customElement } from "@eclipse-lyra/core/externals/lit";
 
 interface Meeting {
     title: string;
@@ -16,7 +16,7 @@ const SAMPLE_MEETINGS: Meeting[] = [
     { title: "Retrospective", start: "11:00", end: "12:00", day: "Fri", location: "Room A" },
 ];
 
-@customElement("dashboard-meetings")
+@customElement("lyra-dashboard-meetings")
 export class DashboardMeetings extends LitElement {
     static styles = css`
         :host {
@@ -28,7 +28,7 @@ export class DashboardMeetings extends LitElement {
         .calendar-section {
             max-width: 700px;
         }
-        .week-header {
+        .weeheader {
             display: grid;
             grid-template-columns: 3rem repeat(5, 1fr);
             gap: var(--wa-space-s);
@@ -97,7 +97,7 @@ export class DashboardMeetings extends LitElement {
         const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
         return html`
             <div class="calendar-section">
-                <div class="week-header">
+                <div class="weeheader">
                     <span></span>
                     ${days.map((d) => html`<span class="day-col">${d}</span>`)}
                 </div>

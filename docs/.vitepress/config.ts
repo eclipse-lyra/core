@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
-  title: 'Appspace',
-  description: 'Developer documentation for building IDE-like applications with the Appspace framework',
+  title: 'Eclipse Lyra',
+  description: 'Developer documentation for building IDE-like applications with the Eclipse Lyra framework',
   base: '/docs/',
   ignoreDeadLinks: true,
   themeConfig: {
@@ -10,12 +10,12 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Concepts', link: '/concepts/architecture' },
       { text: 'API', link: '/api' },
-      { text: 'Repo', link: 'https://github.com/kispace-io/appspace' },
+      { text: 'Repo', link: 'https://github.com/eclipse-lyra/core' },
     ],
     sidebar: [
       {
         text: 'Introduction',
-        items: [{ text: 'What is Appspace', link: '/intro' }],
+        items: [{ text: 'What is Eclipse Lyra', link: '/intro' }],
       },
       {
         text: 'Guide',
@@ -46,6 +46,6 @@ export default defineConfig({
         ],
       },
     ],
-    socialLinks: [{ icon: 'github', link: 'https://github.com/kispace-io/appspace' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/eclipse-lyra/core' }],
   },
 });

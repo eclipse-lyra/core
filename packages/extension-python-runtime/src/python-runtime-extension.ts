@@ -8,7 +8,7 @@ import {
     editorRegistry,
     File,
     type EditorInput,
-} from "@kispace-io/core";
+} from "@eclipse-lyra/core";
 import { html } from "lit";
 
 type EditorWithLanguage = { isLanguage?(lang: string): boolean };
@@ -70,7 +70,7 @@ editorRegistry.registerEditorInputHandler({
     label: "Python",
     icon: "python",
     lazyInit: async () => {
-        await import("./k-python-editor");
+        await import("./python-editor");
     },
     canHandle: (input: unknown) =>
         input instanceof File && input.getName().toLowerCase().endsWith(".py"),
@@ -87,7 +87,7 @@ editorRegistry.registerEditorInputHandler({
         };
 
         editorInput.widgetFactory = () =>
-            html`<k-python-editor .input=${editorInput}></k-python-editor>`;
+            html`<lyra-python-editor .input=${editorInput}></lyra-python-editor>`;
 
         return editorInput;
     },

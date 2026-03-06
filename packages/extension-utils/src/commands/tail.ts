@@ -1,4 +1,4 @@
-import { registerAll, toastError } from "@kispace-io/core";
+import { registerAll, toastError } from "@eclipse-lyra/core";
 import { getTextFileFromPath, readTextFile } from "../shared";
 
 registerAll({

@@ -1,12 +1,12 @@
-import {EDITOR_AREA_MAIN} from "./constants";
-import {KPart} from "../parts/k-part";
-import {activePartSignal, activeEditorSignal, partDirtySignal} from "./appstate";
-import {watchSignal} from "./signals";
-import {subscribe} from "./events";
-import {TOPIC_WORKSPACE_CONNECTED} from "./filesys";
-import {KTabs} from "../parts/k-tabs";
-import {TabContribution, IconContribution, contributionRegistry, TOPIC_CONTRIBUTEIONS_CHANGED} from "./contributionregistry";
-import {rootContext} from "./di";
+import { EDITOR_AREA_MAIN } from "./constants";
+import { LyraPart } from "../parts/part";
+import { activePartSignal, activeEditorSignal, partDirtySignal } from "./appstate";
+import { watchSignal } from "./signals";
+import { subscribe } from "./events";
+import { TOPIC_WORKSPACE_CONNECTED } from "./filesys";
+import { LyraTabs } from "../parts/tabs";
+import { TabContribution, IconContribution, contributionRegistry, TOPIC_CONTRIBUTEIONS_CHANGED } from "./contributionregistry";
+import { rootContext } from "./di";
 
 export const EVENT_SHOW_EDITOR = "editors/showEditor";
 
@@ -118,7 +118,7 @@ class EditorRegistry {
         return this.cachedIconContributions;
     }
 
-    private setupEventListeners(editorArea: KTabs) {
+    private setupEventListeners(editorArea: LyraTabs) {
         if (this.listenersAttached) {
             return;
         }
@@ -127,11 +127,11 @@ class EditorRegistry {
         const handler = (event: CustomEvent) => {
             const tabPanel = event.detail
             if (tabPanel) {
-                const parts = Array.from(tabPanel.querySelectorAll(`*`)).filter((element): element is KPart => element instanceof KPart)
+                const parts = Array.from(tabPanel.querySelectorAll(`*`)).filter((element): element is LyraPart => element instanceof LyraPart)
                 parts.forEach((part) => {
                     activePartSignal.set(part)
                     // Only update activeEditorSignal if this is an editor part
-                    if ((part as KPart).isEditor) {
+                    if ((part as LyraPart).isEditor) {
                         activeEditorSignal.set(part)
                     }
                 })
@@ -142,21 +142,21 @@ class EditorRegistry {
 
         const closed = (event: CustomEvent) => {
             const tabPanel: HTMLElement = event.detail
-            const parts = Array.from(tabPanel.querySelectorAll(`*`)).filter((element): element is KPart => element instanceof KPart)
+            const parts = Array.from(tabPanel.querySelectorAll(`*`)).filter((element): element is LyraPart => element instanceof LyraPart)
             parts.forEach((part) => {
                 // part.close() will be automatically called by disconnected callback of part
                 if (activePartSignal.get() == part) {
-                    activePartSignal.set(null as unknown as KPart)
+                    activePartSignal.set(null as unknown as LyraPart)
                 }
                 if (activeEditorSignal.get() == part) {
-                    activeEditorSignal.set(null as unknown as KPart)
+                    activeEditorSignal.set(null as unknown as LyraPart)
                 }
             })
         }
         // @ts-ignore
         editorArea.addEventListener("tab-closed", closed)
 
-        const dirtyHandler = (targetPart: KPart) => {
+        const dirtyHandler = (targetPart: LyraPart) => {
             const tabPanel = targetPart.closest("wa-tab-panel") as HTMLElement
             const name = tabPanel.getAttribute("name") as string
             editorArea.markDirty(name, targetPart.isDirty())
@@ -237,8 +237,8 @@ class EditorRegistry {
         }
     }
 
-    getEditorArea(): KTabs | null {
-        return document.querySelector(`k-tabs#${EDITOR_AREA_MAIN}`) as KTabs | null
+    getEditorArea(): LyraTabs | null {
+        return document.querySelector(`lyra-tabs#${EDITOR_AREA_MAIN}`) as LyraTabs | null
     }
 
     async loadEditor(editorInput: EditorInput | any, preferredEditorId?: string) {

@@ -1,6 +1,6 @@
 // Framework Configuration
 // 
-// This module provides framework-wide configuration that can be customized
+// This module provides frameworwide configuration that can be customized
 // by applications built on the framework.
 
 export interface FrameworkConfig {

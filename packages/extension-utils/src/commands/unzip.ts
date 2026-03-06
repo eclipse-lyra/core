@@ -9,7 +9,7 @@ import {
   toastError,
   toastInfo,
   type CommandContribution
-} from "@kispace-io/core";
+} from "@eclipse-lyra/core";
 import JSZip from "jszip";
 
 registerAll({

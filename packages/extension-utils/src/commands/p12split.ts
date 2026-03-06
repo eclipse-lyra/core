@@ -1,5 +1,5 @@
-import { workspaceService, taskService, toastError, toastInfo, registerAll } from "@kispace-io/core";
-import { PyEnv } from "@kispace-io/extension-python-runtime/api";
+import { workspaceService, taskService, toastError, toastInfo, registerAll } from "@eclipse-lyra/core";
+import { PyEnv } from "@eclipse-lyra/extension-python-runtime/api";
 
 registerAll({
   command: {

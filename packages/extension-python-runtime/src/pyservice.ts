@@ -1,4 +1,4 @@
-import {Directory, File, TOPIC_WORKSPACE_CHANGED, workspaceService} from "@kispace-io/core";
+import {Directory, File, TOPIC_WORKSPACE_CHANGED, workspaceService} from "@eclipse-lyra/core";
 type PipRequirementsModule = typeof import("pip-requirements-js");
 
 let pipRequirementsModulePromise: Promise<PipRequirementsModule> | null = null;
@@ -9,7 +9,7 @@ async function getPipRequirementsModule(): Promise<PipRequirementsModule> {
     }
     return pipRequirementsModulePromise;
 }
-import {publish} from "@kispace-io/core";
+import {publish} from "@eclipse-lyra/core";
 import type {PyWorkerMessage, PyWorkerResponse} from "./pyworker";
 import PyWorker from "./pyworker?worker&inline";
 

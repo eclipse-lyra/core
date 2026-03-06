@@ -1,10 +1,10 @@
 // Re-export framework base classes for app usage
-export { KPart } from '../parts/k-part';
-export { KContainer } from '../parts/k-container';
-export { KDialogContent } from '../parts/k-dialog-content';
-export { KStandardLayout } from '../layouts/k-standard-layout';
-export { KWidget } from '../widgets/k-widget';
-export { KElement } from '../parts/k-element';
+export { LyraPart } from '../parts/part';
+export { LyraContainer } from '../parts/container';
+export { LyraDialogContent } from '../parts/dialog-content';
+export { LyraStandardLayout } from '../layouts/standard-layout';
+export { LyraWidget } from '../widgets/widget';
+export { LyraElement } from '../parts/element';
 // Import to register the custom element
-import '../layouts/k-standard-layout';
+import '../layouts/standard-layout';
 

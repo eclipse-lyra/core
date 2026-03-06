@@ -1,11 +1,11 @@
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { KDialogContent } from "../parts/k-dialog-content";
+import { LyraDialogContent } from "../parts/dialog-content";
 import { contributionRegistry } from "../core/contributionregistry";
 import { DIALOG_CONTRIBUTION_TARGET, OK_BUTTON, CANCEL_BUTTON, DialogContribution, dialogService } from "../core/dialogservice";
 
-@customElement('k-confirm-dialog-content')
-export class KConfirmDialogContent extends KDialogContent {
+@customElement('lyra-confirm-dialog-content')
+export class LyraConfirmDialogContent extends LyraDialogContent {
     @property({ type: String })
     message: string = '';
 
@@ -25,7 +25,7 @@ export class KConfirmDialogContent extends KDialogContent {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'k-confirm-dialog-content': KConfirmDialogContent;
+        'lyra-confirm-dialog-content': LyraConfirmDialogContent;
     }
 }
 
@@ -39,10 +39,10 @@ contributionRegistry.registerContribution(DIALOG_CONTRIBUTION_TARGET, {
         }
         
         return html`
-            <k-confirm-dialog-content 
+            <lyra-confirm-dialog-content 
                 .message="${state.message}"
                 .markdown="${state.markdown}"
-            ></k-confirm-dialog-content>
+            ></lyra-confirm-dialog-content>
         `;
     },
     onButton: async (id: string, result: any, state?: any) => {

@@ -1,7 +1,7 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
-import { rootContext } from "@kispace-io/core";
+import { rootContext } from "@eclipse-lyra/core";
 import type { DuckDBDatabase } from "./duckdb-service";
 
 export const DUCKDB_AVAILABLE_EXTENSIONS: { name: string; description: string }[] = [
@@ -20,8 +20,8 @@ export interface DuckDBExtensionManagerOptions {
   databaseLabel: string;
 }
 
-@customElement("k-duckdb-extension-manager")
-export class KDuckDBExtensionManager extends LitElement {
+@customElement("lyra-duckdb-extension-manager")
+export class LyraDuckDBExtensionManager extends LitElement {
   @property({ type: Boolean })
   open = false;
 
@@ -221,11 +221,11 @@ export class KDuckDBExtensionManager extends LitElement {
 }
 
 class DuckDBExtensionManagerService {
-  private managerInstance: KDuckDBExtensionManager | null = null;
+  private managerInstance: LyraDuckDBExtensionManager | null = null;
 
-  public showExtensionManager(options: DuckDBExtensionManagerOptions): KDuckDBExtensionManager {
+  public showExtensionManager(options: DuckDBExtensionManagerOptions): LyraDuckDBExtensionManager {
     if (!this.managerInstance) {
-      this.managerInstance = document.createElement("k-duckdb-extension-manager") as KDuckDBExtensionManager;
+      this.managerInstance = document.createElement("lyra-duckdb-extension-manager") as LyraDuckDBExtensionManager;
       document.body.appendChild(this.managerInstance);
     }
     this.managerInstance.configure(options);
@@ -233,7 +233,7 @@ class DuckDBExtensionManagerService {
     return this.managerInstance;
   }
 
-  public getManager(): KDuckDBExtensionManager | null {
+  public getManager(): LyraDuckDBExtensionManager | null {
     return this.managerInstance;
   }
 }
@@ -243,6 +243,6 @@ rootContext.put("duckdbExtensionManagerService", duckdbExtensionManagerService);
 
 declare global {
   interface HTMLElementTagNameMap {
-    "k-duckdb-extension-manager": KDuckDBExtensionManager;
+    "lyra-duckdb-extension-manager": LyraDuckDBExtensionManager;
   }
 }

@@ -1,4 +1,4 @@
-import { commandRegistry, type CommandRegistry, type Command } from "@kispace-io/core";
+import { commandRegistry, type CommandRegistry, type Command } from "@eclipse-lyra/core";
 import { parseShellLine } from "./shell-parser";
 
 export interface RunResult {

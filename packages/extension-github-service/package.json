@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-github-service",
+  "name": "@eclipse-lyra/extension-github-service",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,7 +10,7 @@
     }
   },
   "dependencies": {
-    "@kispace-io/core": "*"
+    "@eclipse-lyra/core": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

@@ -1,4 +1,4 @@
-import { css, html, LitElement, customElement } from "@kispace-io/core/externals/lit";
+import { css, html, LitElement, customElement } from "@eclipse-lyra/core/externals/lit";
 
 const SAMPLE_TASKS_DONE = 3;
 const SAMPLE_TASKS_OPEN = 5;
@@ -8,7 +8,7 @@ const SAMPLE_MEETINGS = [
     { title: "Design review", time: "Wed 10:00", location: "Call" },
 ];
 
-@customElement("dashboard-welcome")
+@customElement("lyra-dashboard-welcome")
 export class DashboardWelcome extends LitElement {
     static styles = css`
         :host {

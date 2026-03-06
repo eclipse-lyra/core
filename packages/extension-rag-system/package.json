@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-rag-system",
+  "name": "@eclipse-lyra/extension-rag-system",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,9 +14,9 @@
     }
   },
   "dependencies": {
-    "@kispace-io/core": "*",
-    "@kispace-io/extension-ai-system": "*",
-    "@kispace-io/extension-in-browser-ml": "*",
+    "@eclipse-lyra/core": "*",
+    "@eclipse-lyra/extension-ai-system": "*",
+    "@eclipse-lyra/extension-in-browser-ml": "*",
     "@langchain/core": "^1.0.0",
     "@langchain/textsplitters": "^1.0.0",
     "pdfjs-dist": "^4.0.0",

@@ -1,6 +1,6 @@
-# What is Appspace
+# What is Eclipse Lyra
 
-Appspace is a **modular web framework** for building IDE-like applications. It provides:
+Eclipse Lyra is a **modular web framework** for building IDE-like applications. It provides:
 
 - **App layer** — You define an app by its id, name, version, and the set of extensions it uses. The framework handles registration, lifecycle, and rendering.
 - **Extension system** — Features (editor, terminal, AI, settings, etc.) are packaged as extensions. Each extension registers with the core and can contribute UI and commands.

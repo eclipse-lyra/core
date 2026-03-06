@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-howto-system",
+  "name": "@eclipse-lyra/extension-howto-system",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,8 +10,8 @@
     }
   },
   "dependencies": {
-    "@kispace-io/core": "*",
-    "@kispace-io/extension-ai-system": "*"
+    "@eclipse-lyra/core": "*",
+    "@eclipse-lyra/extension-ai-system": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

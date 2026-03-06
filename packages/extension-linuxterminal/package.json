@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-linuxterminal",
+  "name": "@eclipse-lyra/extension-linuxterminal",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,7 +10,7 @@
     }
   },
   "dependencies": {
-    "@kispace-io/core": "*",
+    "@eclipse-lyra/core": "*",
     "@xterm/xterm": "^5.5.0"
   },
   "devDependencies": {

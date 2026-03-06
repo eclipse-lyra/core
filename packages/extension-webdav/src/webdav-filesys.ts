@@ -6,9 +6,9 @@ import {
     FileContentsOptions, 
     FileContentType,
     TOPIC_WORKSPACE_CHANGED 
-} from '@kispace-io/core';
+} from '@eclipse-lyra/core';
 import { WebDAVClient, WebDAVResource } from './webdav-client';
-import { publish } from '@kispace-io/core';
+import { publish } from '@eclipse-lyra/core';
 
 export class WebDAVFileResource extends File {
     private client: WebDAVClient;

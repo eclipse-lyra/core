@@ -9,11 +9,11 @@ import { html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { css } from "lit";
 import { createRef, ref, Ref } from "lit/directives/ref.js";
-import { KPart } from "@kispace-io/core";
-import { TOOLBAR_MAIN_CENTER } from "@kispace-io/core";
-import { subscribe } from "@kispace-io/core";
-import { CommandRegistry, ExecutionContext, commandRegistry } from "@kispace-io/core";
-import { SYSTEM_LANGUAGE_BUNDLES, i18n } from "@kispace-io/core";
+import { LyraPart } from "@eclipse-lyra/core";
+import { TOOLBAR_MAIN_CENTER } from "@eclipse-lyra/core";
+import { subscribe } from "@eclipse-lyra/core";
+import { CommandRegistry, ExecutionContext, commandRegistry } from "@eclipse-lyra/core";
+import { SYSTEM_LANGUAGE_BUNDLES, i18n } from "@eclipse-lyra/core";
 import commandpaletteBundle from "./commandpalette.json";
 
 const t = i18n('commandpalette');
@@ -21,8 +21,8 @@ const t = i18n('commandpalette');
 // Event topic for opening the command palette
 const TOPIC_OPEN_COMMAND_PALETTE = "commandpalette/open";
 
-@customElement('k-command-palette')
-export class KCommandPalette extends KPart {
+@customElement('lyra-command-palette')
+export class LyraCommandPalette extends LyraPart {
     @state()
     private inputValue: string = '';
 
@@ -55,7 +55,7 @@ export class KCommandPalette extends KPart {
             this.openPalette();
         });
 
-        // Add click-outside listener to close palette
+        // Add clicoutside listener to close palette
         this.boundDocumentClickHandler = this.handleDocumentClick.bind(this);
         document.addEventListener('click', this.boundDocumentClickHandler);
     }
@@ -512,7 +512,7 @@ export default ({ contributionRegistry, commandRegistry, toastInfo, toastError, 
 
     // Create the command palette element once and reuse it
     const commandPaletteElement = (() => {
-        const element = document.createElement('k-command-palette') as any;
+        const element = document.createElement('lyra-command-palette') as any;
         element.commandRegistry = commandRegistry;
         element.toastInfo = toastInfo;
         element.toastError = toastError;

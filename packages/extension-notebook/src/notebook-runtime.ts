@@ -7,14 +7,14 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { marked } from "marked";
 import * as monaco from 'monaco-editor';
 import monacoStyles from "monaco-editor/min/vs/editor/editor.main.css?raw";
-import type { EditorInput } from "@kispace-io/core";
-import { File, workspaceService } from "@kispace-io/core";
-import { PyEnv, pythonPackageManagerService } from "@kispace-io/extension-python-runtime/api";
-import { KPart } from "@kispace-io/core";
+import type { EditorInput } from "@eclipse-lyra/core";
+import { File, workspaceService } from "@eclipse-lyra/core";
+import { PyEnv, pythonPackageManagerService } from "@eclipse-lyra/extension-python-runtime/api";
+import { LyraPart } from "@eclipse-lyra/core";
 import type { NotebookCell, NotebookData, NotebookEditorLike } from "./notebook-types";
 
-@customElement('k-notebook-editor')
-export class KNotebookEditor extends KPart implements NotebookEditorLike {
+@customElement('lyra-notebook-editor')
+export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
     @property({ attribute: false })
     public input?: EditorInput;
 
@@ -764,14 +764,14 @@ except ImportError:
                 <wa-icon name="stop" label="Stop" style="color: var(--wa-color-danger-500);"></wa-icon>
             </wa-button>
         ` : html`
-            <k-command 
+            <lyra-command 
                 cmd="python"
                 icon="play"
                 title="Run cell"
                 size="small"
                 appearance="plain"
                 .params=${{ cellIndex: index }}>
-            </k-command>
+            </lyra-command>
         `;
 
         return html`
@@ -1108,7 +1108,7 @@ except ImportError:
             <style>
                 ${monacoStyles}
             </style>
-            <div class="notebook-cells">
+            <div class="noteboocells">
                 ${repeat(
                     this.notebook.cells,
                     (_cell, index) => index,
@@ -1135,7 +1135,7 @@ except ImportError:
             opacity: 0.8;
         }
 
-        .notebook-cells {
+        .noteboocells {
             display: flex;
             flex-direction: column;
             gap: 3rem;

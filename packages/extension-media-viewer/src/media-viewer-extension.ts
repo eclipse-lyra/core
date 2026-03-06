@@ -1,6 +1,6 @@
 import { customElement, property, state } from "lit/decorators.js";
 import { css, html, nothing } from "lit";
-import { KPart, EditorInput, editorRegistry, File } from "@kispace-io/core";
+import { LyraPart, EditorInput, editorRegistry, File } from "@eclipse-lyra/core";
 
 const SUPPORTED_EXTENSIONS = [
     '.pdf',
@@ -63,14 +63,14 @@ editorRegistry.registerEditorInputHandler({
             state: {},
         } as EditorInput
         editorInput.widgetFactory = () => html`
-            <k-media-viewer .input=${editorInput}></k-media-viewer>`
+            <lyra-media-viewer .input=${editorInput}></lyra-media-viewer>`
         return editorInput;
     },
     ranking: 1000
 })
 
-@customElement('k-media-viewer')
-export class KMediaViewer extends KPart {
+@customElement('lyra-media-viewer')
+export class LyraMediaViewer extends LyraPart {
     @property({attribute: false})
     public input?: EditorInput
 
@@ -291,7 +291,7 @@ export class KMediaViewer extends KPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'k-media-viewer': KMediaViewer
+        'lyra-media-viewer': LyraMediaViewer
     }
 }
 

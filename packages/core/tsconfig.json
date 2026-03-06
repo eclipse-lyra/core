@@ -14,8 +14,8 @@
     "useDefineForClassFields": false,
     "baseUrl": ".",
     "paths": {
-      "@kispace-io/core": ["src"],
-      "@kispace-io/core/*": ["src/*"]
+      "@eclipse-lyra/core": ["src"],
+      "@eclipse-lyra/core/*": ["src/*"]
     },
     "typeRoots": ["./node_modules/@types"]
   },

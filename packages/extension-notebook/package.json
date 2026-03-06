@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-notebook",
+  "name": "@eclipse-lyra/extension-notebook",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,8 +10,8 @@
     }
   },
   "dependencies": {
-    "@kispace-io/core": "*",
-    "@kispace-io/extension-python-runtime": "*",
+    "@eclipse-lyra/core": "*",
+    "@eclipse-lyra/extension-python-runtime": "*",
     "marked": "^12.0.0 || ^16.4.1",
     "monaco-editor": "0.55.1"
   },

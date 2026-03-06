@@ -1,4 +1,4 @@
-import { extensionRegistry, i18nLazy, contributionRegistry, SYSTEM_LANGUAGE_BUNDLES } from '@kispace-io/core';
+import { extensionRegistry, i18nLazy, contributionRegistry, SYSTEM_LANGUAGE_BUNDLES } from '@eclipse-lyra/core';
 import bundle from './i18n.json';
 import pkg from '../package.json';
 
@@ -15,4 +15,4 @@ extensionRegistry.registerExtension({
 });
 
 export { MONACO_EDITOR_TOOLBAR_TARGET_PREFIX } from './monaco-toolbar-constants';
-export { KMonacoWidget } from './k-monaco-widget';
+export { LyraMonacoWidget } from './monaco-widget';

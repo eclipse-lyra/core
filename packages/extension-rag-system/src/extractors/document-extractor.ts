@@ -4,10 +4,10 @@ export { LLMOCRExtractor } from './llm-ocr-extractor';
 
 import { PDFJSExtractor } from './pdfjs-extractor';
 import { LLMOCRExtractor } from './llm-ocr-extractor';
-import { createLogger } from '@kispace-io/core';
-import { toastWarning } from '@kispace-io/core';
+import { createLogger } from '@eclipse-lyra/core';
+import { toastWarning } from '@eclipse-lyra/core';
 import type { IDocumentExtractor, DocumentExtractionOptions } from './document-extractor-interface';
-import type { File } from '@kispace-io/core';
+import type { File } from '@eclipse-lyra/core';
 
 const logger = createLogger('DocumentExtractor');
 

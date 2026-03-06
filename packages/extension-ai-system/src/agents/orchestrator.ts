@@ -1,4 +1,4 @@
-import type { ExecutionContext } from "@kispace-io/core";
+import type { ExecutionContext } from "@eclipse-lyra/core";
 import type { TaskPlan, ChatProvider } from "../core/types";
 import type { AgentContribution, CompletionExecutor } from "../core/interfaces";
 import { createTaskPlan } from "../task/task-plan";

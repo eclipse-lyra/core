@@ -1,24 +1,24 @@
 import { customElement, property, state } from 'lit/decorators.js';
 import { css, html, TemplateResult, nothing } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { KPart } from '@kispace-io/core';
-import { EditorInput } from '@kispace-io/core';
+import { LyraPart } from '@eclipse-lyra/core';
+import { EditorInput } from '@eclipse-lyra/core';
 import { documentIndexService, IndexedDocument } from './document-index-service';
 import { searchWorkspaceDocuments, RAGSearchResult } from './rag-service';
-import { workspaceService, File } from '@kispace-io/core';
-import { createLogger } from '@kispace-io/core';
+import { workspaceService, File } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-lyra/core';
 import { getWorkspacePath } from './utils/workspace-utils';
 import { SnippetExtractor } from './utils/snippet-extractor';
 import { CONTENT_PREVIEW_LENGTHS, SNIPPET_LENGTHS } from './utils/constants';
-import { toastError, toastInfo } from '@kispace-io/core';
-import { taskService } from '@kispace-io/core';
-import { editorRegistry } from '@kispace-io/core';
+import { toastError, toastInfo } from '@eclipse-lyra/core';
+import { taskService } from '@eclipse-lyra/core';
+import { editorRegistry } from '@eclipse-lyra/core';
 
 const logger = createLogger('RAGSystemManager');
 const snippetExtractor = new SnippetExtractor();
 
-@customElement('k-rag-system-manager')
-export class KRAGSystemManager extends KPart {
+@customElement('lyra-rag-system-manager')
+export class LyraRAGSystemManager extends LyraPart {
     @property({ attribute: false })
     public input?: EditorInput;
 
@@ -107,10 +107,10 @@ export class KRAGSystemManager extends KPart {
     }
 
     private handleTreeSelection(e: CustomEvent) {
-        // Try getting from event detail first (as per k-extensions pattern)
+        // Try getting from event detail first (as per extensions pattern)
         let selection = e.detail?.selection || [];
 
-        // If no selection in detail, try getting from tree element directly (as per k-filebrowser pattern)
+        // If no selection in detail, try getting from tree element directly (as per lyra-filebrowser pattern)
         if (selection.length === 0 && this.treeRef.value) {
             // @ts-ignore
             selection = this.treeRef.value.selectedItems || [];
@@ -378,7 +378,7 @@ export class KRAGSystemManager extends KPart {
 
     private formatFileSize(bytes: number): string {
         if (bytes < 1024) return `${bytes} B`;
-        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} LyraB`;
         return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
 
@@ -451,23 +451,23 @@ export class KRAGSystemManager extends KPart {
                 </wa-select>
             ` : nothing}
             
-            <k-command 
+            <lyra-command 
                 size="small" 
                 icon="arrow-rotate-right"
                 title="Refresh document list"
                 .action=${() => this.loadDocuments()}
                 ?disabled=${this.reindexing}>
                 Refresh
-            </k-command>
+            </lyra-command>
             
-            <k-command 
+            <lyra-command 
                 size="small" 
                 icon="database"
                 title="Re-index all documents"
                 .action=${() => this.reindexAllDocuments()}
                 ?disabled=${this.reindexing || this.loading}>
                 ${this.reindexing ? 'Reindexing...' : 'Re-index All'}
-            </k-command>
+            </lyra-command>
         `;
     }
 
@@ -832,8 +832,8 @@ export class KRAGSystemManager extends KPart {
 
         .snippet-content {
             white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            word-wrap: breaword;
+            overflow-wrap: breaword;
             font-family: monospace;
             font-size: 0.875rem;
             line-height: 1.5;
@@ -842,8 +842,8 @@ export class KRAGSystemManager extends KPart {
 
         .snippet-preview {
             white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            word-wrap: breaword;
+            overflow-wrap: breaword;
             font-family: monospace;
             font-size: 0.875rem;
             line-height: 1.5;
@@ -865,7 +865,7 @@ export class KRAGSystemManager extends KPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'k-rag-system-manager': KRAGSystemManager;
+        'lyra-rag-system-manager': LyraRAGSystemManager;
     }
 }
 

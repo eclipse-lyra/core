@@ -1,6 +1,6 @@
 import { html, css, PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { KDialogContent } from "../parts/k-dialog-content";
+import { LyraDialogContent } from "../parts/dialog-content";
 import { contributionRegistry } from "../core/contributionregistry";
 import { DIALOG_CONTRIBUTION_TARGET, CLOSE_BUTTON, DialogContribution, dialogService } from "../core/dialogservice";
 
@@ -11,8 +11,8 @@ export interface NavigableDialogAction {
     callback: () => void;
 }
 
-@customElement('k-navigable-info-dialog-content')
-export class KNavigableInfoDialogContent extends KDialogContent {
+@customElement('lyra-navigable-info-dialog-content')
+export class LyraNavigableInfoDialogContent extends LyraDialogContent {
     @property({ type: String })
     title: string = '';
 
@@ -92,7 +92,7 @@ export class KNavigableInfoDialogContent extends KDialogContent {
     }
 
     static styles = [
-        ...KDialogContent.styles,
+        ...LyraDialogContent.styles,
         css`
             :host {
                 display: block;
@@ -175,7 +175,7 @@ export class KNavigableInfoDialogContent extends KDialogContent {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'k-navigable-info-dialog-content': KNavigableInfoDialogContent;
+        'lyra-navigable-info-dialog-content': LyraNavigableInfoDialogContent;
     }
 }
 
@@ -189,15 +189,15 @@ contributionRegistry.registerContribution(DIALOG_CONTRIBUTION_TARGET, {
         }
         
         const componentHtml = html`
-            <k-navigable-info-dialog-content 
+            <lyra-navigable-info-dialog-content 
                 .title="${state.title}"
                 .message="${state.message}"
                 .markdown="${state.markdown}"
-            ></k-navigable-info-dialog-content>
+            ></lyra-navigable-info-dialog-content>
         `;
         
         (async () => {
-            const element = document.querySelector('k-navigable-info-dialog-content') as KNavigableInfoDialogContent;
+            const element = document.querySelector('lyra-navigable-info-dialog-content') as LyraNavigableInfoDialogContent;
             if (element) {
                 await element.updateComplete;
                 element.actions = state.actions || [];

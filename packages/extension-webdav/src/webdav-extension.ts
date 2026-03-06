@@ -14,7 +14,7 @@
  * Import this file to register the WebDAV extension and its commands.
  */
 
-import { workspaceService } from '@kispace-io/core';
+import { workspaceService } from '@eclipse-lyra/core';
 import { WebDAVClient, type WebDAVConnectionInfo } from './webdav-client';
 import { WebDAVDirectoryResource } from './webdav-filesys';
 import type { WebDAVResource } from './webdav-client';
@@ -24,7 +24,7 @@ export { WebDAVClient, type WebDAVConnectionInfo, type WebDAVResource } from './
 export { WebDAVFileResource, WebDAVDirectoryResource } from './webdav-filesys';
 
 // Import UI component (registers itself)
-import './k-webdav-connect';
+import './webdav-connect';
 
 // Import commands (registers themselves)
 import './webdav-commands';

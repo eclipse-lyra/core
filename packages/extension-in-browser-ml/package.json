@@ -1,5 +1,5 @@
 {
-    "name": "@kispace-io/extension-in-browser-ml",
+    "name": "@eclipse-lyra/extension-in-browser-ml",
     "version": "0.8.7",
     "type": "module",
     "main": "./dist/index.js",
@@ -22,7 +22,7 @@
         "build": "vite build"
     },
     "dependencies": {
-        "@kispace-io/core": "*",
+        "@eclipse-lyra/core": "*",
         "@huggingface/transformers": "^3.8.0"
     },
     "devDependencies": {

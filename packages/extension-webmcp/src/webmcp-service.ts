@@ -3,9 +3,9 @@ import {
   subscribe,
   unsubscribe,
   TOPIC_COMMAND_REGISTERED,
-} from "@kispace-io/core";
-import { ToolRegistry, type ToolDefinition } from "@kispace-io/extension-ai-system/api";
-import type { Command } from "@kispace-io/core";
+} from "@eclipse-lyra/core";
+import { ToolRegistry, type ToolDefinition } from "@eclipse-lyra/extension-ai-system/api";
+import type { Command } from "@eclipse-lyra/core";
 import type { InputSchema } from "@mcp-b/webmcp-types";
 
 export class WebMCPService {

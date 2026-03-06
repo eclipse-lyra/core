@@ -1,4 +1,4 @@
-import { createLogger } from '@kispace-io/core';
+import { createLogger } from '@eclipse-lyra/core';
 
 const logger = createLogger('ToolDetector');
 

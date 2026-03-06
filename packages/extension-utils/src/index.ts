@@ -1,4 +1,4 @@
-import { extensionRegistry, i18nLazy, contributionRegistry, SYSTEM_LANGUAGE_BUNDLES } from "@kispace-io/core";
+import { extensionRegistry, i18nLazy, contributionRegistry, SYSTEM_LANGUAGE_BUNDLES } from "@eclipse-lyra/core";
 import bundle from "./i18n.json";
 import pkg from "../package.json";
 
@@ -12,6 +12,6 @@ extensionRegistry.registerExtension({
   description: t("EXT_UTILS_DESC"),
   loader: () => import("./commands"),
   icon: "toolbox",
-  dependencies: ["@kispace-io/extension-python-runtime"]
+  dependencies: ["@eclipse-lyra/extension-python-runtime"]
 });
 

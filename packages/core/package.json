@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/core",
+  "name": "@eclipse-lyra/core",
   "version": "0.8.7",
   "description": "Appspace platform core: registries, services, parts, widgets, and API",
   "type": "module",

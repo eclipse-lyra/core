@@ -4,7 +4,7 @@
 
 Create a new package under `packages/` (e.g. `packages/extension-myfeature`) with:
 
-- `package.json` — name `@kispace-io/extension-myfeature`, dependency on `@kispace-io/core`.
+- `package.json` — name `@eclipse-lyra/extension-myfeature`, dependency on `@eclipse-lyra/core`.
 - `tsconfig.json` — extends or matches the repo TypeScript setup.
 - `src/index.ts` — entry that registers the extension.
 
@@ -21,7 +21,7 @@ import {
   commandRegistry,
   i18nLazy,
   SYSTEM_LANGUAGE_BUNDLES,
-} from '@kispace-io/core';
+} from '@eclipse-lyra/core';
 import bundle from './i18n.json';
 import pkg from '../package.json';
 
@@ -35,11 +35,11 @@ extensionRegistry.registerExtension({
   description: t('EXT_MYFEATURE_DESC'),
   loader: () => import('./myfeature-extension'),
   icon: 'puzzle-piece',
-  dependencies: ['@kispace-io/extension-someother'], // optional
+  dependencies: ['@eclipse-lyra/extension-someother'], // optional
 });
 ```
 
-The extension id should match the package name (e.g. `@kispace-io/extension-myfeature`).
+The extension id should match the package name (e.g. `@eclipse-lyra/extension-myfeature`).
 
 The **loader** should dynamically import the module that performs the actual registration (commands, contributions, editors).
 
@@ -48,7 +48,7 @@ The **loader** should dynamically import the module that performs the actual reg
 In `myfeature-extension.ts` (or similar), register commands and optionally the UI contribution (e.g. toolbar button) in one call:
 
 ```ts
-import { registerAll, TOOLBAR_MAIN_RIGHT } from '@kispace-io/core';
+import { registerAll, TOOLBAR_MAIN_RIGHT } from '@eclipse-lyra/core';
 
 registerAll({
   command: {

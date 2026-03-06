@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-memory-usage",
+  "name": "@eclipse-lyra/extension-memory-usage",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,7 +10,7 @@
     }
   },
   "dependencies": {
-    "@kispace-io/core": "*"
+    "@eclipse-lyra/core": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

@@ -1,11 +1,11 @@
 import { html, css, PropertyValues } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
-import { KDialogContent } from "../parts/k-dialog-content";
+import { LyraDialogContent } from "../parts/dialog-content";
 import { contributionRegistry } from "../core/contributionregistry";
 import { DIALOG_CONTRIBUTION_TARGET, OK_BUTTON, CANCEL_BUTTON, DialogContribution, dialogService } from "../core/dialogservice";
 
-@customElement('k-prompt-dialog-content')
-export class KPromptDialogContent extends KDialogContent {
+@customElement('lyra-prompt-dialog-content')
+export class LyraPromptDialogContent extends LyraDialogContent {
     @property({ type: String })
     message: string = '';
 
@@ -19,7 +19,7 @@ export class KPromptDialogContent extends KDialogContent {
     private inputValue: string = '';
 
     static styles = [
-        ...KDialogContent.styles,
+        ...LyraDialogContent.styles,
         css`
             wa-input {
                 width: 100%;
@@ -75,7 +75,7 @@ export class KPromptDialogContent extends KDialogContent {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'k-prompt-dialog-content': KPromptDialogContent;
+        'lyra-prompt-dialog-content': LyraPromptDialogContent;
     }
 }
 
@@ -89,11 +89,11 @@ contributionRegistry.registerContribution(DIALOG_CONTRIBUTION_TARGET, {
         }
         
         return html`
-            <k-prompt-dialog-content 
+            <lyra-prompt-dialog-content 
                 .message="${state.message}"
                 .defaultValue="${state.defaultValue}"
                 .markdown="${state.markdown}"
-            ></k-prompt-dialog-content>
+            ></lyra-prompt-dialog-content>
         `;
     },
     onButton: async (id: string, result: any, state?: any) => {

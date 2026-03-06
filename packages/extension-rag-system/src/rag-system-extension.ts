@@ -1,14 +1,14 @@
 import { documentIndexService } from './document-index-service';
-import { registerAll } from '@kispace-io/core';
-import { workspaceService, File } from '@kispace-io/core';
-import { toastError, toastInfo } from '@kispace-io/core';
-import { taskService } from '@kispace-io/core';
-import { activeSelectionSignal } from '@kispace-io/core';
-import { createLogger } from '@kispace-io/core';
-import { contributionRegistry } from '@kispace-io/core';
-import { editorRegistry, EditorInput } from '@kispace-io/core';
+import { registerAll } from '@eclipse-lyra/core';
+import { workspaceService, File } from '@eclipse-lyra/core';
+import { toastError, toastInfo } from '@eclipse-lyra/core';
+import { taskService } from '@eclipse-lyra/core';
+import { activeSelectionSignal } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-lyra/core';
+import { contributionRegistry } from '@eclipse-lyra/core';
+import { editorRegistry, EditorInput } from '@eclipse-lyra/core';
 import { html } from 'lit';
-import { TOOLBAR_MAIN_RIGHT } from '@kispace-io/core';
+import { TOOLBAR_MAIN_RIGHT } from '@eclipse-lyra/core';
 // Import the component to ensure it's registered
 import './rag-system-manager';
 
@@ -330,7 +330,7 @@ export default function ragSystemExtension(context: any) {
         },
         handle: async (input: EditorInput) => {
             input.widgetFactory = () => html`
-                <k-rag-system-manager .input=${input}></k-rag-system-manager>
+                <lyra-rag-system-manager .input=${input}></lyra-rag-system-manager>
             `;
             return input;
         }

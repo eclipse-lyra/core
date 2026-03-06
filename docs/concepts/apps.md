@@ -10,9 +10,9 @@ An **app** is the top-level unit of the framework. You define it with an `AppDef
 | `name` | Yes | Human-readable name. |
 | `version` | Yes | Semantic version string. |
 | `description` | No | Short description. |
-| `extensions` | No | List of extension ids (e.g. `@kispace-io/extension-command-palette`) to enable when the app loads. |
+| `extensions` | No | List of extension ids (e.g. `@eclipse-lyra/extension-command-palette`) to enable when the app loads. |
 | `contributions` | No | App-level contributions (UI and/or extensions). |
-| `render` | No | Root component: tag string, `{ tag, attributes }`, or a function returning a Lit `TemplateResult`. Defaults to `k-standard-layout`. |
+| `render` | No | Root component: tag string, `{ tag, attributes }`, or a function returning a Lit `TemplateResult`. Defaults to `lyra-standard-layout`. |
 | `initialize` | No | Called after extensions and contributions are registered. |
 | `dispose` | No | Called when the app is unloaded. |
 | `releaseHistory` | No | Static array or callback for release history (used by version-info). |
@@ -21,15 +21,15 @@ An **app** is the top-level unit of the framework. You define it with an `AppDef
 ## Registration
 
 ```ts
-import { appLoaderService } from '@kispace-io/core';
+import { appLoaderService } from '@eclipse-lyra/core';
 
 appLoaderService.registerApp(
   {
     id: 'my-app',
     name: 'My App',
     version: '1.0.0',
-    extensions: ['@kispace-io/extension-command-palette', '@kispace-io/extension-settings-tree'],
-    render: { tag: 'k-standard-layout', attributes: { 'show-bottom-panel': 'true' } },
+    extensions: ['@eclipse-lyra/extension-command-palette', '@eclipse-lyra/extension-settings-tree'],
+    render: { tag: 'lyra-standard-layout', attributes: { 'show-bottom-panel': 'true' } },
   },
   { autoStart: true }
 );
@@ -44,7 +44,7 @@ appLoaderService.registerApp(
 If your app uses the marketplace or needs to expose package info, call `applyAppHostConfig` before registering apps:
 
 ```ts
-import { applyAppHostConfig } from '@kispace-io/core';
+import { applyAppHostConfig } from '@eclipse-lyra/core';
 import appPkg from '../package.json';
 
 applyAppHostConfig({

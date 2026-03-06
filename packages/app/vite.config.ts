@@ -13,14 +13,14 @@ const coreDir = path.resolve(packagesDir, 'core');
 function workspaceSourceAliases(): Record<string, string> {
   const alias: Record<string, string> = {};
 
-  alias['@kispace-io/core/core/events'] = path.resolve(coreDir, 'src/core/events.ts');
-  alias['@kispace-io/core/externals/third-party'] = path.resolve(coreDir, 'src/externals/third-party.ts');
-  alias['@kispace-io/core/externals/lit'] = path.resolve(coreDir, 'src/externals/lit.ts');
-  alias['@kispace-io/core/externals/webawesome'] = path.resolve(coreDir, 'src/externals/webawesome.ts');
-  alias['@kispace-io/core/parts'] = path.resolve(coreDir, 'src/parts');
-  alias['@kispace-io/core/widgets'] = path.resolve(coreDir, 'src/widgets');
-  alias['@kispace-io/core/api'] = path.resolve(coreDir, 'src/api/index.ts');
-  alias['@kispace-io/core'] = path.resolve(coreDir, 'src/index.ts');
+  alias['@eclipse-lyra/core/core/events'] = path.resolve(coreDir, 'src/core/events.ts');
+  alias['@eclipse-lyra/core/externals/third-party'] = path.resolve(coreDir, 'src/externals/third-party.ts');
+  alias['@eclipse-lyra/core/externals/lit'] = path.resolve(coreDir, 'src/externals/lit.ts');
+  alias['@eclipse-lyra/core/externals/webawesome'] = path.resolve(coreDir, 'src/externals/webawesome.ts');
+  alias['@eclipse-lyra/core/parts'] = path.resolve(coreDir, 'src/parts');
+  alias['@eclipse-lyra/core/widgets'] = path.resolve(coreDir, 'src/widgets');
+  alias['@eclipse-lyra/core/api'] = path.resolve(coreDir, 'src/api/index.ts');
+  alias['@eclipse-lyra/core'] = path.resolve(coreDir, 'src/index.ts');
 
   for (const name of readdirSync(packagesDir, { withFileTypes: true })) {
     if (!name.isDirectory() || !name.name.startsWith('extension-')) continue;
@@ -28,7 +28,7 @@ function workspaceSourceAliases(): Record<string, string> {
     const pkgPath = path.join(pkgDir, 'package.json');
     if (!existsSync(pkgPath)) continue;
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
-    if (!pkg.name?.startsWith('@kispace-io/')) continue;
+    if (!pkg.name?.startsWith('@eclipse-lyra/')) continue;
     const srcDir = path.join(pkgDir, 'src');
     if (!existsSync(path.join(srcDir, 'index.ts'))) continue;
     if (pkg.exports?.['./api']) alias[`${pkg.name}/api`] = path.join(srcDir, 'api.ts');
@@ -45,7 +45,7 @@ export default defineConfig({
     alias: workspaceSourceAliases(),
   },
   optimizeDeps: {
-    exclude: ['@kispace-io/core'],
+    exclude: ['@eclipse-lyra/core'],
   },
   server: {
     watch: {

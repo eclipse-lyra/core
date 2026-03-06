@@ -2,9 +2,9 @@
  * Commands for WebDAV workspace integration
  */
 
-import { registerAll } from "@kispace-io/core";
-import { workspaceService } from "@kispace-io/core";
-import { createLogger } from "@kispace-io/core";
+import { registerAll } from "@eclipse-lyra/core";
+import { workspaceService } from "@eclipse-lyra/core";
+import { createLogger } from "@eclipse-lyra/core";
 import type { WebDAVConnectionInfo } from "./webdav-client";
 import { html, render } from "lit";
 

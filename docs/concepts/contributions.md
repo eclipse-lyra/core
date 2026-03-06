@@ -18,7 +18,7 @@ Contribution targets define where UI appears:
 | `TOOLBAR_BOTTOM`, `TOOLBAR_BOTTOM_END`, `TOOLBAR_BOTTOM_CENTER` | Bottom toolbar. |
 | `SYSTEM_LANGUAGE_BUNDLES` | i18n language bundles (extensions). |
 
-Import these from `@kispace-io/core`.
+Import these from `@eclipse-lyra/core`.
 
 ## Contribution types
 

@@ -1,12 +1,12 @@
 import { html } from 'lit';
-import { rootContext } from '@kispace-io/core';
+import { rootContext } from '@eclipse-lyra/core';
 import { aiService } from './service/ai-service';
-import { contributionRegistry } from '@kispace-io/core';
-import type { HTMLContribution } from '@kispace-io/core';
-import { editorRegistry } from '@kispace-io/core';
-import type { EditorInput } from '@kispace-io/core';
-import { registerAll, appSettings } from '@kispace-io/core';
-import { TOOLBAR_BOTTOM, TOOLBAR_MAIN_RIGHT, SIDEBAR_AUXILIARY } from '@kispace-io/core';
+import { contributionRegistry } from '@eclipse-lyra/core';
+import type { HTMLContribution } from '@eclipse-lyra/core';
+import { editorRegistry } from '@eclipse-lyra/core';
+import type { EditorInput } from '@eclipse-lyra/core';
+import { registerAll, appSettings } from '@eclipse-lyra/core';
+import { TOOLBAR_BOTTOM, TOOLBAR_MAIN_RIGHT, SIDEBAR_AUXILIARY } from '@eclipse-lyra/core';
 import { CID_AGENTS, KEY_AI_CONFIG } from './core/constants';
 import type { AgentContribution, AgentToolsConfig } from './core/interfaces';
 import type { AIConfig } from './core/types';
@@ -14,15 +14,15 @@ import GENERAL_SYS_PROMPT from './general-assistant-prompt.txt?raw';
 
 import './chat-provider-contributions';
 import './prompt-enhancer-contributions';
-import './view/k-aiview';
-import './view/k-token-usage';
-import './view/components/k-ai-config-editor';
+import './view/aiview';
+import './view/token-usage';
+import './view/components/ai-config-editor';
 
 contributionRegistry.registerContribution(SIDEBAR_AUXILIARY, {
     name: 'aiview',
     label: 'AI Assistant',
     icon: 'robot',
-    component: (id: string) => html`<k-aiview id="${id}"></k-aiview>`
+    component: (id: string) => html`<lyra-aiview id="${id}"></lyra-aiview>`
 });
 
 contributionRegistry.registerContribution(CID_AGENTS, {
@@ -44,7 +44,7 @@ contributionRegistry.registerContribution(CID_AGENTS, {
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM, {
     target: TOOLBAR_BOTTOM,
     label: 'Token Usage',
-    html: '<k-token-usage></k-token-usage>'
+    html: '<lyra-token-usage></lyra-token-usage>'
 } as HTMLContribution);
 
 editorRegistry.registerEditorInputHandler({
@@ -53,7 +53,7 @@ editorRegistry.registerEditorInputHandler({
     ranking: 1000,
     canHandle: (input: EditorInput) => input.key === '.system.ai-config',
     handle: async (input: EditorInput) => {
-        input.widgetFactory = () => html`<k-ai-config-editor .input="${input}"></k-ai-config-editor>`;
+        input.widgetFactory = () => html`<lyra-ai-config-editor .input="${input}"></lyra-ai-config-editor>`;
         return input;
     }
 });

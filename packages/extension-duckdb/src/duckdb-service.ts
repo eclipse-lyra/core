@@ -1,4 +1,4 @@
-import { createLogger } from '@kispace-io/core';
+import { createLogger } from '@eclipse-lyra/core';
 import * as duckdb from '@duckdb/duckdb-wasm';
 import duckdb_wasm_mvp from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url';
 import mvp_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url';

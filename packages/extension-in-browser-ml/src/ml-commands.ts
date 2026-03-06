@@ -1,8 +1,8 @@
-import { registerAll, type ExecutionContext } from "@kispace-io/core";
+import { registerAll, type ExecutionContext } from "@eclipse-lyra/core";
 import { inBrowserMLService } from "./in-browser-ml-service";
 import { MLTask, MLModel, getModelForTask } from "./ml-models";
-import { createLogger } from "@kispace-io/core";
-import { workspaceService, File } from "@kispace-io/core";
+import { createLogger } from "@eclipse-lyra/core";
+import { workspaceService, File } from "@eclipse-lyra/core";
 
 const logger = createLogger('MLCommands');
 

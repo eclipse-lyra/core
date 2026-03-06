@@ -1,7 +1,7 @@
-import { contributionRegistry, TOPIC_CONTRIBUTEIONS_CHANGED } from '@kispace-io/core';
+import { contributionRegistry, TOPIC_CONTRIBUTEIONS_CHANGED } from '@eclipse-lyra/core';
 import { HowToContribution, HowToStep } from './howto-contribution';
-import { subscribe } from '@kispace-io/core';
-import { createLogger } from '@kispace-io/core';
+import { subscribe } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-lyra/core';
 import { Signal } from '@lit-labs/signals';
 
 const logger = createLogger('HowToService');

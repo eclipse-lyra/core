@@ -5,7 +5,7 @@ import { when } from 'lit/directives/when.js';
 import { marked } from 'marked';
 import type { ChatMessage } from '../../core/types';
 
-@customElement('ai-chat-message')
+@customElement('lyra-ai-chat-message')
 export class AIChatMessage extends LitElement {
     @property({ type: Object, attribute: false })
     public message?: ChatMessage;
@@ -37,13 +37,13 @@ export class AIChatMessage extends LitElement {
     }
 
     private processMarkdownContent(markdownHtml: string): string {
-        if (markdownHtml.includes('code-block-wrapper')) return markdownHtml;
+        if (markdownHtml.includes('code-blocwrapper')) return markdownHtml;
         return markdownHtml.replace(/<pre><code([^>]*)>([\s\S]*?)<\/code><\/pre>/gi, (_, attrs, codeText) => `
-            <div class="code-block-wrapper">
-                <div class="code-block-header">
+            <div class="code-blocwrapper">
+                <div class="code-blocheader">
                     <wa-copy-button value="${this.escapeHtmlAttribute(codeText.trim())}" size="small" label="Copy code"></wa-copy-button>
                 </div>
-                <div class="code-block-content">
+                <div class="code-bloccontent">
                     <pre><code${attrs}>${codeText}</code></pre>
                 </div>
             </div>`);
@@ -175,8 +175,8 @@ export class AIChatMessage extends LitElement {
             padding: 0.5rem 0.75rem;
             border-radius: 0.25rem;
             background-color: var(--wa-color-surface-default);
-            word-break: break-word;
-            overflow-wrap: break-word;
+            word-break: breaword;
+            overflow-wrap: breaword;
             max-width: 100%;
             box-sizing: border-box;
             line-height: 1.3;
@@ -199,7 +199,7 @@ export class AIChatMessage extends LitElement {
 
         .message-content pre {
             white-space: pre-wrap;
-            word-break: break-all;
+            word-break: breaall;
             max-width: 100%;
             box-sizing: border-box;
             overflow-x: auto;
@@ -215,7 +215,7 @@ export class AIChatMessage extends LitElement {
 
         .message-content pre code { background-color: transparent; padding: 0; display: block; }
 
-        .code-block-wrapper {
+        .code-blocwrapper {
             margin: 0.75rem 0;
             border: solid var(--wa-border-width-s) var(--wa-color-neutral-border-loud);
             border-radius: var(--wa-border-radius-m);
@@ -223,7 +223,7 @@ export class AIChatMessage extends LitElement {
             overflow: hidden;
         }
 
-        .code-block-header {
+        .code-blocheader {
             display: flex;
             justify-content: flex-end;
             align-items: center;
@@ -232,9 +232,9 @@ export class AIChatMessage extends LitElement {
             background-color: var(--wa-color-surface-default);
         }
 
-        .code-block-content { padding: 0.75rem; overflow-x: auto; }
-        .code-block-content pre { margin: 0; background-color: transparent; }
-        .code-block-content code { background-color: transparent; padding: 0; }
+        .code-bloccontent { padding: 0.75rem; overflow-x: auto; }
+        .code-bloccontent pre { margin: 0; background-color: transparent; }
+        .code-bloccontent code { background-color: transparent; padding: 0; }
 
         .streaming-cursor {
             display: inline-block;
@@ -251,6 +251,6 @@ export class AIChatMessage extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'ai-chat-message': AIChatMessage;
+        'lyra-ai-chat-message': AIChatMessage;
     }
 }

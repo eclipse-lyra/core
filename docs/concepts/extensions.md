@@ -6,7 +6,7 @@
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `id` | Yes | Unique id (e.g. `@kispace-io/extension-command-palette`, typically the package name). |
+| `id` | Yes | Unique id (e.g. `@eclipse-lyra/extension-command-palette`, typically the package name). |
 | `name` | Yes | Human-readable name (can be an i18n label). |
 | `description` | No | Short description. |
 | `loader` | No | Function that dynamically imports the extension module. Runs when the extension is enabled. |
@@ -28,7 +28,7 @@
 
 ## One package per extension
 
-Each extension typically lives in its own package under `packages/extension-*`, depends on `@kispace-io/core`, and has an entry file that registers the extension and a loader that imports the module that does the real registration.
+Each extension typically lives in its own package under `packages/extension-*`, depends on `@eclipse-lyra/core`, and has an entry file that registers the extension and a loader that imports the module that does the real registration.
 
 ## Dependencies
 

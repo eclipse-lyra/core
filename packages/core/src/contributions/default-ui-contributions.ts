@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { contributionRegistry } from "../core/contributionregistry";
+import { contributionRegistry, type HTMLContribution } from "../core/contributionregistry";
 import {
     SIDEBAR_MAIN,
     TOOLBAR_BOTTOM_END,
@@ -10,14 +10,14 @@ contributionRegistry.registerContribution(SIDEBAR_MAIN, {
     name: "filebrowser",
     label: "Workspace",
     icon: "folder-open",
-    component: (id: string) => html`<k-filebrowser id="${id}"></k-filebrowser>`
+    component: (id: string) => html`<lyra-filebrowser id="${id}"></lyra-filebrowser>`
 });
 
 contributionRegistry.registerContribution("system.fastviews-bottomend", {
     name: "log-terminal",
     label: "Log Messages",
     icon: "list",
-    component: (id: string) => html`<k-log-terminal id="${id}"></k-log-terminal>`
+    component: (id: string) => html`<lyra-log-terminal id="${id}"></lyra-log-terminal>`
 });
 
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM_END, {
@@ -29,16 +29,16 @@ contributionRegistry.registerContribution(TOOLBAR_BOTTOM_END, {
 
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM_END, {
     label: `Fast Views`,
-    html: `<k-fastviews target="system.fastviews-bottomend" icon="bolt" title="Fast Views"></k-fastviews>`
+    html: `<lyra-fastviews target="system.fastviews-bottomend" icon="bolt" title="Fast Views"></lyra-fastviews>`
 });
 
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM_END, {
     label: "Language",
-    html: () => html`<k-language-selector></k-language-selector>`
+    html: () => html`<lyra-language-selector></lyra-language-selector>`
 });
 
 contributionRegistry.registerContribution(TOOLBAR_MAIN_RIGHT, {
     label: "App Switcher",
-    html: () => html`<k-app-switcher></k-app-switcher>`
-});
+    html: () => html`<lyra-app-switcher></lyra-app-switcher>`
+} as HTMLContribution);
 

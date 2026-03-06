@@ -28,7 +28,7 @@ const KEY_EXTERNAL_EXTENSIONS = "extensions.external"
 import { UILabel } from "./i18n";
 
 export interface Extension {
-    /** Unique identifier for the extension (e.g., "@kispace-io/extension-notebook") */
+    /** Unique identifier for the extension (e.g., "@eclipse-lyra/extension-notebook") */
     id: string;
     
     /** Human-readable name of the extension */
@@ -65,7 +65,7 @@ export interface Extension {
      * 
      * @example
      * ```typescript
-     * dependencies: ["@kispace-io/extension-python-runtime"]
+     * dependencies: ["@eclipse-lyra/extension-python-runtime"]
      * ```
      */
     dependencies?: string[];
@@ -256,8 +256,8 @@ class ExtensionRegistry {
      * 
      * @example
      * ```typescript
-     * // This will automatically load @kispace-io/extension-python-runtime first
-     * await extensionRegistry.load('@kispace-io/extension-notebook')
+     * // This will automatically load @eclipse-lyra/extension-python-runtime first
+     * await extensionRegistry.load('@eclipse-lyra/extension-notebook')
      * ```
      */
     public async load(extensionId: string, loadingChain: string[] = []): Promise<void> {

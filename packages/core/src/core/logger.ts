@@ -24,7 +24,7 @@ const originalConsole = {
 // Log handler type
 type LogHandler = (source: string, message: string, level: LogLevel) => void;
 
-// Registered log handler (set by UI components like k-log-terminal)
+// Registered log handler (set by UI components like log-terminal)
 let logHandler: LogHandler | null = null;
 
 // Message buffer for logs that occur before handler is registered

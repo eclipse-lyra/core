@@ -1,4 +1,4 @@
-import { extensionRegistry, i18nLazy, contributionRegistry, SYSTEM_LANGUAGE_BUNDLES } from '@kispace-io/core';
+import { extensionRegistry, i18nLazy, contributionRegistry, SYSTEM_LANGUAGE_BUNDLES } from '@eclipse-lyra/core';
 import bundle from './i18n.json';
 import pkg from '../package.json';
 
@@ -10,7 +10,7 @@ extensionRegistry.registerExtension({
   id: pkg.name,
   name: t('EXT_LINUXTERMINAL_NAME'),
   description: t('EXT_LINUXTERMINAL_DESC'),
-  loader: () => import("./k-linuxterminal"),
+  loader: () => import("./linuxterminal"),
   icon: "terminal",
   experimental: true,
   

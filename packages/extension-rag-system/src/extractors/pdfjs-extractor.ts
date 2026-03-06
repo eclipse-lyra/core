@@ -1,5 +1,5 @@
-import type { File } from '@kispace-io/core';
-import { createLogger } from '@kispace-io/core';
+import type { File } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-lyra/core';
 import type { IDocumentExtractor, DocumentExtractionOptions } from './document-extractor-interface';
 
 const logger = createLogger('PDFJSExtractor');

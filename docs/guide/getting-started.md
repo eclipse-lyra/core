@@ -8,8 +8,8 @@
 ## Run the default app
 
 ```bash
-git clone https://github.com/kispace-io/appspace.git
-cd appspace
+git clone https://github.com/eclipse-lyra/core.git
+cd core
 npm install
 npm run dev
 ```
@@ -29,7 +29,7 @@ The app output is in `packages/app/dist/`.
 
 | Path | Role |
 |------|------|
-| `packages/core` (`@kispace-io/core`) | Platform: registries, services, UI parts. Import this in apps and extensions. |
+| `packages/core` (`@eclipse-lyra/core`) | Platform: registries, services, UI parts. Import this in apps and extensions. |
 | `packages/extension-*` | One package per extension (e.g. command palette, Monaco editor, settings). |
 | `packages/app` | Default app: defines the app and imports extensions. Use as a template for your own app. |
 | Root | Scripts: `dev`, `build`, `build:app`, `test`, `docs:dev`, `docs:build`. |

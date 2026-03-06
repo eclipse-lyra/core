@@ -1,11 +1,11 @@
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { KDialogContent } from "../parts/k-dialog-content";
+import { LyraDialogContent } from "../parts/dialog-content";
 import { contributionRegistry } from "../core/contributionregistry";
 import { DIALOG_CONTRIBUTION_TARGET, OK_BUTTON, DialogContribution, dialogService } from "../core/dialogservice";
 
-@customElement('k-info-dialog-content')
-export class KInfoDialogContent extends KDialogContent {
+@customElement('lyra-info-dialog-content')
+export class LyraInfoDialogContent extends LyraDialogContent {
     @property({ type: String })
     message: string = '';
 
@@ -21,7 +21,7 @@ export class KInfoDialogContent extends KDialogContent {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'k-info-dialog-content': KInfoDialogContent;
+        'lyra-info-dialog-content': LyraInfoDialogContent;
     }
 }
 
@@ -35,10 +35,10 @@ contributionRegistry.registerContribution(DIALOG_CONTRIBUTION_TARGET, {
         }
         
         return html`
-            <k-info-dialog-content 
+            <lyra-info-dialog-content 
                 .message="${state.message}"
                 .markdown="${state.markdown}"
-            ></k-info-dialog-content>
+            ></lyra-info-dialog-content>
         `;
     },
     onButton: async (id: string, result: any, state?: any) => {

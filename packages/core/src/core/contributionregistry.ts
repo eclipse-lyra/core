@@ -33,9 +33,9 @@ export interface TabContribution extends Contribution {
     editorId?: string;
     closable?: boolean;
     noOverflow?: boolean;
-    /** When true or omitted, a k-toolbar is rendered for this tab; when false, no toolbar is shown. */
+    /** When true or omitted, a lyra-toolbar is rendered for this tab; when false, no toolbar is shown. */
     toolbar?: boolean;
-    /** When true or omitted, a k-contextmenu is rendered for this tab; when false, no context menu is shown. */
+    /** When true or omitted, a contextmenu is rendered for this tab; when false, no context menu is shown. */
     contextMenu?: boolean;
     component?: (id: string) => TemplateResult;
 }

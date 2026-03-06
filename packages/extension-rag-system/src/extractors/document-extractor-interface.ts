@@ -1,4 +1,4 @@
-import type { File } from '@kispace-io/core';
+import type { File } from '@eclipse-lyra/core';
 
 export interface DocumentExtractionOptions {
     /** Include page numbers in extracted text (default: true for PDFs) */

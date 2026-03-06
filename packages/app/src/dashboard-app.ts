@@ -1,17 +1,17 @@
 import "./dashboard-views";
-import { html } from "@kispace-io/core/externals/lit";
+import { html } from "@eclipse-lyra/core/externals/lit";
 import {
     contributionRegistry,
     type HTMLContribution,
     type TabContribution,
     SYSTEM_VIEWS,
     TOOLBAR_MAIN_RIGHT,
-    KPart,
+    LyraPart,
     EDITOR_AREA_MAIN,
     commandRegistry,
     appLoaderService,
-} from "@kispace-io/core";
-import { customElement } from "@kispace-io/core/externals/lit";
+} from "@eclipse-lyra/core";
+import { customElement } from "@eclipse-lyra/core/externals/lit";
 
 const dashboardLogo = () => html`
     <div style="padding: var(--wa-space-m); display: flex; justify-content: center; min-width: 48px; min-height: 48px; box-sizing: border-box;">
@@ -30,8 +30,8 @@ contributionRegistry.registerContribution("dashboard-toolbar-top", {
     html: dashboardLogo
 } as HTMLContribution);
 
-@customElement('k-view-wrapper')
-export class KViewWrapper extends KPart {
+@customElement('lyra-view-wrapper')
+export class LyraViewWrapper extends LyraPart {
     protected render() {
         return html`<slot></slot>`
     }
@@ -55,9 +55,9 @@ const makeView = (
 });
 
 const viewDefs: [string, string, string, ViewComponent, boolean][] = [
-    ["dashboard-home", "Overview", "house", () => html`<dashboard-welcome></dashboard-welcome>`, false],
-    ["dashboard-tasks", "My Tasks", "list-check", () => html`<dashboard-my-tasks></dashboard-my-tasks>`, true],
-    ["dashboard-meetings", "Meetings", "calendar-days", () => html`<dashboard-meetings></dashboard-meetings>`, true],
+    ["dashboard-home", "Overview", "house", () => html`<lyra-dashboard-welcome></lyra-dashboard-welcome>`, false],
+    ["dashboard-tasks", "My Tasks", "list-check", () => html`<lyra-dashboard-my-tasks></lyra-dashboard-my-tasks>`, true],
+    ["dashboard-meetings", "Meetings", "calendar-days", () => html`<lyra-dashboard-meetings></lyra-dashboard-meetings>`, true],
 ];
 
 for (const [name, label, icon, component, closable] of viewDefs) {
@@ -89,11 +89,11 @@ appLoaderService.registerApp({
     version: '0.0.0',
     description: 'Demo dashboard layout with left navigation and views.',
     extensions: [
-        '@kispace-io/extension-utils',
-        '@kispace-io/extension-md-editor',
-        '@kispace-io/extension-monaco-editor',
-        '@kispace-io/extension-media-viewer',
-        '@kispace-io/extension-settings-tree'
+        '@eclipse-lyra/extension-utils',
+        '@eclipse-lyra/extension-md-editor',
+        '@eclipse-lyra/extension-monaco-editor',
+        '@eclipse-lyra/extension-media-viewer',
+        '@eclipse-lyra/extension-settings-tree'
     ],
     render: () =>
         html`<style>
@@ -125,14 +125,14 @@ appLoaderService.registerApp({
   
         <div class="dashboard-shell">
           <div class="toolbar-top">
-            <k-toolbar id="dashboard-toolbar-top"></k-toolbar>
-            <k-toolbar id="dashboard-toolbar-top-center"></k-toolbar>
-            <k-toolbar id=${TOOLBAR_MAIN_RIGHT}></k-toolbar>
+            <lyra-toolbar id="dashboard-toolbar-top"></lyra-toolbar>
+            <lyra-toolbar id="dashboard-toolbar-top-center"></lyra-toolbar>
+            <lyra-toolbar id=${TOOLBAR_MAIN_RIGHT}></lyra-toolbar>
           </div>
-          <k-resizable-grid class="dashboard-main" orientation="horizontal" sizes="15%, 85%">
-            <k-toolbar id="dashboard-views" size="large" orientation="vertical"></k-toolbar>
-            <k-tabs style="padding: 10px;" id=${EDITOR_AREA_MAIN}></k-tabs>
-          </k-resizable-grid>
+          <lyra-resizable-grid class="dashboard-main" orientation="horizontal" sizes="15%, 85%">
+            <lyra-toolbar id="dashboard-views" size="large" orientation="vertical"></lyra-toolbar>
+            <lyra-tabs style="padding: 10px;" id=${EDITOR_AREA_MAIN}></lyra-tabs>
+          </lyra-resizable-grid>
         </div>`,
     initialize() {
         requestAnimationFrame(() => {

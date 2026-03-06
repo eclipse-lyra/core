@@ -29,7 +29,7 @@ jobs:
         run: npm ci
 
       - name: Build core package
-        run: npm run build -w @kispace-io/core
+        run: npm run build -w @eclipse-lyra/core
 
       - name: Set package.json version from tag
         run: |
@@ -38,7 +38,7 @@ jobs:
           VERSION=${VERSION#v}
           npm version --no-commit-hooks --no-git-tag-version "$VERSION"
 
-      - name: Build app!space app
+      - name: Build Lyra app
         run: npm run build:app
         continue-on-error: false
 

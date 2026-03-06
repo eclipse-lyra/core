@@ -1,6 +1,6 @@
-import { contributionRegistry, workspaceService, File, TOPIC_WORKSPACE_CHANGED, TOPIC_WORKSPACE_CONNECTED, activeEditorSignal, partDirtySignal, subscribe, appLoaderService } from '@kispace-io/core';
-import type { EditorContentProvider } from '@kispace-io/core';
-import { watchSignal } from '@kispace-io/core';
+import { contributionRegistry, workspaceService, File, TOPIC_WORKSPACE_CHANGED, TOPIC_WORKSPACE_CONNECTED, activeEditorSignal, partDirtySignal, subscribe, appLoaderService } from '@eclipse-lyra/core';
+import type { EditorContentProvider } from '@eclipse-lyra/core';
+import { watchSignal } from '@eclipse-lyra/core';
 import { HOWTO_CONTRIBUTION_TARGET } from '../howto-service';
 import type { HowToContribution, HowToContext } from '../howto-contribution';
 

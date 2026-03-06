@@ -3,7 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ref } from "lit/directives/ref.js";
 import { repeat } from "lit/directives/repeat.js";
 import { PyEnv } from "./pyservice";
-import { rootContext } from "@kispace-io/core";
+import { rootContext } from "@eclipse-lyra/core";
 
 export interface PackageManagerOptions {
     packages: string[];
@@ -12,8 +12,8 @@ export interface PackageManagerOptions {
     pyenv?: PyEnv;
 }
 
-@customElement('k-python-package-manager')
-export class KPythonPackageManager extends LitElement {
+@customElement('lyra-python-package-manager')
+export class LyraPythonPackageManager extends LitElement {
     @property({ type: Boolean })
     open: boolean = false;
 
@@ -284,11 +284,11 @@ export class KPythonPackageManager extends LitElement {
 }
 
 class PythonPackageManagerService {
-    private managerInstance?: KPythonPackageManager;
+    private managerInstance?: LyraPythonPackageManager;
 
-    public showPackageManager(options: PackageManagerOptions): KPythonPackageManager {
+    public showPackageManager(options: PackageManagerOptions): LyraPythonPackageManager {
         if (!this.managerInstance) {
-            this.managerInstance = document.createElement('k-python-package-manager') as KPythonPackageManager;
+            this.managerInstance = document.createElement('lyra-python-package-manager') as LyraPythonPackageManager;
             document.body.appendChild(this.managerInstance);
         }
 
@@ -298,7 +298,7 @@ class PythonPackageManagerService {
         return this.managerInstance;
     }
 
-    public getManager(): KPythonPackageManager | undefined {
+    public getManager(): LyraPythonPackageManager | undefined {
         return this.managerInstance;
     }
 }

@@ -1,4 +1,4 @@
-import { appSettings } from "@kispace-io/core";
+import { appSettings } from "@eclipse-lyra/core";
 import type { ChatMessage } from "../core/types";
 
 export interface Session {

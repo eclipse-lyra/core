@@ -3,7 +3,7 @@ import {
   i18nLazy,
   contributionRegistry,
   SYSTEM_LANGUAGE_BUNDLES,
-} from '@kispace-io/core';
+} from '@eclipse-lyra/core';
 import bundle from './i18n.json';
 import pkg from '../package.json';
 
@@ -17,5 +17,5 @@ extensionRegistry.registerExtension({
   description: t('EXT_DUCKDB_DESC'),
   loader: () => import('./duckdb-extension'),
   icon: 'database',
-  dependencies: ['@kispace-io/extension-monaco-editor'],
+  dependencies: ['@eclipse-lyra/extension-monaco-editor'],
 });

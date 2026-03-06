@@ -1,4 +1,4 @@
-import { appSettings } from "@kispace-io/core";
+import { appSettings } from "@eclipse-lyra/core";
 import type { ChatProvider } from "../core/types";
 import type { AIService } from "../service/ai-service";
 import { KEY_AI_CONFIG } from "../core/constants";

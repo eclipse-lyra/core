@@ -1,5 +1,5 @@
-import type { ExecutionContext } from "@kispace-io/core";
-import { contributionRegistry } from "@kispace-io/core";
+import type { ExecutionContext } from "@eclipse-lyra/core";
+import { contributionRegistry } from "@eclipse-lyra/core";
 import type { ChatMessage, ApiMessage, ToolDefinition } from "../core/types";
 import type { PromptEnhancer, AgentContribution, PromptEnhancerContribution } from "../core/interfaces";
 import { CID_PROMPT_ENHANCERS } from "../core/constants";

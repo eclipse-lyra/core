@@ -1,10 +1,10 @@
 import {customElement, property, state} from "lit/decorators.js";
-import {KPart} from "@kispace-io/core";
+import {LyraPart} from "@eclipse-lyra/core";
 import {html} from "lit";
 import {marked} from "marked";
-import {EditorInput, editorRegistry} from "@kispace-io/core";
+import {EditorInput, editorRegistry} from "@eclipse-lyra/core";
 import {unsafeHTML} from "lit/directives/unsafe-html.js";
-import {File} from "@kispace-io/core";
+import {File} from "@eclipse-lyra/core";
 
 editorRegistry.registerEditorInputHandler({
     editorId: "system.md-editor",
@@ -21,14 +21,14 @@ editorRegistry.registerEditorInputHandler({
             state: {},
         } as EditorInput
         editorInput.widgetFactory = () => html`
-            <k-md-editor .input=${editorInput}></k-md-editor>`
+            <lyra-md-editor .input=${editorInput}></lyra-md-editor>`
         return editorInput;
     },
     ranking: 1000
 })
 
-@customElement('k-md-editor')
-export class KMDEditor extends KPart {
+@customElement('lyra-md-editor')
+export class LyraMDEditor extends LyraPart {
     @property({attribute: false})
     public input?: EditorInput
     @state()

@@ -13,7 +13,7 @@ const ARTIFACT_TYPE_ICON: Record<ArtifactType, string> = {
     text: 'file-lines'
 };
 
-@customElement('ai-workspace-panel')
+@customElement('lyra-ai-workspace-panel')
 export class AIWorkspacePanel extends LitElement {
     @property({ type: Array, attribute: false })
     public artifacts: Artifact[] = [];
@@ -142,7 +142,7 @@ export class AIWorkspacePanel extends LitElement {
         .artifact-content pre {
             margin: 0;
             white-space: pre-wrap;
-            word-break: break-word;
+            word-break: breaword;
             font-size: 0.8rem;
             max-height: 200px;
             overflow-y: auto;
@@ -152,6 +152,6 @@ export class AIWorkspacePanel extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'ai-workspace-panel': AIWorkspacePanel;
+        'lyra-ai-workspace-panel': AIWorkspacePanel;
     }
 }

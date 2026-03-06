@@ -1,9 +1,9 @@
-import { DependencyContext, rootContext } from "@kispace-io/core";
-import { publish, subscribe } from "@kispace-io/core";
-import { appSettings, TOPIC_SETTINGS_CHANGED } from "@kispace-io/core";
-import { contributionRegistry } from "@kispace-io/core";
-import type { ExecutionContext } from "@kispace-io/core";
-import { logger } from "@kispace-io/core";
+import { DependencyContext, rootContext } from "@eclipse-lyra/core";
+import { publish, subscribe } from "@eclipse-lyra/core";
+import { appSettings, TOPIC_SETTINGS_CHANGED } from "@eclipse-lyra/core";
+import { contributionRegistry } from "@eclipse-lyra/core";
+import type { ExecutionContext } from "@eclipse-lyra/core";
+import { logger } from "@eclipse-lyra/core";
 
 import {
     TOPIC_AI_STREAM_STARTED,

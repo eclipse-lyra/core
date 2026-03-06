@@ -2,15 +2,15 @@ import { ragService, searchWorkspaceDocuments } from './rag-service';
 import { DocumentSearchScope } from './document-index-service';
 import { documentIndexService } from './document-index-service';
 import { getWorkspacePath } from './utils/workspace-utils';
-import { rootContext } from '@kispace-io/core';
+import { rootContext } from '@eclipse-lyra/core';
 import { SEARCH_CONFIG } from './utils/constants';
 import { RAGResultFormatter } from './services/rag-result-formatter';
 import { SnippetExtractor } from './utils/snippet-extractor';
-import { aiService } from '@kispace-io/extension-ai-system/api';
-import { commandRegistry, registerAll } from '@kispace-io/core';
-import type { ExecutionContext } from '@kispace-io/core';
-import type { PromptEnhancer, ToolDefinition } from '@kispace-io/extension-ai-system/api';
-import { createLogger } from '@kispace-io/core';
+import { aiService } from '@eclipse-lyra/extension-ai-system/api';
+import { commandRegistry, registerAll } from '@eclipse-lyra/core';
+import type { ExecutionContext } from '@eclipse-lyra/core';
+import type { PromptEnhancer, ToolDefinition } from '@eclipse-lyra/extension-ai-system/api';
+import { createLogger } from '@eclipse-lyra/core';
 
 const logger = createLogger('RAGIntegration');
 const resultFormatter = new RAGResultFormatter(new SnippetExtractor());
@@ -25,11 +25,11 @@ export const ragPromptEnhancer: PromptEnhancer = {
             }
 
             const instruction = `IMPORTANT: When a user mentions a specific file name or path:
-1. ALWAYS first check if the file is indexed using rag.check-indexed with the file path
+1. ALWAYS first check if the file is indexed using rag.checindexed with the file path
 2. If indexed: Use rag.search-documents with filePath parameter to get relevant content from the indexed document
 3. If not indexed: Read the file directly using file commands (cat_file, ls, etc.)
 
-NEVER use filePath or fileName parameters in rag.search-documents without first verifying the file is indexed with rag.check-indexed. If you use a non-indexed file path/name, the search will return no results.
+NEVER use filePath or fileName parameters in rag.search-documents without first verifying the file is indexed with rag.checindexed. If you use a non-indexed file path/name, the search will return no results.
 
 For general searches (not specific files), use rag.search-documents with just the query parameter to search across all indexed documents. This is more efficient than reading files one by one.`;
 
@@ -82,7 +82,7 @@ export function registerRAGCommands() {
         command: {
             id: 'rag.search-documents',
             name: 'Search Workspace Documents (RAG)',
-            description: 'Search indexed workspace documents for relevant content. IMPORTANT: Only use filePath or fileName if you have already verified the file is indexed using rag.check-indexed. If the file is not indexed, this will return no results.',
+            description: 'Search indexed workspace documents for relevant content. IMPORTANT: Only use filePath or fileName if you have already verified the file is indexed using rag.checindexed. If the file is not indexed, this will return no results.',
             parameters: [
                 {
                     name: 'query',
@@ -101,12 +101,12 @@ export function registerRAGCommands() {
                 },
                 {
                     name: 'filePath',
-                    description: 'Exact file path to search (relative to workspace root). Only use if you verified the file is indexed with rag.check-indexed.',
+                    description: 'Exact file path to search (relative to workspace root). Only use if you verified the file is indexed with rag.checindexed.',
                     required: false
                 },
                 {
                     name: 'fileName',
-                    description: 'File name to search for (partial match supported). Only use if you verified the file is indexed with rag.check-indexed.',
+                    description: 'File name to search for (partial match supported). Only use if you verified the file is indexed with rag.checindexed.',
                     required: false
                 }
             ]
@@ -137,7 +137,7 @@ export function registerRAGCommands() {
                     return {
                         query: query || (filePath ? `filePath: ${filePath}` : `fileName: ${fileName}`),
                         results: [],
-                        warning: `No indexed document found for ${filePath ? `file path "${filePath}"` : `file name "${fileName}"`}. The file may not be indexed. Use rag.check-indexed to verify if a file is indexed before searching.`
+                        warning: `No indexed document found for ${filePath ? `file path "${filePath}"` : `file name "${fileName}"`}. The file may not be indexed. Use rag.checindexed to verify if a file is indexed before searching.`
                     };
                 }
 
@@ -151,7 +151,7 @@ export function registerRAGCommands() {
 
     registerAll({
         command: {
-            id: 'rag.check-indexed',
+            id: 'rag.checindexed',
             name: 'Check if File is Indexed',
             description: 'Check if a specific file is indexed in the document index. Use this to determine if you should use RAG search or read the file directly.',
             parameters: [

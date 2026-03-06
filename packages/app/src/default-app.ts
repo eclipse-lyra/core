@@ -1,4 +1,4 @@
-import { appLoaderService } from "@kispace-io/core";
+import { appLoaderService } from "@eclipse-lyra/core";
 
 appLoaderService.registerApp(
     {
@@ -7,17 +7,17 @@ appLoaderService.registerApp(
       version: '0.0.0',
       description: 'Default app!space application',
       extensions: [
-        '@kispace-io/extension-utils',
-        '@kispace-io/extension-command-palette',
-        '@kispace-io/extension-command-shell',
-        '@kispace-io/extension-md-editor',
-        '@kispace-io/extension-monaco-editor',
-        '@kispace-io/extension-media-viewer',
-        '@kispace-io/extension-settings-tree',
-        '@kispace-io/extension-memory-usage',
-        '@kispace-io/extension-ai-system',
-        '@kispace-io/extension-webmcp',
-        '@kispace-io/extension-duckdb',
+        '@eclipse-lyra/extension-utils',
+        '@eclipse-lyra/extension-command-palette',
+        '@eclipse-lyra/extension-command-shell',
+        '@eclipse-lyra/extension-md-editor',
+        '@eclipse-lyra/extension-monaco-editor',
+        '@eclipse-lyra/extension-media-viewer',
+        '@eclipse-lyra/extension-settings-tree',
+        '@eclipse-lyra/extension-memory-usage',
+        '@eclipse-lyra/extension-ai-system',
+        '@eclipse-lyra/extension-webmcp',
+        '@eclipse-lyra/extension-duckdb',
       ],
     },
     { autoStart: true }

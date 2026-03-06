@@ -1,4 +1,4 @@
-import { Contribution } from '@kispace-io/core';
+import { Contribution } from '@eclipse-lyra/core';
 
 /**
  * HowTo Contribution System

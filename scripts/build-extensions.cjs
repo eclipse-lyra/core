@@ -4,7 +4,7 @@ const { execSync } = require("child_process");
 
 const ROOT = path.join(__dirname, "..");
 const PACKAGES_DIR = path.join(ROOT, "packages");
-const EXTENSION_SCOPE = "@kispace-io/extension-";
+const EXTENSION_SCOPE = "@eclipse-lyra/extension-";
 
 function getExtensionPackages() {
   const dirs = fs.readdirSync(PACKAGES_DIR, { withFileTypes: true });

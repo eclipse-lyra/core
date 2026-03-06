@@ -1,8 +1,8 @@
 import {html} from "lit";
-import type {EditorInput} from "@kispace-io/core";
-import {File} from "@kispace-io/core";
-import {activeEditorSignal} from "@kispace-io/core";
-import type {ExecutionContext} from "@kispace-io/core";
+import type {EditorInput} from "@eclipse-lyra/core";
+import {File} from "@eclipse-lyra/core";
+import {activeEditorSignal} from "@eclipse-lyra/core";
+import type {ExecutionContext} from "@eclipse-lyra/core";
 import {NotebookData, isNotebookEditorLike} from "./notebook-types";
 
 export default ({editorRegistry, commandRegistry, contributionRegistry}: any) => {
@@ -50,9 +50,9 @@ export default ({editorRegistry, commandRegistry, contributionRegistry}: any) =>
     });
 
     editorRegistry.registerEditorInputHandler({
-        editorId: "system.notebook-editor",
+        editorId: "system.notebooeditor",
         label: "Jupyter Notebook",
-        icon: "k jupyter",
+        icon: "lyra jupyter",
         lazyInit: () => import('./notebook-runtime'),
         canHandle: (input: any) => input instanceof File && input.getName().toLowerCase().endsWith(".ipynb"),
         handle: async (input: File) => {
@@ -60,12 +60,12 @@ export default ({editorRegistry, commandRegistry, contributionRegistry}: any) =>
                 title: input.getName(),
                 data: input,
                 key: input.getName(),
-                icon: "k jupyter",
+                icon: "lyra jupyter",
                 noOverflow: true,
                 state: {},
             } as EditorInput;
             editorInput.widgetFactory = () => html`
-                <k-notebook-editor .input=${editorInput}></k-notebook-editor>`;
+                <lyra-notebook-editor .input=${editorInput}></lyra-notebook-editor>`;
             return editorInput;
         },
         ranking: 100,
@@ -73,7 +73,7 @@ export default ({editorRegistry, commandRegistry, contributionRegistry}: any) =>
 
     contributionRegistry.registerContribution('filebrowser.create', {
         label: 'Jupyter Notebook',
-        icon: 'k jupyter',
+        icon: 'lyra jupyter',
         command: 'touch',
         params: {
             path: "notebook.ipynb",

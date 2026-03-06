@@ -1,4 +1,4 @@
-import { createLogger } from '@kispace-io/core';
+import { createLogger } from '@eclipse-lyra/core';
 import { MLTask, MLModel, getModelForTask } from './ml-models';
 import MLWorker from './ml-worker?worker';
 

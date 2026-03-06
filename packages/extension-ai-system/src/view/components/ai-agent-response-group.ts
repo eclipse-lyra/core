@@ -6,7 +6,7 @@ import type { ChatMessage } from '../../core/types';
 import type { AgentResponseGroup, AgentResponseInfo } from '../agent-group-manager';
 import './ai-chat-message';
 
-@customElement('ai-agent-response-group')
+@customElement('lyra-ai-agent-response-group')
 export class AIAgentResponseGroup extends LitElement {
     @property({ type: Object, attribute: false })
     public group?: AgentResponseGroup;
@@ -54,12 +54,12 @@ export class AIAgentResponseGroup extends LitElement {
                     </div>
                 </div>
                 <div class="agent-card-content">
-                    <ai-chat-message
+                    <lyra-ai-chat-message
                         .message="${message}"
                         .isStreaming="${agentInfo.status === 'streaming'}"
                         .showHeader="${false}"
                         .messageIndex="${agentInfo.messageIndex}">
-                    </ai-chat-message>
+                    </lyra-ai-chat-message>
                 </div>
             </div>
         `;
@@ -173,6 +173,6 @@ export class AIAgentResponseGroup extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'ai-agent-response-group': AIAgentResponseGroup;
+        'lyra-ai-agent-response-group': AIAgentResponseGroup;
     }
 }

@@ -20,7 +20,7 @@ const STATUS_COLOR: Record<StepStatus, string> = {
     pending: 'var(--wa-color-neutral-40)'
 };
 
-@customElement('ai-task-progress-panel')
+@customElement('lyra-ai-task-progress-panel')
 export class AITaskProgressPanel extends LitElement {
     @property({ type: Object, attribute: false })
     public plan?: TaskPlan;
@@ -36,7 +36,7 @@ export class AITaskProgressPanel extends LitElement {
         const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
         return html`
-            <div class="task-panel">
+            <div class="taspanel">
                 <div class="panel-header" @click="${() => { this.expanded = !this.expanded; }}">
                     <wa-icon name="diagram-project" label="Task Plan"></wa-icon>
                     <span class="panel-title">Task Plan</span>
@@ -70,7 +70,7 @@ export class AITaskProgressPanel extends LitElement {
     static styles = css`
         :host { display: block; }
 
-        .task-panel {
+        .taspanel {
             border: solid var(--wa-border-width-s) var(--wa-color-brand-border-quiet);
             border-radius: var(--wa-border-radius-m);
             background: var(--wa-color-surface-default);
@@ -156,6 +156,6 @@ export class AITaskProgressPanel extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'ai-task-progress-panel': AITaskProgressPanel;
+        'lyra-ai-task-progress-panel': AITaskProgressPanel;
     }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-monaco-editor",
+  "name": "@eclipse-lyra/extension-monaco-editor",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,7 +10,7 @@
     }
   },
   "dependencies": {
-    "@kispace-io/core": "*",
+    "@eclipse-lyra/core": "*",
     "monaco-editor": "0.55.1"
   },
   "devDependencies": {

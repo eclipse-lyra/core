@@ -1,14 +1,14 @@
 import { html } from "lit";
-import { EditorInput, editorRegistry, File } from "@kispace-io/core";
+import { EditorInput, editorRegistry, File } from "@eclipse-lyra/core";
 
-import "./k-monaco-widget";
+import "./monaco-widget";
 
 editorRegistry.registerEditorInputHandler({
     editorId: "system.monaco-editor",
     label: "Code",
     icon: "file-pen",
     lazyInit: async () => {
-        await import('./k-monaco-editor');
+        await import('./monaco-editor');
     },
     canHandle: (input: unknown) =>
         input instanceof File && !input.getName().toLowerCase().endsWith(".py"),
@@ -22,7 +22,7 @@ editorRegistry.registerEditorInputHandler({
             state: {},
         } as EditorInput
         editorInput.widgetFactory = () => html`
-            <k-monaco-editor .input=${editorInput}></k-monaco-editor>`
+            <lyra-monaco-editor .input=${editorInput}></lyra-monaco-editor>`
         return editorInput;
     }
 })

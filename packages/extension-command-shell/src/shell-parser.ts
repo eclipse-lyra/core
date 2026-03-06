@@ -1,4 +1,4 @@
-import type { CommandRegistry, Command } from "@kispace-io/core";
+import type { CommandRegistry, Command } from "@eclipse-lyra/core";
 
 export interface ParsedCommand {
   commandId: string;

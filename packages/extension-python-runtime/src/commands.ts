@@ -1,4 +1,4 @@
-import { registerAll, workspaceService, toastError, Directory } from "@kispace-io/core";
+import { registerAll, workspaceService, toastError, Directory } from "@eclipse-lyra/core";
 import { PyEnv } from "./pyservice";
 
 registerAll({

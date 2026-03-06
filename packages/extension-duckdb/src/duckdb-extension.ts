@@ -1,7 +1,7 @@
-import { rootContext, editorRegistry, File, type EditorInput } from '@kispace-io/core';
+import { rootContext, editorRegistry, File, type EditorInput } from '@eclipse-lyra/core';
 import { html } from 'lit';
 import { duckdbService } from './duckdb-service';
-import './k-duckdb-editor';
+import './duckdb-editor';
 import './duckdb-extension-manager';
 
 export default function () {
@@ -25,7 +25,7 @@ export default function () {
         widgetFactory: () => null as any,
       };
       editorInput.widgetFactory = () =>
-        html`<k-duckdb-editor .input=${editorInput}></k-duckdb-editor>`;
+        html`<lyra-duckdb-editor .input=${editorInput}></lyra-duckdb-editor>`;
       return editorInput;
     },
   });

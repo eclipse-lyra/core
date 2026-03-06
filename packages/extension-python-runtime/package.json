@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-python-runtime",
+  "name": "@eclipse-lyra/extension-python-runtime",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,8 +22,8 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@kispace-io/core": "*",
-    "@kispace-io/extension-monaco-editor": "*",
+    "@eclipse-lyra/core": "*",
+    "@eclipse-lyra/extension-monaco-editor": "*",
     "pip-requirements-js": "^1.0.2",
     "pyodide": "^0.27.7"
   },

@@ -1,5 +1,5 @@
-import { contributionRegistry, registerAll, type ExecutionContext, taskService, toastError, createLogger } from "@kispace-io/core";
-import { signal } from "@kispace-io/core/externals/lit";
+import { contributionRegistry, registerAll, type ExecutionContext, taskService, toastError, createLogger } from "@eclipse-lyra/core";
+import { signal } from "@eclipse-lyra/core/externals/lit";
 import { inBrowserMLService } from "./in-browser-ml-service";
 import { MLTask, MLModel } from "./ml-models";
 

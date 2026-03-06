@@ -1,5 +1,5 @@
 {
-  "name": "@kispace-io/extension-utils",
+  "name": "@eclipse-lyra/extension-utils",
   "version": "0.8.7",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,8 +10,8 @@
     }
   },
   "dependencies": {
-    "@kispace-io/core": "*",
-    "@kispace-io/extension-python-runtime": "*",
+    "@eclipse-lyra/core": "*",
+    "@eclipse-lyra/extension-python-runtime": "*",
     "jszip": "^3.10.1"
   },
   "devDependencies": {

@@ -15,7 +15,7 @@ export interface PendingApproval {
     alwaysAllowSelections: Map<string, boolean>;
 }
 
-@customElement('ai-tool-approval')
+@customElement('lyra-ai-tool-approval')
 export class AIToolApproval extends LitElement {
     @property({ type: Map, attribute: false })
     public pendingApprovals = new Map<string, PendingApproval>();
@@ -158,6 +158,6 @@ export class AIToolApproval extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'ai-tool-approval': AIToolApproval;
+        'lyra-ai-tool-approval': AIToolApproval;
     }
 }

@@ -1,4 +1,4 @@
-import { File, FileContentType, workspaceService, taskService, toastError, toastInfo, registerAll } from "@kispace-io/core";
+import { File, FileContentType, workspaceService, taskService, toastError, toastInfo, registerAll } from "@eclipse-lyra/core";
 
 registerAll({
   command: {

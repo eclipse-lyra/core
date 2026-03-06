@@ -1,6 +1,6 @@
 import type { AgentContribution, AgentWorkflowOptions, AgentWorkflowResult } from "../core/interfaces";
 import type { ChatMessage, Artifact } from "../core/types";
-import type { ExecutionContext } from "@kispace-io/core";
+import type { ExecutionContext } from "@eclipse-lyra/core";
 import type { IWorkflowStrategy, AgentExecutor } from "./workflow-strategy";
 import { orchestrateTask } from "../agents/orchestrator";
 import { TaskWorkspace } from "../workspace/workspace";

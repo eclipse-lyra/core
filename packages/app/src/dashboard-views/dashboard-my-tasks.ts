@@ -1,4 +1,4 @@
-import { css, html, LitElement, customElement, state } from "@kispace-io/core/externals/lit";
+import { css, html, LitElement, customElement, state } from "@eclipse-lyra/core/externals/lit";
 
 interface TaskItem {
     id: string;
@@ -15,7 +15,7 @@ const SAMPLE_TASKS: TaskItem[] = [
     { id: "5", title: "Sync with design team", done: true },
 ];
 
-@customElement("dashboard-my-tasks")
+@customElement("lyra-dashboard-my-tasks")
 export class DashboardMyTasks extends LitElement {
     @state() private tasks = [...SAMPLE_TASKS];
 
@@ -26,30 +26,30 @@ export class DashboardMyTasks extends LitElement {
             height: 100%;
             box-sizing: border-box;
         }
-        .task-list {
+        .taslist {
             list-style: none;
             padding: 0;
             margin: 0;
             max-width: 600px;
         }
-        .task-item {
+        .tasitem {
             display: flex;
             align-items: center;
             gap: var(--wa-space-m);
             padding: var(--wa-space-m) 0;
             border-bottom: 1px solid var(--wa-color-neutral-border-subtle);
         }
-        .task-item:last-child {
+        .tasitem:last-child {
             border-bottom: none;
         }
-        .task-item.done .task-title {
+        .tasitem.done .tastitle {
             text-decoration: line-through;
             color: var(--wa-color-text-quiet);
         }
-        .task-title {
+        .tastitle {
             flex: 1;
         }
-        .task-due {
+        .tasdue {
             font-size: var(--wa-font-size-s);
             color: var(--wa-color-text-quiet);
         }
@@ -61,17 +61,17 @@ export class DashboardMyTasks extends LitElement {
 
     protected render() {
         return html`
-            <ul class="task-list">
+            <ul class="taslist">
                 ${this.tasks.map(
                     (task) => html`
-                        <li class="task-item ${task.done ? "done" : ""}">
+                        <li class="tasitem ${task.done ? "done" : ""}">
                             <wa-checkbox
                                 ?checked=${task.done}
                                 @change=${() => this.toggleTask(task.id)}
                                 aria-label="${task.title}"
                             ></wa-checkbox>
-                            <span class="task-title">${task.title}</span>
-                            ${task.due ? html`<span class="task-due">${task.due}</span>` : ""}
+                            <span class="tastitle">${task.title}</span>
+                            ${task.due ? html`<span class="tasdue">${task.due}</span>` : ""}
                         </li>
                     `
                 )}

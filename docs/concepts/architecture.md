@@ -27,7 +27,7 @@
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  UI (core)                                                   │
-│  k-standard-layout · k-tabs · k-toolbar · k-filebrowser · …    │
+│  lyra-standard-layout · lyra-tabs · lyra-toolbar · lyra-filebrowser · …    │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -41,7 +41,7 @@
 
 | Path | Role |
 |------|------|
-| **`packages/core`** (`@kispace-io/core`) | Platform: registries, services, parts, widgets, dialogs. No extension logic; extensions live in separate packages. |
+| **`packages/core`** (`@eclipse-lyra/core`) | Platform: registries, services, parts, widgets, dialogs. No extension logic; extensions live in separate packages. |
 | **`packages/extension-*`** | One package per extension. Each depends on core and registers commands, contributions, and optionally editors. |
 | **`packages/app`** | Default app: imports core and extensions, defines `AppDefinition` and `extensions[]`, registers with the app loader. Use as a template. |
 | **Root** | Workspace root. Scripts: `dev`, `build`, `build:app`, `test`, `docs:dev`, `docs:build`. |

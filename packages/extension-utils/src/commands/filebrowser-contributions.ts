@@ -4,7 +4,7 @@ import {
   File,
   Directory,
   i18nLazy,
-} from "@kispace-io/core";
+} from "@eclipse-lyra/core";
 
 const t = i18nLazy("extensions");
 

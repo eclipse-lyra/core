@@ -1,4 +1,4 @@
-import { File, Directory, workspaceService, toastError, registerAll } from "@kispace-io/core";
+import { File, Directory, workspaceService, toastError, registerAll } from "@eclipse-lyra/core";
 import { collectFilesRecursive } from "../shared";
 
 registerAll({
