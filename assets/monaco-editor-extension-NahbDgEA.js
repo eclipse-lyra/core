@@ -1,3 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/monaco-editor-GZnuVHQk.js","assets/main-erQGEv3o.js","assets/main-BftkUBAw.css"])))=>i.map(i=>d[i]);
-import{k as a,j as o,c as n,_ as r}from"./main-erQGEv3o.js";a.registerEditorInputHandler({editorId:"system.monaco-editor",label:"Code",icon:"file-pen",lazyInit:async()=>{await r(()=>import("./monaco-editor-GZnuVHQk.js"),__vite__mapDeps([0,1,2]))},canHandle:e=>e instanceof n&&!e.getName().toLowerCase().endsWith(".py"),handle:async e=>{const t={title:e.getName(),data:e,key:e.getName(),icon:"file-pen",noOverflow:!1,state:{}};return t.component=()=>o`
-            <lyra-monaco-editor .input=${t}></lyra-monaco-editor>`,t}});
