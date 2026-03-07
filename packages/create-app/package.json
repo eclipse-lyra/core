@@ -1,0 +1,16 @@
+{
+  "name": "@eclipse-lyra/create-app",
+  "version": "0.0.0",
+  "description": "Scaffold a new Eclipse Lyra app (monorepo with app + example extension)",
+  "type": "module",
+  "bin": "index.js",
+  "files": [
+    "index.js",
+    "template"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eclipse-lyra/core"
+  },
+  "license": "EPL-2.0"
+}

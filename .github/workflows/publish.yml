@@ -47,7 +47,7 @@ jobs:
       - name: Update package versions (CI only, not committed)
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          for pkg in packages/core packages/extension-*; do
+          for pkg in packages/core packages/extension-* packages/create-app; do
             [ -d "$pkg" ] && (cd "$pkg" && npm version "$VERSION" --no-git-tag-version) && echo "Updated $pkg to $VERSION"
           done
       
@@ -58,12 +58,16 @@ jobs:
         run: npm run type-check
         continue-on-error: true
 
-      - name: Publish core and extension packages to npm
+      - name: Publish core, extensions, and create-app to npm
         run: |
-          for pkg in packages/core packages/extension-*; do
+          for pkg in packages/core packages/extension-* packages/create-app; do
             if [ -d "$pkg" ]; then
-              echo "Publishing $pkg..."
-              (cd "$pkg" && npm publish --access public --provenance)
+              if grep -q '"private":\s*true' "$pkg/package.json" 2>/dev/null; then
+                echo "Skipping $pkg (private)"
+              else
+                echo "Publishing $pkg..."
+                (cd "$pkg" && npm publish --access public --provenance)
+              fi
             fi
           done
 

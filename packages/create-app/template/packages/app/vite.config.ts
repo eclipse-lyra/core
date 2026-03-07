@@ -1,0 +1,37 @@
+import { defineConfig } from 'vite';
+import mkcert from 'vite-plugin-mkcert';
+import crossOriginIsolation from 'vite-plugin-cross-origin-isolation';
+import { resolveDepVersionsPlugin } from '@eclipse-lyra/core/vite-plugin-resolve-deps';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export default defineConfig({
+  root: __dirname,
+  base: process.env.VITE_BASE_PATH || '/',
+  resolve: {},
+  optimizeDeps: {
+    include: ['@eclipse-lyra/core'],
+  },
+  plugins: [resolveDepVersionsPlugin(), mkcert(), crossOriginIsolation()],
+  esbuild: {
+    tsconfigRaw: {
+      compilerOptions: {
+        experimentalDecorators: true,
+        useDefineForClassFields: false,
+      },
+    },
+  },
+  worker: {
+    format: 'es',
+  },
+  build: {
+    outDir: path.resolve(__dirname, 'dist'),
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
+    },
+  },
+});

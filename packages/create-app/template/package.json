@@ -1,0 +1,11 @@
+{
+  "name": "{{APP_NAME}}",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "npm run dev -w {{APP_NAME}}",
+    "build": "npm run build -w {{APP_NAME}}",
+    "preview": "npm run preview -w {{APP_NAME}}"
+  }
+}

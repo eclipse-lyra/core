@@ -1,0 +1,39 @@
+{
+  "name": "{{APP_NAME}}",
+  "version": "0.0.0",
+  "description": "{{APP_DESCRIPTION}}",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@eclipse-lyra/core": "^0.x",
+    "@eclipse-lyra/extension-ai-system": "^0.x",
+    "@eclipse-lyra/extension-command-palette": "^0.x",
+    "@eclipse-lyra/extension-md-editor": "^0.x",
+    "@eclipse-lyra/extension-media-viewer": "^0.x",
+    "@eclipse-lyra/extension-memory-usage": "^0.x",
+    "@eclipse-lyra/extension-monaco-editor": "^0.x",
+    "@eclipse-lyra/extension-notebook": "^0.x",
+    "@eclipse-lyra/extension-python-runtime": "^0.x",
+    "@eclipse-lyra/extension-settings-tree": "^0.x",
+    "@eclipse-lyra/extension-utils": "^0.x",
+    "example-extension": "*",
+    "pace-js": "^1.2.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vite-plugin-cross-origin-isolation": "^0.1.6",
+    "vite-plugin-mkcert": "^1.17.9"
+  },
+  "marketplace": {
+    "catalogUrls": [
+      "https://raw.githubusercontent.com/kispace-io/appspace-marketplace/main/catalogs/extensions.json",
+      "https://raw.githubusercontent.com/kispace-io/appspace-marketplace/main/catalogs/apps.json"
+    ]
+  }
+}
