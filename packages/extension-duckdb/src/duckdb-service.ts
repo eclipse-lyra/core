@@ -1,9 +1,16 @@
 import { createLogger } from '@eclipse-lyra/core';
 import * as duckdb from '@duckdb/duckdb-wasm';
+import duckdb_wasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url';
+import mvp_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url';
+import duckdb_wasm_eh from '@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url';
+import eh_worker from '@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url';
 
 const logger = createLogger('DuckDBService');
 
-const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
+const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
+  mvp: { mainModule: duckdb_wasm, mainWorker: mvp_worker },
+  eh: { mainModule: duckdb_wasm_eh, mainWorker: eh_worker },
+};
 
 const IN_MEMORY_KEY = '__memory__';
 const OPFS_DB_DIR = 'duckdb-databases';
@@ -52,12 +59,8 @@ async function createConnection(path: string | null): Promise<{
   conn: AsyncDuckDBConnection;
   worker: Worker;
 }> {
-  const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
-  const workerUrl = URL.createObjectURL(
-    new Blob([`importScripts("${bundle.mainWorker}");`], { type: 'text/javascript' }),
-  );
-  const worker = new Worker(workerUrl);
-  URL.revokeObjectURL(workerUrl);
+  const bundle = await duckdb.selectBundle(MANUAL_BUNDLES);
+  const worker = new Worker(bundle.mainWorker!);
   const log = new duckdb.ConsoleLogger();
   const db = new duckdb.AsyncDuckDB(log, worker);
   await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
