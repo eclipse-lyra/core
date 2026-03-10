@@ -1,6 +1,7 @@
 import { html } from "lit";
 import { contributionRegistry, type HTMLContribution } from "../core/contributionregistry";
 import {
+    PANEL_BOTTOM,
     SIDEBAR_MAIN,
     TOOLBAR_BOTTOM_END,
     TOOLBAR_MAIN_RIGHT
@@ -21,7 +22,7 @@ contributionRegistry.registerContribution(SIDEBAR_MAIN, {
     component: (id: string) => html`<lyra-filebrowser id="${id}"></lyra-filebrowser>`
 });
 
-contributionRegistry.registerContribution("system.fastviews-bottomend", {
+contributionRegistry.registerContribution(PANEL_BOTTOM, {
     name: VIEW_LOG_TERMINAL,
     label: "Log Messages",
     icon: "list",
