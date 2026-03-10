@@ -1,6 +1,10 @@
 {
   "name": "@eclipse-lyra/extension-dataviewer",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eclipse-lyra/core"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
