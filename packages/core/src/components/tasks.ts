@@ -261,7 +261,7 @@ export class LyraTasks extends LyraPart {
                     style="font-size: 1rem; --indicator-color: var(--wa-color-warning-fill-loud);"
                     label="${t.ACTIVE_TASKS}"
                 ></wa-spinner>
-                <span class="tascount">${taskCount}</span>
+                <wa-badge appearance="outlined" variant="neutral" pill>${taskCount}</wa-badge>
                 <div class="tasbar-wrap"><wa-progress-bar indeterminate></wa-progress-bar></div>
             </div>
         `;
