@@ -1,6 +1,6 @@
 import { customElement, property, state } from 'lit/decorators.js';
 import { css, html } from 'lit';
-import { LyraPart, toastError } from '@eclipse-lyra/core';
+import { LyraPart, toastError, filebrowserDialog } from '@eclipse-lyra/core';
 import { dataviewerService, type DataviewListEntry } from './dataviewer-service';
 import type { DataView } from './api';
 import { TOPIC_DATAVIEW_ADDED } from './api';
@@ -28,6 +28,50 @@ export class DataViewPart extends LyraPart {
 
   private get displayed(): DataView | null {
     return this.selectedView ?? this.dataview;
+  }
+
+  private get hasData(): boolean {
+    const dv = this.displayed;
+    if (!dv) return false;
+    const { columns, rows } = dv.data;
+    return Array.isArray(columns) && Array.isArray(rows) && (columns.length > 0 || rows.length > 0);
+  }
+
+  private toCsv(dv: DataView): string {
+    const { columns, rows } = dv.data;
+    const escapeCell = (value: unknown): string => {
+      if (value === null || value === undefined) return '';
+      const str = String(value);
+      if (!/[",\n]/.test(str)) return str;
+      return `"${str.replace(/"/g, '""')}"`;
+    };
+    const header = columns.map(escapeCell).join(',');
+    const body = rows.map((row) => row.map(escapeCell).join(',')).join('\n');
+    return body ? `${header}\n${body}` : header;
+  }
+
+  private async onExportCsv(): Promise<void> {
+    const dv = this.displayed;
+    if (!dv || !this.hasData) return;
+    try {
+      const csv = this.toCsv(dv);
+      const safeTitle = dv.title?.trim() || 'dataview';
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const fileName = `${safeTitle.replace(/[^a-zA-Z0-9-_]+/g, '_')}-${timestamp}.csv`;
+      const targetDir = await this.chooseExportDirectory();
+      if (!targetDir) return;
+      // @ts-ignore executeCommand is available via LyraPart/LyraWidget
+      this.executeCommand('touch', {
+        path: `${targetDir}/${fileName}`,
+        contents: csv,
+      });
+    } catch (err) {
+      toastError(err instanceof Error ? err.message : String(err));
+    }
+  }
+
+  private async chooseExportDirectory(): Promise<string | null> {
+    return filebrowserDialog('directory');
   }
 
   protected async doInitUI() {
@@ -94,7 +138,6 @@ export class DataViewPart extends LyraPart {
   private async onHistorySelect(e: CustomEvent<{ item?: { value?: string } }>): Promise<void> {
     const value = e.detail?.item?.value ?? '';
     if (!value || value === '__stats__') {
-      // Ignore the stats item and empty
       return;
     }
     await this.selectStorageKey(value);
@@ -111,6 +154,17 @@ export class DataViewPart extends LyraPart {
         this.selectedView = null;
       }
       await this.refreshPersistedList(true);
+    } catch (err) {
+      toastError(err instanceof Error ? err.message : String(err));
+    }
+  }
+
+  private async onClearHistory(): Promise<void> {
+    try {
+      await dataviewerService.clearAllViews();
+      this.selectedStorageKey = '';
+      this.selectedView = null;
+      await this.refreshPersistedList(false);
     } catch (err) {
       toastError(err instanceof Error ? err.message : String(err));
     }
@@ -147,6 +201,19 @@ export class DataViewPart extends LyraPart {
 
           <wa-dropdown-item value="__stats__" disabled>
             ${this.persistedList.length} data view${this.persistedList.length === 1 ? '' : 's'}
+            ${this.persistedList.length > 0
+              ? html`
+                  <wa-button
+                    slot="details"
+                    appearance="plain"
+                    size="small"
+                    title="Clear history"
+                    @click=${() => this.onClearHistory()}
+                  >
+                    <wa-icon name="trash" label="Clear history"></wa-icon>
+                  </wa-button>
+                `
+              : null}
           </wa-dropdown-item>
 
           ${this.persistedList.map(
@@ -170,9 +237,20 @@ export class DataViewPart extends LyraPart {
               </wa-dropdown-item>
             `
           )}
+
         </wa-dropdown>
 
         <wa-divider orientation="vertical"></wa-divider>
+
+        <wa-button
+          size="small"
+          appearance="plain"
+          title="Export current data view to CSV"
+          ?disabled=${!this.hasData}
+          @click=${() => this.onExportCsv()}
+        >
+          <wa-icon name="file-csv" label="Export CSV"></wa-icon>
+        </wa-button>
 
         <wa-switch
           ?checked=${this.autoActivateTab}

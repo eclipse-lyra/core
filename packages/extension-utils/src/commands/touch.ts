@@ -55,7 +55,8 @@ registerAll({
         path += extension;
       }
 
-      if (path) {
+      const isAbsolute = path?.startsWith("/");
+      if (path && !isAbsolute) {
         const selection = activeSelectionSignal.get();
         const dirPath =
           selection instanceof Directory
@@ -65,6 +66,7 @@ registerAll({
               : undefined;
         if (dirPath && !path.startsWith(dirPath + "/")) path = dirPath + "/" + path;
       }
+      if (path && isAbsolute) path = path.slice(1);
 
       const workspaceDir = await workspaceService.getWorkspace();
       if (!workspaceDir) {

@@ -68,6 +68,13 @@ export class DataviewerService {
     await persistenceService.persistObject(KEY_INDEX, list);
     await persistenceService.persistObject(KEY_PREFIX + storageKey, null);
   }
+
+  async clearAllViews(): Promise<void> {
+    const index = (await persistenceService.getObject(KEY_INDEX)) as IndexEntry[] | undefined;
+    const list = Array.isArray(index) ? index : [];
+    await Promise.all(list.map((entry) => persistenceService.persistObject(KEY_PREFIX + entry.storageKey, null)));
+    await persistenceService.persistObject(KEY_INDEX, []);
+  }
 }
 
 export const dataviewerService = new DataviewerService();

@@ -34,7 +34,9 @@ export type {
     LogLevel
 } from '../core/logger';
 export type {
-    NavigableDialogAction
+    NavigableDialogAction,
+    FilebrowserDialogMode,
+    FilebrowserDialogState
 } from '../dialogs';
 export type {
     TreeNode,

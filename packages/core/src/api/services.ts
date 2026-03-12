@@ -29,11 +29,13 @@ export {
     type SettingsJsonSchema,
     type SettingsCategoryInfo,
 } from '../core/settingsservice';
+export { dialogService } from '../core/dialogservice';
 export { 
     infoDialog,
     navigableInfoDialog,
     confirmDialog,
     promptDialog,
+    filebrowserDialog,
     type NavigableDialogAction
 } from '../dialogs';
 export { 
