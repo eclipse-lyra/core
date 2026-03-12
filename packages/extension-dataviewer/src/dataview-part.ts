@@ -5,11 +5,15 @@ import { dataviewerService, type DataviewListEntry } from './dataviewer-service'
 import type { DataView } from './api';
 import { TOPIC_DATAVIEW_ADDED } from './api';
 import { when } from '@eclipse-lyra/core/externals/lit';
+import './lyra-data-table';
 
 @customElement('lyra-dataview')
 export class DataViewPart extends LyraPart {
   @property({ attribute: false })
   dataview: DataView | null = null;
+
+  @property({ type: Boolean })
+  standalone = false;
 
   @state()
   private persistedList: DataviewListEntry[] = [];
@@ -171,6 +175,7 @@ export class DataViewPart extends LyraPart {
   }
 
   protected renderToolbar() {
+    if (this.standalone) return html``;
     const current = this.selectedView ?? this.dataview;
     const selectedMeta = this.persistedList.find((e) => e.storageKey === this.selectedStorageKey);
     const baseTitle = selectedMeta?.title ?? current?.title ?? (this.persistedList.length > 0 ? 'Latest data view' : 'No data');
@@ -267,30 +272,10 @@ export class DataViewPart extends LyraPart {
   }
 
   private renderTable(dv: DataView) {
-    const { columns, rows } = dv.data;
-    if (columns.length === 0 && rows.length === 0) {
+    if (!this.hasData) {
       return html`<div class="result-empty">No data.</div>`;
     }
-    return html`
-      <div class="result-table-wrap">
-        <table class="result-table">
-          <thead>
-            <tr>
-              ${columns.map((col) => html`<th>${col}</th>`)}
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(
-              (row) => html`
-                <tr>
-                  ${row.map((cell) => html`<td>${String(cell ?? '')}</td>`)}
-                </tr>
-              `
-            )}
-          </tbody>
-        </table>
-      </div>
-    `;
+    return html`<lyra-data-table .data=${dv.data}></lyra-data-table>`;
   }
 
   render() {

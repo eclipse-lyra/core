@@ -12,8 +12,6 @@ import './dataview-part';
 import type { DataView } from './api';
 import { parseCsv } from './parse-csv';
 
-const DATAVIEW_KEY_PREFIX = '.dataview/';
-
 dataviewerService.init();
 rootContext.put('dataviewerService', dataviewerService);
 
@@ -22,34 +20,6 @@ contributionRegistry.registerContribution(PANEL_BOTTOM, {
   label: 'Data Views',
   icon: 'table',
   component: (id: string) => html`<lyra-dataview id="${id}"></lyra-dataview>`,
-});
-
-editorRegistry.registerEditorInputHandler({
-  editorId: 'system.dataviewer',
-  label: 'Data View',
-  icon: 'table',
-  ranking: 900,
-  canHandle: (input: unknown) =>
-    typeof (input as EditorInput)?.key === 'string' &&
-    (input as EditorInput).key.startsWith(DATAVIEW_KEY_PREFIX),
-  handle: async (input: EditorInput) => {
-    const storageKey = (input.data?.storageKey as string) ?? (input.key?.replace(DATAVIEW_KEY_PREFIX, '') as string);
-    const entry = await dataviewerService.getView(storageKey);
-    if (!entry) {
-      return Promise.reject(new Error('Data view not found'));
-    }
-    const title = entry.title || `Data: ${entry.id}`;
-    return {
-      key: input.key,
-      title,
-      data: entry,
-      icon: 'table',
-      noOverflow: false,
-      state: {},
-      component: () =>
-        html`<lyra-dataview .dataview=${entry}></lyra-dataview>`,
-    } as EditorInput;
-  },
 });
 
 editorRegistry.registerEditorInputHandler({
@@ -74,7 +44,7 @@ editorRegistry.registerEditorInputHandler({
       icon: 'table',
       noOverflow: false,
       state: {},
-      component: () => html`<lyra-dataview .dataview=${dataView}></lyra-dataview>`,
+      component: () => html`<lyra-dataview .dataview=${dataView} .standalone=${true}></lyra-dataview>`,
     };
     return editorInput;
   },
