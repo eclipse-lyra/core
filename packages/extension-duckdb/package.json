@@ -23,8 +23,7 @@
   },
   "dependencies": {
     "@duckdb/duckdb-wasm": "1.33.1-dev20.0",
-    "@eclipse-lyra/core": "*",
-    "@eclipse-lyra/extension-monaco-editor": "*"
+    "@eclipse-lyra/core": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
