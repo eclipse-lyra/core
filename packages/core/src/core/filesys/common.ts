@@ -73,6 +73,13 @@ export enum FileContentEncoding {
     BASE64
 }
 
+/**
+ * Options for reading file contents. Backend implementors are encouraged to
+ * preserve MIME information when possible – for example, by returning the
+ * native Blob from remote HTTP/WebDAV responses (via response.blob()) and
+ * passing it through unchanged for { blob: true } / { uri: true } usages,
+ * instead of recreating typeless Blobs from raw ArrayBuffers.
+ */
 export interface FileContentsOptions {
     contentType?: FileContentType;
     encoding?: FileContentEncoding;
