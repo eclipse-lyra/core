@@ -11,5 +11,4 @@ import "./exists";
 import "./wc";
 import "./unzip";
 import "./p12split";
-import "./js";
 

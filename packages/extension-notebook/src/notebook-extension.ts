@@ -1,11 +1,15 @@
-import {html} from "lit";
-import type {EditorInput} from "@eclipse-lyra/core";
-import {File} from "@eclipse-lyra/core";
-import {activeEditorSignal} from "@eclipse-lyra/core";
-import type {ExecutionContext} from "@eclipse-lyra/core";
-import {NotebookData, isNotebookEditorLike} from "./notebook-types";
+import { html } from "lit";
+import type { EditorInput } from "@eclipse-lyra/core";
+import { File } from "@eclipse-lyra/core";
+import { activeEditorSignal } from "@eclipse-lyra/core";
+import type { ExecutionContext } from "@eclipse-lyra/core";
+import { NotebookData, isNotebookEditorLike } from "./notebook-types";
+import { TARGET_NOTEBOOK_KERNELS } from "./notebook-kernel-api";
+import { javascriptKernelContribution } from "./javascript-kernel";
 
-export default ({editorRegistry, commandRegistry, contributionRegistry}: any) => {
+export default ({ editorRegistry, commandRegistry, contributionRegistry }: any) => {
+    contributionRegistry.registerContribution(TARGET_NOTEBOOK_KERNELS, javascriptKernelContribution);
+
     const INITIAL_NOTEBOOK_CONTENT: NotebookData = {
         cells: [
             {
@@ -15,17 +19,17 @@ export default ({editorRegistry, commandRegistry, contributionRegistry}: any) =>
             },
             {
                 cell_type: 'code',
-                source: ['print("Hello, World!")'],
+                source: ['self.postMessage("Hello, World!")'],
                 execution_count: null,
                 outputs: [],
                 metadata: {}
             }
         ],
-        metadata: {},
+        metadata: { kernel: 'javascript' },
         nbformat: 4,
         nbformat_minor: 4
     };
-    commandRegistry.registerHandler('python', {
+    commandRegistry.registerHandler('notebook.runCell', {
         ranking: 10,
         canExecute: (context: ExecutionContext) => {
             const activeEditor = activeEditorSignal.get();

@@ -8,9 +8,10 @@ import { marked } from "marked";
 import * as monaco from 'monaco-editor';
 import monacoStyles from "monaco-editor/min/vs/editor/editor.main.css?raw";
 import type { EditorInput } from "@eclipse-lyra/core";
-import { File, workspaceService, createLogger, LyraPart } from "@eclipse-lyra/core";
-import { PyEnv, pythonPackageManagerService } from "@eclipse-lyra/extension-python-runtime/api";
+import { File, createLogger, LyraPart, contributionRegistry, subscribe, unsubscribe, TOPIC_CONTRIBUTEIONS_CHANGED } from "@eclipse-lyra/core";
 import type { NotebookCell, NotebookData, NotebookEditorLike } from "./notebook-types";
+import type { NotebookKernel, NotebookKernelContribution } from "./notebook-kernel-api";
+import { TARGET_NOTEBOOK_KERNELS } from "./notebook-kernel-api";
 
 const logger = createLogger('NotebookRuntime');
 
@@ -29,16 +30,24 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
     private executingCells: Set<number> = new Set();
 
     @state()
-    private pyenv?: PyEnv;
+    private availableKernels: NotebookKernelContribution[] = [];
 
     @state()
-    private pyConnected: boolean = false;
+    private selectedKernelId: string | null = null;
 
     @state()
-    private pyConnecting: boolean = false;
+    private kernel: NotebookKernel | null = null;
 
     @state()
-    private pyVersion?: string;
+    private kernelConnected: boolean = false;
+
+    @state()
+    private kernelConnecting: boolean = false;
+
+    @state()
+    private kernelVersion: string | undefined = undefined;
+
+    private unsubscribeContributionsToken?: string;
 
     @state()
     private editingMarkdownCells: Set<number> = new Set();
@@ -76,13 +85,17 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
             this.themeObserver = undefined;
         }
 
-        if (this.pyenv) {
-            this.pyenv.close();
-            this.pyenv = undefined;
+        if (this.unsubscribeContributionsToken) {
+            unsubscribe(this.unsubscribeContributionsToken);
+            this.unsubscribeContributionsToken = undefined;
         }
 
-        this.pyConnected = false;
-        this.pyVersion = undefined;
+        if (this.kernel?.close) {
+            void Promise.resolve(this.kernel.close());
+        }
+        this.kernel = null;
+        this.kernelConnected = false;
+        this.kernelVersion = undefined;
     }
 
     async save() {
@@ -119,24 +132,55 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
         this.loadNotebook();
     }
 
+    private async onKernelDropdownSelect(e: CustomEvent<{ item?: { value?: string } }>): Promise<void> {
+        const value = e.detail?.item?.value ?? '';
+        const nextId = value || null;
+        if (this.selectedKernelId === nextId) return;
+        if (this.kernel?.close) void Promise.resolve(this.kernel.close());
+        this.kernel = null;
+        this.kernelConnected = false;
+        this.kernelVersion = undefined;
+        this.selectedKernelId = nextId;
+        if (this.notebook) {
+            if (!this.notebook.metadata) this.notebook.metadata = {};
+            this.notebook.metadata.kernel = nextId ?? undefined;
+        }
+        this.cellOutputs.clear();
+        this.executionCounter = 0;
+        this.notebook?.cells?.forEach((cell) => {
+            if (cell.cell_type === 'code') {
+                cell.execution_count = null;
+                cell.outputs = [];
+            }
+        });
+        this.resetCellState();
+        await this.ensureKernelLoaded();
+        this.requestUpdate();
+        this.updateToolbar();
+    }
+
     protected renderToolbar() {
-        const connectionTitle = this.pyConnecting 
-            ? 'Connecting to Python...' 
-            : this.pyConnected 
-                ? 'Python Connected' 
-                : 'Python Disconnected - Click to connect';
-        
-        const connectionText = this.pyConnecting
+        const kernels = this.availableKernels;
+        const hasKernels = kernels.length > 0;
+        const currentLabel = this.selectedKernelId
+            ? kernels.find((c) => c.id === this.selectedKernelId)?.label ?? this.selectedKernelId
+            : 'Select kernel';
+
+        const connectionTitle = this.kernelConnecting
             ? 'Connecting...'
-            : this.pyConnected && this.pyVersion 
-                ? `Python ${this.pyVersion}` 
+            : this.kernelConnected
+                ? 'Kernel connected'
+                : 'Kernel disconnected';
+        const connectionText = this.kernelConnecting
+            ? 'Connecting...'
+            : this.kernelConnected
+                ? (this.kernelVersion ?? 'Connected')
                 : 'Not connected';
-        
-        const iconColor = this.pyConnected
-            ? "var(--wa-color-green-40)"
-            : this.pyConnecting
-                ? "var(--wa-color-warning-500)"
-                : "var(--wa-color-red-40)";
+        const iconColor = this.kernelConnected
+            ? 'var(--wa-color-green-40)'
+            : this.kernelConnecting
+                ? 'var(--wa-color-warning-500)'
+                : 'var(--wa-color-red-40)';
 
         const runAllButton = this.isRunningAll ? html`
             <wa-button size="small" appearance="plain" @click=${() => this.cancelAllCells()} title="Cancel running all cells">
@@ -151,51 +195,179 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
         `;
 
         return html`
-            <wa-button 
-                appearance="plain" 
+            <wa-dropdown
+                class="kernel-select"
+                placement="bottom-start"
+                distance="4"
                 size="small"
-                style="display: flex; align-items: center; gap: 0.5rem;"
-                ?disabled=${this.pyConnecting}
-                @click=${() => this.connectPython()}
-                title=${connectionTitle}>
-                <wa-icon 
-                    name="circle"
-                    label="Python status"
-                    style=${styleMap({ color: iconColor })}
-                ></wa-icon>
-                ${connectionText}
-            </wa-button>
+                @wa-select=${(e: CustomEvent<{ item?: { value?: string } }>) => void this.onKernelDropdownSelect(e)}
+            >
+                <wa-button
+                    slot="trigger"
+                    appearance="plain"
+                    size="small"
+                    with-caret
+                    title="Notebook kernel"
+                >
+                    ${currentLabel}
+                </wa-button>
+                ${kernels.map(
+                    (c) => html`
+                        <wa-dropdown-item
+                            value=${c.id}
+                            type="checkbox"
+                            ?checked=${c.id === this.selectedKernelId}
+                        >
+                            ${c.label}
+                        </wa-dropdown-item>
+                    `
+                )}
+            </wa-dropdown>
             ${runAllButton}
-            <wa-button 
-                size="small" 
+            <wa-button
+                size="small"
                 appearance="plain"
                 @click=${() => this.clearAllOutputs()}
-                title="Clear all outputs and reset execution counter">
+                title="Clear all outputs and reset execution counter"
+            >
                 <wa-icon name="eraser" label="Clear"></wa-icon>
                 Clear Outputs
             </wa-button>
-            <wa-button 
-                size="small" 
-                appearance="plain"
-                @click=${() => this.restartKernel()}
-                title="Restart Python kernel (clears all variables and state)"
-                ?disabled=${!this.pyConnected || this.pyConnecting}>
-                <wa-icon name="arrows-rotate" label="Restart"></wa-icon>
-                Restart Kernel
-            </wa-button>
-            <wa-button 
-                size="small" 
-                appearance="plain"
-                @click=${() => this.openPackageManager()}
-                title="Manage required packages for this notebook">
-                <wa-icon name="box" label="Packages"></wa-icon>
-                Packages
-            </wa-button>
+            ${this.kernel?.restart ? html`
+                <wa-button
+                    size="small"
+                    appearance="plain"
+                    @click=${() => void this.restartKernel()}
+                    title="Restart kernel"
+                    ?disabled=${!this.kernelConnected || this.kernelConnecting}
+                >
+                    <wa-icon name="arrows-rotate" label="Restart"></wa-icon>
+                    Restart Kernel
+                </wa-button>
+            ` : ''}
+            ${this.kernel?.openPackageManager ? html`
+                <wa-button
+                    size="small"
+                    appearance="plain"
+                    @click=${() => this.openPackageManager()}
+                    title="Manage packages"
+                >
+                    <wa-icon name="box" label="Packages"></wa-icon>
+                    Packages
+                </wa-button>
+            ` : ''}
+            ${this.kernel ? (this.kernel.connect ? html`
+                <wa-button
+                    appearance="plain"
+                    size="small"
+                    style="display: flex; align-items: center; gap: 0.5rem;"
+                    ?disabled=${this.kernelConnecting}
+                    @click=${() => void this.connectKernel()}
+                    title=${connectionTitle}
+                >
+                    <wa-icon name="circle" label="Kernel status" style=${styleMap({ color: iconColor })}></wa-icon>
+                    ${connectionText}
+                </wa-button>
+            ` : html`
+                <span style="display: flex; align-items: center; gap: 0.5rem;" title=${connectionTitle}>
+                    <wa-icon name="circle" label="Kernel status" style=${styleMap({ color: iconColor })}></wa-icon>
+                    ${connectionText}
+                </span>
+            `) : ''}
         `;
     }
 
-    protected doInitUI() {
+    private async connectKernel(): Promise<void> {
+        if (this.kernelConnecting || !this.kernel?.connect) return;
+        try {
+            this.kernelConnecting = true;
+            this.requestUpdate();
+            this.updateToolbar();
+            await this.kernel.connect({
+                requiredPackages: this.notebook?.metadata?.required_packages,
+            });
+            this.kernelConnected = true;
+            if (this.kernel.getVersion) this.kernelVersion = await this.kernel.getVersion();
+        } catch (err) {
+            logger.error('Failed to connect kernel', err);
+        } finally {
+            this.kernelConnecting = false;
+            this.requestUpdate();
+            this.updateToolbar();
+        }
+    }
+
+    protected async doInitUI() {
         this.setupThemeObserver();
+        this.unsubscribeContributionsToken = subscribe(TOPIC_CONTRIBUTEIONS_CHANGED, (event: { target?: string }) => {
+            if (event?.target === TARGET_NOTEBOOK_KERNELS) {
+                void this.refreshKernels();
+            }
+        });
+        await this.refreshKernels();
+    }
+
+    private resolveDefaultKernelId(contributions: NotebookKernelContribution[]): string | null {
+        if (!contributions.length) return null;
+        const fromMeta = this.notebook?.metadata?.kernel;
+        if (fromMeta && contributions.some((c) => c.id === fromMeta)) return fromMeta;
+        const python = contributions.find((c) => c.id === 'python');
+        if (python) return python.id;
+        const js = contributions.find((c) => c.id === 'javascript');
+        if (js) return js.id;
+        return contributions[0].id;
+    }
+
+    private async refreshKernels(): Promise<void> {
+        const contributions = contributionRegistry.getContributions<NotebookKernelContribution>(TARGET_NOTEBOOK_KERNELS);
+        this.availableKernels = contributions;
+        if (!this.selectedKernelId && contributions.length) {
+            this.selectedKernelId = this.resolveDefaultKernelId(contributions);
+            if (this.notebook && this.selectedKernelId) {
+                if (!this.notebook.metadata) this.notebook.metadata = {};
+                this.notebook.metadata.kernel = this.selectedKernelId;
+            }
+        }
+        if (this.selectedKernelId && !contributions.some((c) => c.id === this.selectedKernelId)) {
+            this.selectedKernelId = contributions.length ? contributions[0].id : null;
+        }
+        this.requestUpdate();
+        await this.ensureKernelLoaded();
+        this.updateToolbar();
+    }
+
+    private async ensureKernelLoaded(): Promise<void> {
+        const id = this.selectedKernelId;
+        if (!id || this.kernel?.id === id) return;
+        if (this.kernel?.close) void Promise.resolve(this.kernel.close());
+        this.kernel = null;
+        this.kernelConnected = false;
+        this.kernelVersion = undefined;
+        const contribution = this.availableKernels.find((c) => c.id === id);
+        if (!contribution) return;
+        try {
+            this.kernelConnecting = true;
+            this.requestUpdate();
+            this.updateToolbar();
+            const k = await contribution.loadKernel();
+            if (this.selectedKernelId !== id) return;
+            this.kernel = k;
+            if (k.connect) {
+                await k.connect({
+                    requiredPackages: this.notebook?.metadata?.required_packages,
+                });
+            }
+            this.kernelConnected = true;
+            if (k.getVersion) {
+                this.kernelVersion = await k.getVersion();
+            }
+        } catch (err) {
+            logger.error('Failed to load kernel', id, err);
+        } finally {
+            this.kernelConnecting = false;
+            this.requestUpdate();
+            this.updateToolbar();
+        }
     }
 
     private async loadNotebook() {
@@ -214,7 +386,10 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
             };
         }
 
-        // Initialize execution counter from existing cells
+        if (this.notebook?.metadata?.kernel) {
+            this.selectedKernelId = this.notebook.metadata.kernel;
+        }
+
         if (this.notebook?.cells) {
             const maxCount = this.notebook.cells
                 .filter(cell => cell.cell_type === 'code')
@@ -231,6 +406,8 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
                 }
             });
         }
+
+        void this.refreshKernels();
     }
 
     private setupThemeObserver() {
@@ -357,71 +534,6 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
         return newCell;
     }
 
-    private async initPyodide() {
-        if (!this.pyenv) {
-            this.pyenv = new PyEnv();
-            const workspace = await workspaceService.getWorkspace();
-            if (workspace) {
-                await this.pyenv.init(workspace);
-                this.pyConnected = true;
-
-                // Get Python version using sys.version
-                try {
-                    const response = await this.pyenv.execCode('import sys; sys.version.split()[0]');
-                    this.pyVersion = response?.result || 'Unknown';
-                } catch (error) {
-                    console.error("Failed to get Python version:", error);
-                    this.pyVersion = 'Unknown';
-                }
-
-                // Load required packages from notebook metadata
-                const requiredPackages = this.notebook?.metadata?.required_packages || [];
-                if (requiredPackages.length > 0) {
-                    try {
-                        await this.pyenv.loadPackages(requiredPackages);
-                    } catch (error) {
-                        console.error("Failed to load required packages:", error);
-                    }
-                }
-
-                // Set up matplotlib backend and patch plt.show() if matplotlib is installed
-                try {
-                    await this.pyenv.execCode(`
-try:
-    import matplotlib
-    matplotlib.use('agg')
-    
-    import matplotlib.pyplot as plt
-    import io
-    import base64
-    
-    _original_show = plt.show
-    _display_data = None
-    
-    def _patched_show(*args, **kwargs):
-        """Patched plt.show() that captures the current figure for notebook display."""
-        global _display_data
-        if plt.get_fignums():
-            fig = plt.gcf()
-            buffer = io.BytesIO()
-            fig.savefig(buffer, format='png', bbox_inches='tight', dpi=100)
-            buffer.seek(0)
-            _display_data = base64.b64encode(buffer.read()).decode('utf-8')
-            plt.close(fig)
-        # Don't call original show() as it would try to display in a window
-    
-    plt.show = _patched_show
-except ImportError:
-    # matplotlib not installed - skip configuration
-    pass
-`);
-                } catch (error) {
-                    console.error("Failed to configure matplotlib:", error);
-                }
-            }
-        }
-    }
-
     public async executeCell(cellIndex: number) {
         const cell = this.notebook!.cells[cellIndex];
         if (cell.cell_type !== 'code') return;
@@ -430,74 +542,38 @@ except ImportError:
         this.requestUpdate();
 
         try {
-            await this.initPyodide();
+            await this.ensureKernelLoaded();
+            const k = this.kernel;
+            if (!k) {
+                if (this.executingCells.has(cellIndex)) {
+                    this.cellOutputs.set(cellIndex, { type: 'error', data: 'No kernel selected' });
+                }
+                return;
+            }
 
-            // Get code from Monaco editor if available, otherwise from cell source
             const editor = this.monacoEditors.get(cellIndex);
-            let code = editor ? editor.getValue() : this.getCellSource(cell);
+            const code = editor ? editor.getValue() : this.getCellSource(cell);
 
-            // PyEnv now runs in a worker and returns { result, console }
-            const response = await this.pyenv!.execCode(code);
+            const result = await k.execute(code);
 
-            // Build output from console output and result
-            const outputParts: string[] = [];
-
-            // Add console output (stdout/stderr) if present
-            if (response && typeof response === 'object' && 'console' in response) {
-                const consoleOutput = response.console;
-                if (Array.isArray(consoleOutput) && consoleOutput.length > 0) {
-                    const filteredOutput = consoleOutput.filter(s => s && s.trim());
-                    if (filteredOutput.length > 0) {
-                        outputParts.push(...filteredOutput);
-                    }
-                }
+            if (result.error) {
+                this.cellOutputs.set(cellIndex, { type: 'error', data: result.error });
+            } else {
+                this.cellOutputs.set(cellIndex, {
+                    type: 'execute_result',
+                    data: result.data,
+                    imageData: result.imageData,
+                });
             }
 
-            // Check if plt.show() was called (which stores data in _display_data)
-            let imageData: string | undefined = undefined;
-            try {
-                const checkDisplayData = await this.pyenv!.execCode('_display_data if "_display_data" in dir() else None');
-                const displayResult = checkDisplayData && typeof checkDisplayData === 'object' ? 
-                    checkDisplayData.result : checkDisplayData;
-                
-                if (displayResult && String(displayResult) !== 'None' && String(displayResult) !== 'undefined') {
-                    imageData = String(displayResult);
-                    // Clear the display data for next execution
-                    await this.pyenv!.execCode('_display_data = None');
-                }
-            } catch (e) {
-                logger.debug('No display data to retrieve:', e);
-            }
-
-            // Add the return value if it exists, but only if we didn't capture a matplotlib figure
-            // (matplotlib functions return objects like Text, Line2D etc that aren't useful to display)
-            if (!imageData) {
-                const result = response && typeof response === 'object' ? response.result : response;
-                if (result !== undefined && result !== null && String(result) !== 'undefined') {
-                    const resultStr = String(result);
-                    if (resultStr && resultStr !== 'undefined') {
-                        outputParts.push(resultStr);
-                    }
-                }
-            }
-
-            this.cellOutputs.set(cellIndex, {
-                type: 'execute_result',
-                data: outputParts.length > 0 ? outputParts.join('\n') : undefined,
-                imageData: imageData
-            });
-
-            // Update execution count
             this.executionCounter++;
             cell.execution_count = this.executionCounter;
             this.markDirty(true);
-
         } catch (error) {
-            // Check if execution is still marked as running (not cancelled)
             if (this.executingCells.has(cellIndex)) {
                 this.cellOutputs.set(cellIndex, {
                     type: 'error',
-                    data: String(error)
+                    data: error instanceof Error ? error.message : String(error),
                 });
             }
         } finally {
@@ -506,36 +582,15 @@ except ImportError:
         }
     }
 
-    private async cancelExecution(cellIndex: number) {
-        if (!this.pyenv) return;
-
-        // Check if graceful interrupt is available (requires SharedArrayBuffer)
-        if (this.pyenv.canInterrupt()) {
-            // Use interrupt buffer - Python will raise KeyboardInterrupt
-            this.pyenv.interrupt();
-            // The KeyboardInterrupt will be caught in executeCell's catch block
+    private cancelExecution(cellIndex: number) {
+        if (this.kernel?.interrupt) {
+            this.kernel.interrupt();
         } else {
-            // SharedArrayBuffer not available - must terminate worker
             this.cellOutputs.set(cellIndex, {
                 type: 'error',
-                data: 'Execution cancelled by user (worker terminated - SharedArrayBuffer not available for graceful interrupt)'
+                data: 'Cancellation not supported for this kernel',
             });
-
             this.executingCells.delete(cellIndex);
-
-            // Terminate and reinitialize
-            this.pyenv.close();
-            this.pyenv = undefined;
-            this.pyConnected = false;
-            this.pyVersion = undefined;
-
-            // Reinitialize for future executions
-            try {
-                await this.initPyodide();
-            } catch (error) {
-                console.error("Failed to reinitialize Python after cancellation:", error);
-            }
-
             this.requestUpdate();
         }
     }
@@ -565,29 +620,20 @@ except ImportError:
     }
 
     private async restartKernel() {
-        if (!this.pyenv || this.pyConnecting) return;
-
+        if (!this.kernel?.restart || this.kernelConnecting) return;
         try {
-            this.pyConnecting = true;
-            
-            // Close current environment
-            this.pyenv.close();
-            this.pyenv = undefined;
-            this.pyConnected = false;
-            this.pyVersion = undefined;
-
-            // Force re-render to show reconnecting state
+            this.kernelConnecting = true;
             this.requestUpdate();
-
-            // Reinitialize
-            await this.initPyodide();
-
-            // Force re-render to show connected state
-            this.requestUpdate();
+            this.updateToolbar();
+            await this.kernel.restart();
+            this.kernelConnected = true;
+            if (this.kernel.getVersion) this.kernelVersion = await this.kernel.getVersion();
         } catch (error) {
-            console.error("Failed to restart kernel:", error);
+            logger.error('Failed to restart kernel', error);
         } finally {
-            this.pyConnecting = false;
+            this.kernelConnecting = false;
+            this.requestUpdate();
+            this.updateToolbar();
         }
     }
 
@@ -620,6 +666,7 @@ except ImportError:
 
     private cancelAllCells() {
         this.cancelRunAll = true;
+        this.kernel?.interrupt?.();
     }
 
     private toggleMarkdownEdit(index: number) {
@@ -765,7 +812,7 @@ except ImportError:
             </wa-button>
         ` : html`
             <lyra-command 
-                cmd="python"
+                cmd="notebook.runCell"
                 icon="play"
                 title="Run cell"
                 size="small"
@@ -827,22 +874,6 @@ except ImportError:
             `;
         }
     }
-
-    private async connectPython() {
-        if (this.pyConnecting || this.pyConnected) {
-            return;
-        }
-        
-        try {
-            this.pyConnecting = true;
-            await this.initPyodide();
-        } catch (error) {
-            console.error("Failed to initialize Pyodide:", error);
-        } finally {
-            this.pyConnecting = false;
-        }
-    }
-
 
     private addCell(index: number, cellType: 'code' | 'markdown' = 'code') {
         if (!this.notebook) return;
@@ -976,9 +1007,10 @@ except ImportError:
 
         container.style.height = `${calculatedHeight}px`;
 
+        const language = this.kernel?.language ?? 'javascript';
         const editor = monaco.editor.create(container, {
             value: source,
-            language: 'python',
+            language,
             theme: this.getMonacoTheme(),
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
@@ -1045,20 +1077,14 @@ except ImportError:
     }
 
     private openPackageManager() {
-        const packages = this.notebook?.metadata?.required_packages || [];
-        
-        pythonPackageManagerService.showPackageManager({
-            packages,
-            pyenv: this.pyenv,
+        if (!this.kernel?.openPackageManager) return;
+        const packages = this.notebook?.metadata?.required_packages ?? [];
+        this.kernel.openPackageManager({
+            requiredPackages: packages,
             onPackageAdded: (packageName: string) => {
                 if (!this.notebook) return;
-                if (!this.notebook.metadata) {
-                    this.notebook.metadata = {};
-                }
-                if (!this.notebook.metadata.required_packages) {
-                    this.notebook.metadata.required_packages = [];
-                }
-                
+                if (!this.notebook.metadata) this.notebook.metadata = {};
+                if (!this.notebook.metadata.required_packages) this.notebook.metadata.required_packages = [];
                 if (!this.notebook.metadata.required_packages.includes(packageName)) {
                     this.notebook.metadata.required_packages.push(packageName);
                     this.markDirty(true);
@@ -1066,24 +1092,26 @@ except ImportError:
             },
             onPackageRemoved: (packageName: string) => {
                 if (!this.notebook?.metadata?.required_packages) return;
-                
                 const index = this.notebook.metadata.required_packages.indexOf(packageName);
                 if (index > -1) {
                     this.notebook.metadata.required_packages.splice(index, 1);
                     this.markDirty(true);
                 }
-            }
+            },
         });
     }
 
     protected updated(changedProperties: Map<string, any>) {
         super.updated(changedProperties);
 
-        // Update toolbar when state affecting toolbar changes
-        if (changedProperties.has('pyConnected') || 
-            changedProperties.has('pyConnecting') ||
-            changedProperties.has('pyVersion') ||
-            changedProperties.has('isRunningAll')) {
+        if (
+            changedProperties.has('kernelConnected') ||
+            changedProperties.has('kernelConnecting') ||
+            changedProperties.has('kernelVersion') ||
+            changedProperties.has('isRunningAll') ||
+            changedProperties.has('availableKernels') ||
+            changedProperties.has('selectedKernelId')
+        ) {
             this.updateToolbar();
         }
 
@@ -1124,15 +1152,8 @@ except ImportError:
             width: 100%;
         }
 
-        .python-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .python-version {
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .kernel-select {
+            max-width: 10rem;
         }
 
         .noteboocells {

@@ -1,18 +1,21 @@
 import {
-    rootContext,
     registerAll,
-    commandRegistry,
-    workspaceService,
     toastInfo,
     toastError,
     editorRegistry,
     File,
     type EditorInput,
+    contributionRegistry,
 } from "@eclipse-lyra/core";
+import { TARGET_NOTEBOOK_KERNELS } from "@eclipse-lyra/extension-notebook";
 import { html } from "lit";
 
 type EditorWithLanguage = { isLanguage?(lang: string): boolean };
 import { PyEnv } from "./pyservice";
+import { pythonNotebookKernelContribution } from "./python-notebook-kernel";
+
+contributionRegistry.registerContribution(TARGET_NOTEBOOK_KERNELS, pythonNotebookKernelContribution);
+
 import { parsePackagesFromContent } from "./editor-python-run";
 import { pythonPackageManagerService } from "./package-manager";
 

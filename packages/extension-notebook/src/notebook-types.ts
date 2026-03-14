@@ -9,6 +9,7 @@ export interface NotebookCell {
 export interface NotebookData {
     cells: NotebookCell[];
     metadata?: {
+        kernel?: string;
         required_packages?: string[];
         [key: string]: any;
     };

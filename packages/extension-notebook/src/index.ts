@@ -1,3 +1,5 @@
+export * from './notebook-types';
+export * from './notebook-kernel-api';
 import { extensionRegistry, i18n } from '@eclipse-lyra/core';
 import pkg from '../package.json';
 
@@ -9,5 +11,5 @@ extensionRegistry.registerExtension({
   description: t.EXT_NOTEBOOK_DESC,
   loader: () => import("./notebook-extension"),
   icon: "lyra jupyter",
-  dependencies: ["@eclipse-lyra/extension-python-runtime"],
+  dependencies: [],
 });

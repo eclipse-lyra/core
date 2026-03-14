@@ -44,6 +44,8 @@ export {
     toastWarning
 } from '../core/toast';
 export { taskService } from '../core/taskservice';
+export { runJavaScriptCode } from '../commands/js';
+export { createJsRuntime, type JsRuntime } from '../core/js-runtime';
 export { publish, subscribe, unsubscribe } from '../core/events';
 export { configureFramework, getFrameworkConfig } from '../core/config';
 export { treeNodeComparator } from '../core/tree-utils';

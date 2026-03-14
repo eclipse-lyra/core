@@ -377,11 +377,11 @@ async function syncWorkspace() {
     }
 }
 
-// Get Pyodide version
+// Get Python version (e.g. "3.12.0")
 async function getVersion() {
     if (!pyodide) throw new Error('Pyodide not initialized');
-    // Version is already a string, but ensure it's cloneable
-    return String(pyodide.version);
+    const result = await pyodide.runPythonAsync("import sys; sys.version.split()[0]");
+    return result != null ? String(result) : String(pyodide.version);
 }
 
 // Message handler

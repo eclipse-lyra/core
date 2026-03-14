@@ -24,6 +24,7 @@
   "dependencies": {
     "@eclipse-lyra/core": "*",
     "@eclipse-lyra/extension-monaco-editor": "*",
+    "@eclipse-lyra/extension-notebook": "*",
     "pip-requirements-js": "^1.0.2",
     "pyodide": "^0.27.7"
   },
