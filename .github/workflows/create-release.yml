@@ -53,7 +53,7 @@ jobs:
           REPO="${{ github.repository }}"
           echo "${{ steps.tag_message.outputs.message }}" > release_notes.txt
           
-          echo "${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          echo "${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}" | gh auth login --with-token
           
           if gh release view "$TAG" --repo "$REPO" &>/dev/null; then
             echo "Release $TAG already exists, skipping creation"

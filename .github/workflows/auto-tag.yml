@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Extract version and create tag
         id: extract-version
@@ -60,10 +60,3 @@ jobs:
           make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Trigger Publish workflow
-        if: steps.extract-version.outputs.version != ''
-        run: |
-          gh workflow run "Publish to npm" --ref ${{ steps.extract-version.outputs.version }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
