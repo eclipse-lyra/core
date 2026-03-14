@@ -55,7 +55,7 @@ export class LyraSqlEditor extends LyraPart implements EditorContentProvider {
     const file = this.input!.data;
     const textContents = await file.getContents();
     this.initialContent = textContents;
-    this.initialUri = file.getName();
+    this.initialUri = file.getWorkspacePath();
     this.unsubscribeContributionsToken = subscribe(TOPIC_CONTRIBUTEIONS_CHANGED, (event: { target?: string } | undefined) => {
       if (event?.target === 'system.sqladapters') {
         void this.refreshAdapters();
