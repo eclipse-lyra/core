@@ -6,6 +6,7 @@
 import '@eclipse-lyra/extension-ai-system';
 import '@eclipse-lyra/extension-command-palette';
 import '@eclipse-lyra/extension-command-shell';
+import '@eclipse-lyra/extension-catalog';
 import '@eclipse-lyra/extension-dataviewer';
 import '@eclipse-lyra/extension-duckdb';
 import '@eclipse-lyra/extension-github-service';

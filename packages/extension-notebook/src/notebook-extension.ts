@@ -3,11 +3,13 @@ import type { EditorInput } from "@eclipse-lyra/core";
 import { File } from "@eclipse-lyra/core";
 import { activeEditorSignal } from "@eclipse-lyra/core";
 import type { ExecutionContext } from "@eclipse-lyra/core";
+import { registerNotebookCatalog } from "./notebook-catalog";
 import { NotebookData, isNotebookEditorLike } from "./notebook-types";
 import { TARGET_NOTEBOOK_KERNELS } from "./notebook-kernel-api";
 import { javascriptKernelContribution } from "./javascript-kernel";
 
 export default ({ editorRegistry, commandRegistry, contributionRegistry }: any) => {
+    registerNotebookCatalog();
     contributionRegistry.registerContribution(TARGET_NOTEBOOK_KERNELS, javascriptKernelContribution);
 
     const INITIAL_NOTEBOOK_CONTENT: NotebookData = {
@@ -19,7 +21,7 @@ export default ({ editorRegistry, commandRegistry, contributionRegistry }: any) 
             },
             {
                 cell_type: 'code',
-                source: ['self.postMessage("Hello, World!")'],
+                source: ['return "Hello, World!"'],
                 execution_count: null,
                 outputs: [],
                 metadata: {}

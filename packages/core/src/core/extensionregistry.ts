@@ -255,6 +255,21 @@ class ExtensionRegistry {
         })
     }
 
+    /** Like enable() but returns a Promise that resolves when the extension is loaded. Use when the caller must wait for commands/contributions to be registered (e.g. before rendering the app). */
+    public async enableAsync(extensionId: string, informUser: boolean = false): Promise<void> {
+        if (this.isEnabled(extensionId)) {
+            return
+        }
+        logger.debug(`Loading extension: ${extensionId}`)
+        try {
+            await this.load(extensionId)
+            this.updateEnablement(extensionId, true, informUser)
+        } catch (e) {
+            logger.error(`Could not load extension: ${extensionId}: ${e}`)
+            throw e
+        }
+    }
+
     /**
      * Loads an extension and all its dependencies.
      * 

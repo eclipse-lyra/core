@@ -13,6 +13,7 @@
     "@eclipse-lyra/core": "^0.x",
     "@eclipse-lyra/extension-ai-system": "^0.x",
     "@eclipse-lyra/extension-command-palette": "^0.x",
+    "@eclipse-lyra/extension-catalog": "^0.x",
     "@eclipse-lyra/extension-md-editor": "^0.x",
     "@eclipse-lyra/extension-media-viewer": "^0.x",
     "@eclipse-lyra/extension-memory-usage": "^0.x",

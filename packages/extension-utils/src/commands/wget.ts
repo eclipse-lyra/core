@@ -1,4 +1,31 @@
-import { File, FileContentType, workspaceService, taskService, toastError, toastInfo, registerAll } from "@eclipse-lyra/core";
+import {
+  File,
+  FileContentType,
+  workspaceService,
+  taskService,
+  toastError,
+  toastInfo,
+  filebrowserDialog,
+  registerAll,
+} from "@eclipse-lyra/core";
+
+function fallbackFileName(): string {
+  return `downloaded-file-${new Date().toISOString().replace(/[:.]/g, "-").replace("T", "_").slice(0, -5)}`;
+}
+
+function fileNameFromUrl(url: string): string {
+  if (url.startsWith("data:")) {
+    return fallbackFileName();
+  }
+  try {
+    const segs = new URL(url).pathname.split("/").filter((s) => s.length > 0);
+    const last = segs[segs.length - 1];
+    if (last?.includes(".") && !last.includes(";")) return last;
+  } catch {
+    // ignore
+  }
+  return fallbackFileName();
+}
 
 registerAll({
   command: {
@@ -6,29 +33,22 @@ registerAll({
     name: "wget",
     description: "Download a file from a URL to the workspace",
     parameters: [
+      { name: "url", description: "the URL of the file to download", required: true },
+      { name: "filename", description: "optional filename to save as (will be auto-detected if not provided)", required: false },
       {
-        name: "url",
-        description: "the URL of the file to download",
-        required: true
+        name: "targetPath",
+        description: "workspace path where to save; if not provided, a file browser dialog is shown to pick a directory",
+        required: false,
       },
-      {
-        name: "filename",
-        description: "optional filename to save as (will be auto-detected if not provided)",
-        required: false
-      }
-    ]
+    ],
   },
   handler: {
     canExecute: (context: any) => {
-      const url = context.params && context.params["url"];
-      if (!url) {
-        return false;
-      }
-      return url.startsWith("http://") || url.startsWith("https://");
+      const url = context.params?.url;
+      return Boolean(url && (url.startsWith("http://") || url.startsWith("https://")));
     },
     execute: async (context: any) => {
-      const url = context.params && context.params["url"];
-
+      const url = context.params?.url;
       if (!url) {
         toastError("No URL provided.");
         return;
@@ -40,70 +60,62 @@ registerAll({
         return;
       }
 
-      const folders = await workspaceService.getFolders();
-      const targetFolderName = folders.length > 0 ? folders[0].name : null;
+      const defaultFileName = fileNameFromUrl(url);
+      let savePath: string;
+      const targetPath = context.params?.targetPath;
+
+      if (targetPath) {
+        const folders = await workspaceService.getFolders();
+        const firstFolder = folders.length > 0 ? folders[0].name : null;
+        const resolved = targetPath.includes("/") ? targetPath : (firstFolder ? `${firstFolder}/${targetPath}` : targetPath);
+        const lastSegment = resolved.split("/").pop() ?? "";
+        savePath =
+          lastSegment.includes(".") && lastSegment !== resolved
+            ? resolved
+            : `${resolved.replace(/\/$/, "")}/${defaultFileName}`;
+      } else {
+        const chosenDir = await filebrowserDialog("directory");
+        if (chosenDir == null) return;
+        savePath = `${chosenDir}/${defaultFileName}`;
+      }
 
       await taskService.runAsync("Downloading file", async (progress: any) => {
         progress.message = "Starting download...";
         progress.progress = 0;
 
         try {
-          const response = await fetch(url, {
-            mode: "cors",
-            credentials: "omit"
-          });
-
+          const response = await fetch(url, { mode: "cors", credentials: "omit" });
           if (!response.ok) {
             toastError("Failed to download file: " + response.statusText);
             return;
           }
 
-          let fileName = context.params && context.params["filename"];
-
+          let fileName = context.params?.filename;
           if (!fileName) {
             const contentDisposition = response.headers.get("content-disposition");
             if (contentDisposition) {
-              let filenameMatch = contentDisposition.match(/filename="([^"]+)"/);
-              if (filenameMatch && filenameMatch[1]) {
-                fileName = filenameMatch[1];
-              } else {
-                filenameMatch = contentDisposition.match(/filename=([^;]+)/);
-                if (filenameMatch && filenameMatch[1]) {
-                  fileName = filenameMatch[1].trim();
-                }
-              }
-            }
-
-            if (!fileName) {
-              const urlSegments = new URL(url).pathname.split("/").filter(s => s.length > 0);
-              const lastSegment = urlSegments[urlSegments.length - 1];
-              if (lastSegment && lastSegment.includes(".")) {
-                fileName = lastSegment;
-              } else {
-                const now = new Date().toISOString().replace(/[:.]/g, "-").replace("T", "_").slice(0, -5);
-                fileName = `downloaded-file-${now}`;
-              }
+              const match = contentDisposition.match(/filename="?([^";\n]+)"?/);
+              if (match?.[1]) fileName = match[1].trim();
             }
           }
+          if (!fileName) fileName = defaultFileName;
 
-          const targetPath = targetFolderName ? `${targetFolderName}/${fileName}` : fileName;
-          const downloadedFile = await workspaceDir.getResource(targetPath, { create: true }) as File;
+          const pathToUse = savePath.includes("/") ? savePath.replace(/\/[^/]+$/, `/${fileName}`) : fileName;
 
           progress.message = `Downloading ${fileName}...`;
           progress.progress = 50;
 
-          await downloadedFile.saveContents(response.body, {
-            contentType: FileContentType.BINARY
-          });
+          const downloadedFile = (await workspaceDir.getResource(pathToUse, { create: true })) as File;
+          await downloadedFile.saveContents(response.body, { contentType: FileContentType.BINARY });
 
           progress.progress = 100;
           toastInfo(`File downloaded: ${fileName}`);
         } catch (err) {
-          toastError("Failed to download file: " + err);
+          toastError("Failed to download file: " + String(err));
           throw err;
         }
       });
-    }
-  }
+    },
+  },
 });
 

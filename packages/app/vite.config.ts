@@ -33,13 +33,13 @@ function workspaceSourceAliases(): Record<string, string> {
     const srcDir = path.join(pkgDir, 'src');
     if (!existsSync(path.join(srcDir, 'index.ts'))) continue;
     if (pkg.exports?.['./api']) alias[`${pkg.name}/api`] = path.join(srcDir, 'api.ts');
-    alias[pkg.name] = path.join(srcDir, 'index.ts');
     const exports = pkg.exports && typeof pkg.exports === 'object' ? pkg.exports : {};
     for (const [key, value] of Object.entries(exports)) {
       if (key === '.' || !key.startsWith('./')) continue;
       const target = typeof value === 'string' ? value : (value as { import?: string })?.import;
       if (target?.startsWith('./src/')) alias[pkg.name + key] = path.join(pkgDir, target);
     }
+    alias[pkg.name] = path.join(srcDir, 'index.ts');
   }
 
   return alias;
@@ -83,6 +83,7 @@ export default defineConfig({
   },
   build: {
     outDir: path.resolve(__dirname, 'dist'),
+    assetsInlineLimit: 0,
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),

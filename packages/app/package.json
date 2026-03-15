@@ -14,6 +14,7 @@
     "@eclipse-lyra/extension-ai-system": "*",
     "@eclipse-lyra/extension-command-palette": "*",
     "@eclipse-lyra/extension-command-shell": "*",
+    "@eclipse-lyra/extension-catalog": "*",
     "@eclipse-lyra/extension-dataviewer": "*",
     "@eclipse-lyra/extension-sqleditor": "*",
     "@eclipse-lyra/extension-duckdb": "*",

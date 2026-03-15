@@ -190,12 +190,13 @@ export class CompositeDirectory extends Directory {
     }
 
     async getResource(path: string, options?: GetResourceOptions): Promise<Resource | null> {
-        if (!path || !path.trim()) {
+        const normalized = path?.replace(/^\/+/, "").trim();
+        if (!normalized) {
             return null;
         }
-        const idx = path.indexOf('/');
-        const folderName = idx >= 0 ? path.slice(0, idx).trim() : path.trim();
-        const rest = idx >= 0 ? path.slice(idx + 1).trim() : '';
+        const idx = normalized.indexOf('/');
+        const folderName = idx >= 0 ? normalized.slice(0, idx).trim() : normalized.trim();
+        const rest = idx >= 0 ? normalized.slice(idx + 1).trim() : '';
         const dir = this.entriesByName.get(folderName);
         if (!dir) {
             return null;

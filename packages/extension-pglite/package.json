@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@eclipse-lyra/core": "*",
+    "@eclipse-lyra/extension-catalog": "*",
     "@eclipse-lyra/extension-notebook": "*",
     "@eclipse-lyra/extension-sqleditor": "*",
     "@electric-sql/pglite": "^0.3.0"

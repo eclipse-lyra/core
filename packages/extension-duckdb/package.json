@@ -24,6 +24,7 @@
   "dependencies": {
     "@duckdb/duckdb-wasm": "1.33.1-dev20.0",
     "@eclipse-lyra/core": "*",
+    "@eclipse-lyra/extension-catalog": "*",
     "@eclipse-lyra/extension-notebook": "*",
     "@eclipse-lyra/extension-sqleditor": "*"
   },

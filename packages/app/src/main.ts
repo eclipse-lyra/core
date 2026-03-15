@@ -43,6 +43,7 @@ appLoaderService.registerApp(
       '@eclipse-lyra/extension-utils',
       '@eclipse-lyra/extension-command-palette',
       '@eclipse-lyra/extension-command-shell',
+      '@eclipse-lyra/extension-catalog',
       '@eclipse-lyra/extension-md-editor',
       '@eclipse-lyra/extension-monaco-editor',
       '@eclipse-lyra/extension-media-viewer',

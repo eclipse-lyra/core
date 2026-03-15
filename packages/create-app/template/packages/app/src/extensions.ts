@@ -6,6 +6,7 @@
  */
 import '@eclipse-lyra/extension-ai-system';
 import '@eclipse-lyra/extension-command-palette';
+import '@eclipse-lyra/extension-catalog';
 import '@eclipse-lyra/extension-md-editor';
 import '@eclipse-lyra/extension-media-viewer';
 import '@eclipse-lyra/extension-memory-usage';

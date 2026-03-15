@@ -509,13 +509,16 @@ class AppLoaderService {
         this.dispatchLoadProgress('Loading extensions…');
         await extensionRegistry.loadEnabledExtensions();
 
-        // Enable new app's extensions (after contributions are registered and
-        // any globally enabled extensions have been loaded)
+        // Enable and load app extensions so commands/contributions are registered before UI is shown
         if (app.extensions.length > 0) {
             this.dispatchLoadProgress('Enabling extensions…');
-            app.extensions.forEach(extId => {
-                extensionRegistry.enable(extId);
-            });
+            await Promise.all(
+                app.extensions.map((extId) =>
+                    extensionRegistry.enableAsync(extId).catch((e) => {
+                        logger.error(`Failed to load extension ${extId}: ${getErrorMessage(e)}`);
+                    })
+                )
+            );
         }
 
         // Initialize new app
