@@ -188,12 +188,13 @@ export class LyraTabs extends LyraContainer {
 
     markDirty(name: string, dirty: boolean): void {
         const tab = this.getTab(name);
-        tab!.classList.toggle("part-dirty", dirty);
+        if (!tab) return;
+        tab.classList.toggle("part-dirty", dirty);
     }
-
+    
     isDirty(name: string): boolean {
         const tab = this.getTab(name);
-        return tab!.classList.contains("part-dirty");
+        return !!tab && tab.classList.contains("part-dirty");
     }
 
     // ============= Private Helper Methods =============
@@ -307,9 +308,10 @@ export class LyraTabs extends LyraContainer {
         this.dirtySignalCleanup = watchSignal(partDirtySignal, (part: LyraPart | null) => {
             if (!part) return;
             const panel = part.closest('wa-tab-panel') as HTMLElement | null;
-            if (!panel || !this.contains(panel)) return;
+            if (!panel) return;
             const name = panel.getAttribute('name');
-            if (name) this.markDirty(name, part.isDirty());
+            if (!name) return;
+            this.markDirty(name, part.isDirty());
         });
 
         this.activateNextAvailableTab();
