@@ -51,6 +51,10 @@
     "./vite-plugin-resolve-deps": {
       "types": "./dist/vite-plugin-resolve-deps.d.ts",
       "import": "./dist/vite-plugin-resolve-deps.js"
+    },
+    "./vite-plugin-local-aliases": {
+      "types": "./dist/vite-plugin-local-aliases.d.ts",
+      "import": "./dist/vite-plugin-local-aliases.js"
     }
   },
   "peerDependencies": {
