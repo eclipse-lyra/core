@@ -314,12 +314,21 @@ export class LyraFileBrowser extends LyraPart {
     }
 
     async onFileDoubleClicked(event: Event) {
-        // @ts-ignore
-        const node: TreeNode = event.currentTarget.model
-        const resource = node.data as Resource
+        const item = event.currentTarget as HTMLElement & { model?: TreeNode; expanded?: boolean };
+        const node = item.model;
+        if (!node) {
+            return;
+        }
+
+        const resource = node.data as Resource;
         if (resource instanceof File) {
-            activeSelectionSignal.set(resource)
-            this.executeCommand("open_editor", {})
+            activeSelectionSignal.set(resource);
+            this.executeCommand("open_editor", {});
+            return;
+        }
+
+        if (!node.leaf && "expanded" in item) {
+            item.expanded = !item.expanded;
         }
     }
 
