@@ -128,7 +128,7 @@ registerAll({
         }
     },
     contribution: {
-        target: "contextmenu:filebrowser",
+        target: "contextmenu:view.filebrowser",
         label: "Disconnect folder",
         icon: "folder-minus",
         disabled: () => {

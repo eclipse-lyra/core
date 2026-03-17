@@ -182,14 +182,18 @@ export class LyraFileBrowser extends LyraPart {
         }
 
         if (resource instanceof Directory && loadChildren) {
-            for (const childResource of await resource.listChildren(forceRefreshChildren)) {
+            const children = await resource.listChildren(forceRefreshChildren);
+            for (const childResource of children) {
                 if (HIDE_DOT_RESOURCE && childResource.getName().startsWith(".")) {
-                    continue
+                    continue;
                 }
                 const child = await this.resourceToTreeNode(childResource, true, forceRefreshChildren);
                 node.children.push(child);
             }
-            node.children.sort(treeNodeComparator)
+            node.children.sort(treeNodeComparator);
+            // Mark directory as loaded even if it has no children,
+            // so empty folders don't stay in a perpetual "loading" state.
+            (node as any).loaded = true;
         }
 
         return node;
@@ -200,7 +204,10 @@ export class LyraFileBrowser extends LyraPart {
             return html``
         }
 
-        const isLazy = !node.leaf && node.children.length === 0;
+        // Treat a directory as "lazy" only if its children
+        // have never been loaded. Once loaded (even if empty),
+        // we clear the lazy flag so the progress ring disappears.
+        const isLazy = !node.leaf && !(node as any).loaded;
         const resource = node.data as Resource;
         const isFile = resource instanceof File;
         const isDraggable = !!resource.getParent();
@@ -297,14 +304,18 @@ export class LyraFileBrowser extends LyraPart {
 
         this.loadingNodes.add(node);
         try {
-            for (const childResource of await resource.listChildren(false)) {
+            const children = await resource.listChildren(false);
+            for (const childResource of children) {
                 if (HIDE_DOT_RESOURCE && childResource.getName().startsWith(".")) {
-                    continue
+                    continue;
                 }
                 const child = await this.resourceToTreeNode(childResource, false);
                 node.children.push(child);
             }
             node.children.sort(treeNodeComparator);
+            // Children have now been loaded at least once (even if none remain
+            // after filtering), so mark the node as loaded to disable lazy mode.
+            (node as any).loaded = true;
             this.requestUpdate();
         } catch (error) {
             logger.error('Failed to load directory children:', error);
