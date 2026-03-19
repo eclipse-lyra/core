@@ -21,8 +21,8 @@ registerAll({
         "parameters": []
     },
     handler: {
-        execute: async context => {
-            const part = context.activeEditor || context.activePart
+        execute: async _context => {
+            const part = activeEditorSignal.get() || activePartSignal.get()
             if (part && part.isDirty()) {
                 part.save()
             }
@@ -34,8 +34,8 @@ registerAll({
         label: "Save active editor",
         slot: "start",
         disabled: () => {
-            const editor = activeEditorSignal.get()
-            return !editor || !editor.isDirty()
+            const part = activePartSignal.get()
+            return !part || !part.isDirty()
         }
     } as CommandContribution
 })

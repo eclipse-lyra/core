@@ -195,7 +195,7 @@ export class DataViewPart extends LyraPart {
             <wa-icon name="clock-rotate-left" label="History"></wa-icon>
           </wa-button>
 
-          <wa-dropdown-item value="__stats__" disabled>
+          <wa-dropdown-item value="__stats__">
             ${this.persistedList.length} data view${this.persistedList.length === 1 ? '' : 's'}
             ${this.persistedList.length > 0
               ? html`
