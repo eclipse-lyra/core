@@ -515,7 +515,7 @@ export class LyraTabs extends LyraContainer {
                                 ${c.component ? c.component(c.name) : nothing}
                             </wa-scroller>
                             ${when(c.contextMenu !== false, () => html`
-                                <lyra-contextmenu id="contextmenu:${c.name}"
+                                <lyra-contextmenu id="contextmenu:${c.editorId ?? c.name}"
                                                ?is-editor="${this.containerId === EDITOR_AREA_MAIN}"></lyra-contextmenu>
                             `)}
                         </wa-tab-panel>

@@ -33,6 +33,11 @@ export interface HTMLContribution extends Contribution {
 
 export interface TabContribution extends Contribution {
     name: string;
+    /**
+     * Stable editor-type identifier used for contribution targets (for example `toolbar:${editorId}`).
+     * Needed because `name` is often tab-instance specific (such as file/path based) and would
+     * fragment toolbar contributions across many dynamic targets.
+     */
     editorId?: string;
     closable?: boolean;
     noOverflow?: boolean;
