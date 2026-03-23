@@ -1,4 +1,4 @@
-import { createLogger } from "@eclipse-lyra/core";
+import { createLogger, workspaceService, File, Directory } from "@eclipse-lyra/core";
 
 const logger = createLogger('PyService');
 import type { PyWorkerMessage, PyWorkerResponse } from "./pyworker";
@@ -14,7 +14,7 @@ export class PyEnv {
     private stderrCallback?: (text: string) => void;
     private interruptBuffer?: Uint8Array;
 
-    public async init(_workspace?: unknown, vars?: any) {
+    public async init(vars?: any) {
         this.vars = vars ?? {};
 
         const worker = new PyWorker();
@@ -31,6 +31,109 @@ export class PyEnv {
         await this.sendMessage('init', { vars: this.vars });
     }
 
+    private async handleWorkspaceRequest(response: PyWorkerResponse) {
+        const { id, payload } = response;
+        const { op, path, ...extra } = payload ?? {};
+        const send = (success: boolean, data?: unknown, error?: string) => {
+            this.worker!.postMessage({
+                id,
+                type: 'workspaceResponse',
+                payload: { success, data, error }
+            } as PyWorkerMessage);
+        };
+
+        try {
+            const workspace = await workspaceService.getWorkspace();
+            if (!workspace) {
+                send(false, undefined, 'No workspace selected');
+                return;
+            }
+
+            const resolvePath = (p: string) => (p === '' || p === '.') ? '' : p;
+
+            switch (op) {
+                case 'read': {
+                    const resource = await workspace.getResource(resolvePath(path));
+                    if (!resource || !(resource instanceof File)) {
+                        send(false, undefined, `File not found: ${path}`);
+                        return;
+                    }
+                    const binary = !!extra.binary;
+                    if (binary) {
+                        const blob = await (resource as File).getContents({ blob: true });
+                        const buf = blob instanceof Blob ? await blob.arrayBuffer() : new ArrayBuffer(0);
+                        send(true, buf);
+                    } else {
+                        const content = await (resource as File).getContents();
+                        send(true, typeof content === 'string' ? content : String(content ?? ''));
+                    }
+                    return;
+                }
+                case 'write': {
+                    let content = extra.content;
+                    if (content instanceof ArrayBuffer || ArrayBuffer.isView(content)) {
+                        content = new Blob([content as unknown as BlobPart]);
+                    }
+                    const target = await workspace.getResource(resolvePath(path), { create: true });
+                    if (!target || !(target instanceof File)) {
+                        send(false, undefined, `Failed to create file: ${path}`);
+                        return;
+                    }
+                    await (target as File).saveContents(content);
+                    send(true);
+                    return;
+                }
+                case 'list': {
+                    const resource = await workspace.getResource(resolvePath(path));
+                    if (!resource || !(resource instanceof Directory)) {
+                        send(false, undefined, `Directory not found: ${path}`);
+                        return;
+                    }
+                    const children = await (resource as Directory).listChildren(false);
+                    send(true, children.map((r) => r.getName()));
+                    return;
+                }
+                case 'exists': {
+                    const resource = await workspace.getResource(resolvePath(path));
+                    send(true, resource != null);
+                    return;
+                }
+                case 'is_file': {
+                    const resource = await workspace.getResource(resolvePath(path));
+                    send(true, resource instanceof File);
+                    return;
+                }
+                case 'is_dir': {
+                    const resource = await workspace.getResource(resolvePath(path));
+                    send(true, resource instanceof Directory);
+                    return;
+                }
+                case 'get_uri': {
+                    const resource = await workspace.getResource(resolvePath(path));
+                    if (!resource || !(resource instanceof File)) {
+                        send(false, undefined, `File not found: ${path}`);
+                        return;
+                    }
+                    const uri = await (resource as File).getContents({ uri: true });
+                    send(true, typeof uri === 'string' ? uri : undefined);
+                    return;
+                }
+                case 'revoke_uri': {
+                    const uri = extra.uri;
+                    if (typeof uri === 'string') {
+                        URL.revokeObjectURL(uri);
+                    }
+                    send(true);
+                    return;
+                }
+                default:
+                    send(false, undefined, `Unknown workspace op: ${op}`);
+            }
+        } catch (err) {
+            send(false, undefined, err instanceof Error ? err.message : String(err));
+        }
+    }
+
     private handleWorkerMessage(response: PyWorkerResponse) {
         // Handle interrupt buffer initialization
         if (response.id === 'interrupt-buffer') {
@@ -43,6 +146,11 @@ export class PyEnv {
             return;
         }
         
+        if (response.type === 'workspaceRequest') {
+            this.handleWorkspaceRequest(response);
+            return;
+        }
+
         // Handle input requests
         if (response.type === 'inputRequest') {
             const promptText = response.payload.prompt || 'Input:';

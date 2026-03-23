@@ -5,7 +5,9 @@ import {loadPyodide, PyodideInterface} from "pyodide";
 let pyodide: PyodideInterface | null = null;
 let interruptBuffer: Uint8Array | null = null;
 let inputCounter = 0;
+let workspaceRequestCounter = 0;
 const pendingInputRequests: Map<string, { resolve: (value: string) => void, reject: (error: any) => void }> = new Map();
+const pendingWorkspaceRequests: Map<string, { resolve: (value: any) => void, reject: (error: any) => void }> = new Map();
 
 // Store original console methods before interception
 const originalConsole = {
@@ -80,13 +82,13 @@ console.debug = function(...args: any[]) {
 // Message types for worker communication
 export interface PyWorkerMessage {
     id: string;
-    type: 'init' | 'execCode' | 'execModule' | 'runFunction' | 'setGlobal' | 'loadPackages' | 'getVersion' | 'inputResponse';
+    type: 'init' | 'execCode' | 'execModule' | 'runFunction' | 'setGlobal' | 'loadPackages' | 'getVersion' | 'inputResponse' | 'workspaceResponse';
     payload?: any;
 }
 
 export interface PyWorkerResponse {
     id: string;
-    type: 'success' | 'error' | 'stdout' | 'stderr' | 'inputRequest' | 'console';
+    type: 'success' | 'error' | 'stdout' | 'stderr' | 'inputRequest' | 'console' | 'workspaceRequest';
     payload?: any;
 }
 
@@ -95,6 +97,68 @@ const consoleBuffer: string[] = [];
 
 function sendMessage(response: PyWorkerResponse) {
     self.postMessage(response);
+}
+
+function createWorkspaceRequest(op: string, path?: string, extra?: Record<string, unknown>): Promise<any> {
+    const id = `ws-${workspaceRequestCounter++}`;
+    return new Promise((resolve, reject) => {
+        pendingWorkspaceRequests.set(id, { resolve, reject });
+        sendMessage({
+            id,
+            type: 'workspaceRequest',
+            payload: { op, path: path ?? '', ...extra }
+        });
+    });
+}
+
+function createLyraBridge() {
+    return {
+        read_file: (path: string, binary?: boolean) =>
+            createWorkspaceRequest('read', path, { binary: !!binary }),
+        write_file: (path: string, content: string | ArrayBuffer | Uint8Array) =>
+            createWorkspaceRequest('write', path, { content }),
+        list_dir: (path: string) =>
+            createWorkspaceRequest('list', path || '.'),
+        exists: (path: string) =>
+            createWorkspaceRequest('exists', path),
+        is_file: (path: string) =>
+            createWorkspaceRequest('is_file', path),
+        is_dir: (path: string) =>
+            createWorkspaceRequest('is_dir', path),
+        get_uri: (path: string) =>
+            createWorkspaceRequest('get_uri', path),
+        revoke_uri: (uri: string) =>
+            createWorkspaceRequest('revoke_uri', undefined, { uri }),
+        fetch: async (pathOrUri: string) => {
+            const isBlobUrl = typeof pathOrUri === 'string' && pathOrUri.startsWith('blob:');
+            let url: string;
+            if (isBlobUrl) {
+                url = pathOrUri;
+            } else {
+                url = await createWorkspaceRequest('get_uri', pathOrUri);
+            }
+            const r = await fetch(url);
+            if (!isBlobUrl) {
+                await createWorkspaceRequest('revoke_uri', undefined, { uri: url });
+            }
+            return r;
+        },
+        uri: (path: string) => {
+            const state: { _url?: string } = {};
+            return {
+                async __aenter__() {
+                    state._url = await createWorkspaceRequest('get_uri', path);
+                    return state._url;
+                },
+                async __aexit__(_excType?: unknown, _excVal?: unknown, _excTb?: unknown) {
+                    if (state._url) {
+                        await createWorkspaceRequest('revoke_uri', undefined, { uri: state._url });
+                        state._url = undefined;
+                    }
+                }
+            };
+        }
+    };
 }
 
 // Initialize Pyodide
@@ -181,7 +245,20 @@ async function initPyodide(payload: { vars?: any }) {
         }
     });
     
-    // Set custom variables if provided
+    const lyraBridge = createLyraBridge();
+    pyodide.globals.set('__lyra_bridge__', lyraBridge);
+    // make the bridge available to the Python code as a module: > import lyra
+    pyodide.runPython(`
+import sys
+import types
+__bridge__ = __lyra_bridge__
+__m__ = types.ModuleType('lyra')
+for __a__ in ('read_file', 'write_file', 'list_dir', 'exists', 'is_file', 'is_dir', 'get_uri', 'revoke_uri', 'fetch', 'uri'):
+    setattr(__m__, __a__, getattr(__bridge__, __a__))
+sys.modules['lyra'] = __m__
+del __lyra_bridge__, __bridge__, __m__, __a__
+`);
+
     if (payload.vars) {
         for (const [key, value] of Object.entries(payload.vars)) {
             pyodide.globals.set(key, value);
@@ -350,20 +427,32 @@ async function getVersion() {
 self.onmessage = async (event: MessageEvent<PyWorkerMessage>) => {
     const { id, type, payload } = event.data;
     
-    // Handle input response separately (doesn't follow normal request/response pattern)
     if (type === 'inputResponse') {
         const pending = pendingInputRequests.get(id);
         if (pending) {
             pendingInputRequests.delete(id);
             if (payload.cancelled) {
-                pending.resolve('');  // Return empty string if cancelled
+                pending.resolve('');
             } else {
                 pending.resolve(payload.value || '');
             }
         }
         return;
     }
-    
+
+    if (type === 'workspaceResponse') {
+        const pending = pendingWorkspaceRequests.get(id);
+        if (pending) {
+            pendingWorkspaceRequests.delete(id);
+            if (payload?.success === false) {
+                pending.reject(new Error(payload.error ?? 'Workspace request failed'));
+            } else {
+                pending.resolve(payload?.data);
+            }
+        }
+        return;
+    }
+
     try {
         let result;
         
