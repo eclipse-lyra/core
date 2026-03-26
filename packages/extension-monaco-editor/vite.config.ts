@@ -6,7 +6,11 @@ import dts from 'vite-plugin-dts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isExternal = (id: string): boolean => {
-  if (id === 'monaco-editor' || id.startsWith('monaco-editor/')) {
+  if (
+    id === 'monaco-editor' ||
+    id.startsWith('monaco-editor/') ||
+    id.includes('/node_modules/monaco-editor/')
+  ) {
     return false;
   }
   return !id.startsWith('./') && !id.startsWith('../') && !(path.isAbsolute(id) && id.includes('/src/'));
@@ -23,7 +27,12 @@ export default defineConfig({
       formats: ['es'],
       fileName: (_, entryName) => `${entryName}.js`,
     },
-    rolldownOptions: { external: isExternal, output: { format: 'es' } },
+    rolldownOptions: {
+      external: isExternal,
+      output: {
+        format: 'es',
+      },
+    },
     outDir: 'dist', sourcemap: true, minify: false,
   },
 });
