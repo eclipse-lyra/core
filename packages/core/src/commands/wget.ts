@@ -22,6 +22,15 @@ function fileNameFromUrl(url: string): string {
     return fallbackFileName();
 }
 
+function isSupportedWgetUrl(url: string): boolean {
+    try {
+        const { protocol } = new URL(url);
+        return protocol === "http:" || protocol === "https:" || protocol === "data:" || protocol === "blob:";
+    } catch {
+        return false;
+    }
+}
+
 registerAll({
     command: {
         id: "wget",
@@ -40,7 +49,7 @@ registerAll({
     handler: {
         canExecute: (context: any) => {
             const url = context.params?.url;
-            return Boolean(url && (url.startsWith("http://") || url.startsWith("https://")));
+            return Boolean(url && isSupportedWgetUrl(url));
         },
         execute: async (context: any) => {
             const url = context.params?.url;
