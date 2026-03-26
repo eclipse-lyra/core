@@ -14,15 +14,46 @@ class PythonNotebookKernel implements NotebookKernel {
 
   private pyenv: PyEnv | null = null;
   private requiredPackages: string[] = [];
+  private loadedPackages = new Set<string>();
+  private connectPromise: Promise<void> | null = null;
 
   async connect(options?: { requiredPackages?: string[] }): Promise<void> {
-    if (this.pyenv) return;
-    this.requiredPackages = options?.requiredPackages ?? [];
-    this.pyenv = new PyEnv();
-    await this.pyenv.init();
-    if (this.requiredPackages.length > 0) {
-      await this.pyenv.loadPackages(this.requiredPackages);
+    if (this.connectPromise) {
+      await this.connectPromise;
+      if (options?.requiredPackages) {
+        this.requiredPackages = options.requiredPackages;
+      }
+      const packagesToLoadAfterWait = this.requiredPackages.filter((pkg) => !this.loadedPackages.has(pkg));
+      if (packagesToLoadAfterWait.length === 0 || !this.pyenv) return;
+      await this.pyenv.loadPackages(packagesToLoadAfterWait);
+      packagesToLoadAfterWait.forEach((pkg) => this.loadedPackages.add(pkg));
+      return;
     }
+
+    this.connectPromise = this.doConnect(options);
+    try {
+      await this.connectPromise;
+    } finally {
+      this.connectPromise = null;
+    }
+  }
+
+  private async doConnect(options?: { requiredPackages?: string[] }): Promise<void> {
+    if (options?.requiredPackages) {
+      this.requiredPackages = options.requiredPackages;
+    }
+
+    if (!this.pyenv) {
+      this.pyenv = new PyEnv();
+      await this.pyenv.init();
+    }
+
+    const packagesToLoad = this.requiredPackages.filter((pkg) => !this.loadedPackages.has(pkg));
+    if (packagesToLoad.length > 0) {
+      await this.pyenv.loadPackages(packagesToLoad);
+      packagesToLoad.forEach((pkg) => this.loadedPackages.add(pkg));
+    }
+
     try {
       await this.pyenv.execCode(`
 try:
@@ -135,7 +166,8 @@ except ImportError:
       this.pyenv.close();
       this.pyenv = null;
     }
-    await this.connect();
+    this.loadedPackages.clear();
+    await this.connect({ requiredPackages: this.requiredPackages });
   }
 
   openPackageManager(
@@ -159,6 +191,7 @@ except ImportError:
       this.pyenv.close();
       this.pyenv = null;
     }
+    this.loadedPackages.clear();
   }
 }
 

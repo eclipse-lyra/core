@@ -271,9 +271,7 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
         try {
             this.kernelConnecting = true;
             this.requestUpdate();
-            await this.kernel.connect({
-                requiredPackages: this.notebook?.metadata?.required_packages,
-            });
+            await this.connectKernelWithRequiredPackages(this.kernel);
             this.kernelConnected = true;
             if (this.kernel.getVersion) this.kernelVersion = await this.kernel.getVersion();
         } catch (err) {
@@ -323,7 +321,25 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
 
     private async ensureKernelLoaded(): Promise<void> {
         const id = this.selectedKernelId;
-        if (!id || this.kernel?.id === id) return;
+        if (!id) return;
+        if (this.kernel?.id === id) {
+            if (!this.kernel.connect) return;
+            try {
+                this.kernelConnecting = true;
+                this.requestUpdate();
+                await this.connectKernelWithRequiredPackages(this.kernel);
+                this.kernelConnected = true;
+                if (this.kernel.getVersion) {
+                    this.kernelVersion = await this.kernel.getVersion();
+                }
+            } catch (err) {
+                logger.error('Failed to reconnect kernel with required packages', id, err);
+            } finally {
+                this.kernelConnecting = false;
+                this.requestUpdate();
+            }
+            return;
+        }
         if (this.kernel?.close) void Promise.resolve(this.kernel.close());
         this.kernel = null;
         this.kernelConnected = false;
@@ -337,9 +353,7 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
             if (this.selectedKernelId !== id) return;
             this.kernel = k;
             if (k.connect) {
-                await k.connect({
-                    requiredPackages: this.notebook?.metadata?.required_packages,
-                });
+                await this.connectKernelWithRequiredPackages(k);
             }
             this.kernelConnected = true;
             if (k.getVersion) {
@@ -1020,6 +1034,7 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
                 if (!this.notebook.metadata.required_packages.includes(packageName)) {
                     this.notebook.metadata.required_packages.push(packageName);
                     this.markDirty(true);
+                    void this.syncKernelPackages();
                 }
             },
             onPackageRemoved: (packageName: string) => {
@@ -1028,9 +1043,26 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
                 if (index > -1) {
                     this.notebook.metadata.required_packages.splice(index, 1);
                     this.markDirty(true);
+                    void this.syncKernelPackages();
                 }
             },
         });
+    }
+
+    private async connectKernelWithRequiredPackages(kernel: NotebookKernel): Promise<void> {
+        if (!kernel.connect) return;
+        await kernel.connect({
+            requiredPackages: this.notebook?.metadata?.required_packages ?? [],
+        });
+    }
+
+    private async syncKernelPackages(): Promise<void> {
+        if (!this.kernel?.connect) return;
+        try {
+            await this.connectKernelWithRequiredPackages(this.kernel);
+        } catch (err) {
+            logger.error('Failed to sync kernel packages', err);
+        }
     }
 
     protected updated(changedProperties: Map<string, any>) {

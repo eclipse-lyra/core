@@ -25,7 +25,7 @@
     "@eclipse-lyra/core": "*",
     "@eclipse-lyra/extension-monaco-editor": "*",
     "@eclipse-lyra/extension-notebook": "*",
-    "pyodide": "^0.27.7"
+    "pyodide": "^0.29.3"
   },
   "devDependencies": {
     "typescript": "^6.0.0",
