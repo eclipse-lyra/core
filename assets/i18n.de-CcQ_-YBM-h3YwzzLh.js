@@ -1,1 +1,0 @@
-const e="RAG-System",n="Retrieval-Augmented Generation System für Dokumentenindizierung, Suche und Abruf",t={EXT_RAG_SYSTEM_NAME:e,EXT_RAG_SYSTEM_DESC:n};export{n as EXT_RAG_SYSTEM_DESC,e as EXT_RAG_SYSTEM_NAME,t as default};

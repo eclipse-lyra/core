@@ -1,1 +1,0 @@
-const o="WebDAV Workspace",e="Connect to WebDAV servers (Nextcloud, ownCloud) as workspace folders for cloud storage integration",s={EXT_WEBDAV_NAME:o,EXT_WEBDAV_DESC:e};export{e as EXT_WEBDAV_DESC,o as EXT_WEBDAV_NAME,s as default};
