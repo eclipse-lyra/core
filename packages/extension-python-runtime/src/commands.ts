@@ -23,7 +23,7 @@ registerAll({
         return;
       }
       const pyenv = new PyEnv();
-      await pyenv.init(undefined, { params: context.params });
+      await pyenv.init({ params: context.params });
       return await pyenv.execCode(code);
     }
   }

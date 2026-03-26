@@ -36,7 +36,7 @@ registerAll({
             const script: string = context.params?.["script"];
             if (!script) return;
             const pyenv = new PyEnv();
-            await pyenv.init(undefined, { params: context.params });
+            await pyenv.init({ params: context.params });
             await pyenv.execScript(script);
         },
     },
