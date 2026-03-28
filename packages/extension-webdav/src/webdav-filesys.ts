@@ -95,6 +95,8 @@ export class WebDAVDirectoryResource extends Directory {
     private parent?: Directory;
     private children?: Map<string, Resource>;
     private connectionInfo?: WebDAVConnectionInfo;
+    /** Workspace root label only; nested dirs use {@link WebDAVResource.displayName}. */
+    private rootFolderDisplayName?: string;
 
     constructor(client: WebDAVClient, resource: WebDAVResource, parent?: Directory, connectionInfo?: WebDAVConnectionInfo) {
         super();
@@ -102,9 +104,17 @@ export class WebDAVDirectoryResource extends Directory {
         this.resource = resource;
         this.parent = parent;
         this.connectionInfo = connectionInfo;
+        if (!parent) {
+            const n = connectionInfo?.name?.trim();
+            this.rootFolderDisplayName =
+                n && n.length > 0 ? n : extractLeafNameFromUrl(connectionInfo?.url ?? resource.href);
+        }
     }
 
     getName(): string {
+        if (this.rootFolderDisplayName !== undefined) {
+            return this.rootFolderDisplayName;
+        }
         return this.resource.displayName;
     }
 
@@ -219,18 +229,28 @@ export class WebDAVDirectoryResource extends Directory {
     }
 
     async rename(newName: string): Promise<void> {
-        if (this.getName() === newName) {
+        const trimmed = String(newName ?? '').trim();
+        if (!trimmed || this.getName() === trimmed) {
+            return;
+        }
+
+        if (!this.parent) {
+            this.rootFolderDisplayName = trimmed;
+            if (this.connectionInfo) {
+                this.connectionInfo = { ...this.connectionInfo, name: trimmed };
+            }
+            await workspaceService.updateFolderName(this, trimmed);
             return;
         }
 
         const pathParts = this.resource.href.split('/').filter(Boolean);
-        pathParts[pathParts.length - 1] = newName;
+        pathParts[pathParts.length - 1] = trimmed;
         const newPath = '/' + pathParts.join('/') + '/';
-        
+
         await this.client.moveResource(this.resource.href, newPath);
         this.resource.href = newPath;
-        this.resource.displayName = newName;
-        
+        this.resource.displayName = trimmed;
+
         publish(TOPIC_WORKSPACE_CHANGED, workspaceService.getWorkspaceSync() ?? this.getWorkspace());
     }
 
@@ -260,6 +280,16 @@ export class WebDAVDirectoryResource extends Directory {
         return {
             url: this.client.getBaseUrl()
         };
+    }
+}
+
+function extractLeafNameFromUrl(url: string): string {
+    try {
+        const urlObj = new URL(url);
+        const pathParts = urlObj.pathname.split('/').filter(Boolean);
+        return pathParts[pathParts.length - 1] || 'workspace';
+    } catch {
+        return 'workspace';
     }
 }
 

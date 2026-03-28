@@ -33,27 +33,41 @@ import { LyraWebDAVConnect } from "./webdav-connect";
 // Import commands (registers themselves)
 import './webdav-commands';
 
+async function getNextWebdavWorkspaceName(): Promise<string> {
+    const folders = await workspaceService.getFolders();
+    const used = new Set(folders.filter((f) => f.type === 'webdav').map((f) => f.name));
+    let n = 1;
+    while (used.has(`webdav${n}`)) {
+        n += 1;
+    }
+    return `webdav${n}`;
+}
+
 // Register WebDAV as a workspace contribution
 workspaceService.registerContribution({
     type: 'webdav',
     name: 'webdav',
-    
+
     canHandle(input: any): boolean {
         // Accept any connection info with a URL (credentials are optional for public/shared folders)
         return input && typeof input === 'object' && 'url' in input && typeof input.url === 'string';
     },
-    
+
     async connect(input: WebDAVConnectionInfo) {
+        const name =
+            typeof input.name === 'string' && input.name.trim().length > 0
+                ? input.name.trim()
+                : await getNextWebdavWorkspaceName();
         const client = new WebDAVClient(input);
         const rootResource: WebDAVResource = {
             href: input.url,
             displayName: extractWorkspaceNameFromUrl(input.url),
             isDirectory: true
         };
-        return new WebDAVDirectoryResource(client, rootResource, undefined, input);
+        return new WebDAVDirectoryResource(client, rootResource, undefined, { ...input, name });
     },
-    
-    async restore(data: WebDAVConnectionInfo) {
+
+    async restore(data: WebDAVConnectionInfo & { name?: string }) {
         if (!data || !data.url) {
             return undefined;
         }
@@ -64,6 +78,10 @@ workspaceService.registerContribution({
                 username: data.username,
                 password: data.password ? decodePassword(data.password) : undefined
             };
+            const name =
+                typeof data.name === 'string' && data.name.trim().length > 0
+                    ? data.name.trim()
+                    : await getNextWebdavWorkspaceName();
 
             const client = new WebDAVClient(restored);
             const rootResource: WebDAVResource = {
@@ -71,13 +89,13 @@ workspaceService.registerContribution({
                 displayName: extractWorkspaceNameFromUrl(data.url),
                 isDirectory: true
             };
-            return new WebDAVDirectoryResource(client, rootResource, undefined, restored);
+            return new WebDAVDirectoryResource(client, rootResource, undefined, { ...restored, name });
         } catch (error) {
             logger.error('Failed to restore WebDAV workspace:', error);
             return undefined;
         }
     },
-    
+
     async persist(workspace) {
         if (workspace instanceof WebDAVDirectoryResource) {
             const connectionInfo = workspace.getConnectionInfo();
@@ -87,6 +105,7 @@ workspaceService.registerContribution({
 
             return {
                 url: connectionInfo.url,
+                name: workspace.getName(),
                 ...(connectionInfo.username !== undefined ? { username: connectionInfo.username } : {}),
                 ...(connectionInfo.password !== undefined ? { password: encodePassword(connectionInfo.password) } : {})
             };

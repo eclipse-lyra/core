@@ -2,6 +2,8 @@ export interface WebDAVConnectionInfo {
     url: string;
     username?: string;
     password?: string;
+    /** Workspace root label (composite path prefix); defaults to webdav1, webdav2, … */
+    name?: string;
 }
 
 export interface WebDAVResource {
