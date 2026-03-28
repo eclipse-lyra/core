@@ -147,8 +147,9 @@ export abstract class LyraPart extends LyraContainer {
     private onContentContextMenu = (event: MouseEvent): void => {
         const contextMenu = this.renderRoot.querySelector('lyra-contextmenu') as LyraContextMenu | null;
         if (!contextMenu) return;
-        event.preventDefault();
-        contextMenu.show({ x: event.clientX, y: event.clientY }, event);
+        if (contextMenu.show({ x: event.clientX, y: event.clientY }, event)) {
+            event.preventDefault();
+        }
     };
 
     private syncIsEditorCapability(): void {

@@ -140,6 +140,14 @@ export class LyraContextMenu extends LyraElement {
         this.contributions = [...wildcard, ...categoryMatches, ...specific];
     }
 
+    /** Returns true when registry contributions or part-supplied menu content exist. */
+    private hasMenuBody(): boolean {
+        this.refreshContributions();
+        if (this.contributions.length > 0) return true;
+        const partContent = this.partContextMenuRenderer ? this.partContextMenuRenderer() : nothing;
+        return partContent !== nothing;
+    }
+
     /**
      * Gets the element at the given point, traversing shadow DOM boundaries recursively.
      * This is necessary because elementFromPoint() doesn't penetrate shadow roots.
@@ -187,7 +195,9 @@ export class LyraContextMenu extends LyraElement {
         }
     }
 
-    public show(position: { x: number, y: number }, mouseEvent?: MouseEvent) {
+    /** Opens the menu at `position`. Returns false when there is nothing to show (no thin empty panel). */
+    public show(position: { x: number, y: number }, mouseEvent?: MouseEvent): boolean {
+        if (!this.hasMenuBody()) return false;
         if (mouseEvent) {
             this.triggerClickUnderCursor(mouseEvent);
         }
@@ -196,6 +206,7 @@ export class LyraContextMenu extends LyraElement {
         this.updateComplete.then(() => {
             document.addEventListener('pointerdown', this.boundHandleDocumentPointerDown, { capture: true });
         });
+        return true;
     }
 
     private onClose() {
