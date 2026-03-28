@@ -18,6 +18,8 @@ export interface TreeNode {
     loadError?: string;
     /** Persisted workspace folder that could not be restored (see UnavailableWorkspaceFolderDirectory). */
     placeholderNotice?: string;
+    /** Backend label for workspace roots (e.g. `webdav`, `indexeddb`). */
+    workspaceTag?: string;
 }
 
 export const treeNodeComparator = (c1: TreeNode, c2: TreeNode) => {

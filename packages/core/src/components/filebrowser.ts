@@ -30,6 +30,9 @@ const t = await i18n(import.meta.glob('./filebrowser*.json'));
 
 const WORKSPACE_CHANGED_DEBOUNCE_MS = 250;
 
+/** `wa-tree-item` exposes `.model` for the bound {@link TreeNode} (not in generated element types). */
+type WaTreeItemElement = HTMLElement & { model?: TreeNode };
+
 @customElement('lyra-filebrowser')
 export class LyraFileBrowser extends LyraPart {
 
@@ -259,11 +262,11 @@ export class LyraFileBrowser extends LyraPart {
             try {
                 const info = await workspaceService.getFolderInfoForDirectory(resource);
                 if (buildGen !== this.treeBuildGeneration) {
-                    (node as any).loaded = !node.leaf;
+                    node.loaded = !node.leaf;
                     return node;
                 }
                 if (info?.backendName) {
-                    (node as any).workspaceTag = info.backendName;
+                    node.workspaceTag = info.backendName;
                 }
             } catch (e) {
                 logger.debug('Failed to get workspace info for directory', e);
@@ -274,7 +277,7 @@ export class LyraFileBrowser extends LyraPart {
             try {
                 const children = await resource.listChildren(forceRefreshChildren);
                 if (buildGen !== this.treeBuildGeneration) {
-                    (node as any).loaded = true;
+                    node.loaded = true;
                     return node;
                 }
                 for (const childResource of children) {
@@ -283,7 +286,7 @@ export class LyraFileBrowser extends LyraPart {
                     }
                     const child = await this.resourceToTreeNode(childResource, true, forceRefreshChildren);
                     if (buildGen !== this.treeBuildGeneration) {
-                        (node as any).loaded = true;
+                        node.loaded = true;
                         return node;
                     }
                     node.children.push(child);
@@ -291,7 +294,11 @@ export class LyraFileBrowser extends LyraPart {
                 node.children.sort(treeNodeComparator);
             } catch (error) {
                 if (buildGen !== this.treeBuildGeneration) {
-                    (node as any).loaded = true;
+                    node.loaded = true;
+                    return node;
+                }
+                if (!(await workspaceService.isResourceInCurrentWorkspace(resource))) {
+                    node.loaded = true;
                     return node;
                 }
                 const detail = error instanceof Error ? error.message : String(error);
@@ -300,7 +307,7 @@ export class LyraFileBrowser extends LyraPart {
             }
             // Mark directory as loaded even if it has no children or loading failed,
             // so empty folders don't stay in a perpetual "loading" state.
-            (node as any).loaded = true;
+            node.loaded = true;
         }
 
         if (resource instanceof UnavailableWorkspaceFolderDirectory) {
@@ -318,14 +325,14 @@ export class LyraFileBrowser extends LyraPart {
         // Treat a directory as "lazy" only if its children
         // have never been loaded. Once loaded (even if empty),
         // we clear the lazy flag so the progress ring disappears.
-        const isLazy = !node.leaf && !(node as any).loaded;
+        const isLazy = !node.leaf && !node.loaded;
         const resource = node.data as Resource;
         const isFile = resource instanceof File;
         const isDraggable = !!resource.getParent();
         const iconSpec = isFile
             ? editorRegistry.getFileIcon(resource.getName())
             : (node.icon || "folder-open");
-        const workspaceTag = (node as any).workspaceTag as string | undefined;
+        const workspaceTag = node.workspaceTag;
         const loadError = node.loadError;
         const placeholderNotice = node.placeholderNotice;
         const issueText = loadError
@@ -447,10 +454,15 @@ export class LyraFileBrowser extends LyraPart {
             node.children.sort(treeNodeComparator);
             // Children have now been loaded at least once (even if none remain
             // after filtering), so mark the node as loaded to disable lazy mode.
-            (node as any).loaded = true;
+            node.loaded = true;
             this.requestUpdate();
         } catch (error) {
             if (buildGen !== this.treeBuildGeneration) {
+                return;
+            }
+            if (!(await workspaceService.isResourceInCurrentWorkspace(resource))) {
+                node.loaded = true;
+                this.requestUpdate();
                 return;
             }
             const detail = error instanceof Error ? error.message : String(error);
@@ -488,7 +500,8 @@ export class LyraFileBrowser extends LyraPart {
             const node: TreeNode = selection[0].model
             const data = node.data
             activeSelectionSignal.set(data)
-            const path = (data as any)?.getWorkspacePath?.();
+            const resource = data as Resource;
+            const path = resource?.getWorkspacePath?.();
             if (typeof path === 'string') {
                 this.persistSelectedPath(path);
             } else {
@@ -522,7 +535,7 @@ export class LyraFileBrowser extends LyraPart {
             return singleRootResource instanceof Directory ? singleRootResource : undefined;
         }
 
-        const node: TreeNode | undefined = (treeItem as any).model;
+        const node: TreeNode | undefined = (treeItem as WaTreeItemElement).model;
         const resource = node?.data as Resource | undefined;
         if (resource instanceof Directory) {
             return resource;

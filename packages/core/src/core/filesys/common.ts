@@ -657,6 +657,26 @@ export class WorkspaceService {
     }
 
     /**
+     * Whether {@link resource} still belongs to the current workspace (walks up to the backend root).
+     * After {@link disconnectFolder}, the root is no longer listed, so in-flight listChildren errors can be ignored.
+     */
+    async isResourceInCurrentWorkspace(resource: Resource): Promise<boolean> {
+        await this.initPromise;
+        let current: Resource | undefined = resource;
+        while (current) {
+            const parent = current.getParent();
+            if (!parent) {
+                if (!(current instanceof Directory)) {
+                    return false;
+                }
+                return this.folders.some(f => f.directory === current);
+            }
+            current = parent;
+        }
+        return false;
+    }
+
+    /**
      * Update persisted metadata for a workspace root directory.
      * Currently used to keep display names of roots (e.g. IndexedDB) in sync
      * with their in-memory Directory instances.
