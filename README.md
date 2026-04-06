@@ -98,7 +98,13 @@ For a deeper, more detailed tour of the architecture (including concepts like co
 | **`packages/core`** (`@eclipse-lyra/core`) | Platform: registries, services, parts, widgets, dialogs, default UI contributions. No extension logic; extensions are separate packages. |
 | **`packages/extension-*`** | One package per extension (e.g. `extension-ai-system`, `extension-settings-tree`, `extension-monaco-editor`). Each depends on core and registers commands/contributions/editors. |
 | **`packages/app`** | Default app: imports core + extensions, defines `AppDefinition` and `extensions[]`, registers with app loader. Use as template for your own app. |
-| **Root** | Workspace root. Scripts: `dev`, `build`, `build:app`, `test`. |
+| **`packages/app-e2e`** | Playwright harness only: minimal Vite app + specs under `packages/app-e2e/e2e/`. Not the product demo. Run `npm run test:e2e` from the repo root. |
+| **Root** | Workspace root. Scripts: `dev`, `build`, `build:app`, `test`, `test:e2e`. |
+
+### Testing
+
+- **Unit:** `npm run test` — Vitest in `@eclipse-lyra/core`.
+- **E2E:** `npm run test:e2e` — Playwright against the minimal shell in `packages/app-e2e` (headless by default; CI runs the same command). See [packages/app-e2e/README.md](packages/app-e2e/README.md) for how the harness is wired and why (e.g. extension load order for auxiliary tabs).
 
 ### Main concepts
 
@@ -139,7 +145,7 @@ For those comparing frameworks, here is how Eclipse Lyra lines up with Angular, 
 | **Forms** | No built-in form framework; ad-hoc with WebAwesome/Lit | Reactive Forms / Template-driven forms | Uncontrolled/controlled components; Formik, React Hook Form | v-model + validation; VeeValidate, etc. |
 | **HTTP / Data** | No built-in HTTP client; fetch or extensions (e.g. GitHub, ESM.sh) | HttpClient; interceptors | fetch / axios; TanStack Query common | fetch / axios; TanStack Query common |
 | **i18n** | Built-in: `i18n()` (typed namespace, co-located JSON), `currentLanguageSignal`, locales discovered from bundles | @angular/localize; build-time or runtime | react-i18next, react-intl | vue-i18n (official) |
-| **Testing** | Vitest (unit tests in core) | Jasmine/Karma or Jest; Angular Testing Library | Jest + React Testing Library; Vitest | Jest/Vitest + Vue Test Utils |
+| **Testing** | Vitest (unit tests in core); Playwright E2E harness (`packages/app-e2e`) | Jasmine/Karma or Jest; Angular Testing Library | Jest + React Testing Library; Vitest | Jest/Vitest + Vue Test Utils |
 | **Build / Bundling** | Vite 7; core as library (ES, multiple entries); app as Vite SPA | Angular CLI (esbuild/webpack) | Vite, Create React App, Next.js, etc. | Vite (default), Vue CLI, Nuxt |
 | **Runtime footprint** | **Browser-native** tech stack (Lit, standard DOM, Web APIs); **very lightweight** runtime; no heavy framework runtime layer | Full framework runtime; larger baseline | Small library; ecosystem can add weight | Small core; ecosystem can add weight |
 | **CLI** | `npm create @eclipse-lyra/app` (scaffold new app); npm scripts: dev, build, build:app, test | Angular CLI (generate, build, serve) | Create React App, Vite templates | Vue CLI, create-vue; Nuxt CLI |

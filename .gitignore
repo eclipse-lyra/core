@@ -40,6 +40,9 @@ docs/.vitepress/cache
 # TypeScript
 *.tsbuildinfo
 
+# Local / internal notes (not part of the published tree)
+docs/internal/
+
 # Testing
 coverage
 .nyc_output

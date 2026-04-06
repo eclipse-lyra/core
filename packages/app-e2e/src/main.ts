@@ -55,7 +55,7 @@ appLoaderService.registerApp(
         name: 'Lyra E2E',
         description: 'Playwright harness — not the product demo.',
         layoutId: 'standard-full',
-        extensions: ['@eclipse-lyra/extension-ai-system'],
+        extensions: ['@eclipse-lyra/extension-ai-system', '@eclipse-lyra/extension-monaco-editor'],
     },
     { autoStart: true, hostConfig: true, container: appRoot },
 );

@@ -26,15 +26,23 @@ git clone https://github.com/eclipse-lyra/core.git
 cd core
 npm install
 npm run dev          # run the default app
-npm run test         # run tests
+npm run test         # run unit tests (Vitest in core)
 npm run build:app    # build core and app
 npm run type-check   # TypeScript check
 ```
 
+## Testing
+
+- **Unit tests:** `npm run test` — Vitest in `@eclipse-lyra/core`.
+- **End-to-end:** `npm run test:e2e` — Playwright against the minimal app in `packages/app-e2e` (builds core + E2E shell, serves preview, runs specs in `packages/app-e2e/e2e/`). Install browsers once:  
+  `npm exec --workspace=@eclipse-lyra/app-e2e -- playwright install chromium`  
+  (use `playwright install chromium --with-deps` on fresh Linux CI images, as in CI).
+- **E2E harness and strategy** (tab order, coupled-editor specs, CI behavior): see [packages/app-e2e/README.md](packages/app-e2e/README.md).
+
 ## Code and PR expectations
 
 - Keep changes focused; prefer smaller PRs.
-- Ensure `npm run test` and `npm run type-check` pass.
+- Ensure `npm run test`, `npm run type-check`, and `npm run test:e2e` pass when your change affects UI, contributions, or extension loading.
 - New features or API changes may require updates to docs under `docs/`.
 
 ## Questions

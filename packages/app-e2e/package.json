@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@eclipse-lyra/core": "*",
-    "@eclipse-lyra/extension-ai-system": "*"
+    "@eclipse-lyra/extension-ai-system": "*",
+    "@eclipse-lyra/extension-monaco-editor": "*"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",
