@@ -36,10 +36,10 @@ export class DocksStandardLayout extends DocksContainer {
 
     private getGridSizes(): string {
         if (this.showLeftSidebar && this.showAuxSidebar) {
-            return "15%, 65%, 20%";
+            return "20%, 60%, 20%";
         }
         if (this.showLeftSidebar) {
-            return "15%, 85%";
+            return "20%, 80%";
         }
         if (this.showAuxSidebar) {
             return "80%, 20%";
