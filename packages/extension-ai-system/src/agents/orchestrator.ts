@@ -1,4 +1,4 @@
-import type { ExecutionContext } from "@eclipse-lyra/core";
+import type { ExecutionContext } from "@eclipse-docks/core";
 import type { TaskPlan, ChatProvider } from "../core/types";
 import type { AgentContribution, CompletionExecutor } from "../core/interfaces";
 import { createTaskPlan } from "../task/task-plan";

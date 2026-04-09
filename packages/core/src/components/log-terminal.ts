@@ -1,6 +1,6 @@
 import { css, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { LyraPart } from '../parts/part';
+import { DocksPart } from '../parts/part';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
 import { registerLogHandler, unregisterLogHandler, type LogLevel } from '../core/logger';
 import { i18n } from '../core/i18n';
@@ -14,8 +14,8 @@ export interface LogMessage {
     message: string;
 }
 
-@customElement('lyra-log-terminal')
-export class LyraLogTerminal extends LyraPart {
+@customElement('docks-log-terminal')
+export class DocksLogTerminal extends DocksPart {
     @state()
     private messages: LogMessage[] = [];
 
@@ -106,7 +106,7 @@ export class LyraLogTerminal extends LyraPart {
         const debugCount = this.messages.filter(m => m.level === 'debug').length;
 
         return html`
-            <lyra-command 
+            <docks-command 
                 icon="list"
                 title="${t.ALL_LOGS}"
                 appearance="${this.filter === 'all' ? 'filled' : 'plain'}"
@@ -116,9 +116,9 @@ export class LyraLogTerminal extends LyraPart {
                     this.saveSettings();
                 }}>
                 ${t.ALL} (${this.messages.length})
-            </lyra-command>
+            </docks-command>
 
-            <lyra-command 
+            <docks-command 
                 icon="circle-info"
                 title="${t.INFO_LOGS}"
                 appearance="${this.filter === 'info' ? 'filled' : 'plain'}"
@@ -128,9 +128,9 @@ export class LyraLogTerminal extends LyraPart {
                     this.saveSettings();
                 }}>
                 ${t.INFO}${infoCount > 0 ? ` (${infoCount})` : ''}
-            </lyra-command>
+            </docks-command>
 
-            <lyra-command 
+            <docks-command 
                 icon="triangle-exclamation"
                 title="${t.WARNING_LOGS}"
                 appearance="${this.filter === 'warning' ? 'filled' : 'plain'}"
@@ -140,9 +140,9 @@ export class LyraLogTerminal extends LyraPart {
                     this.saveSettings();
                 }}>
                 ${t.WARNINGS}${warningCount > 0 ? ` (${warningCount})` : ''}
-            </lyra-command>
+            </docks-command>
 
-            <lyra-command 
+            <docks-command 
                 icon="circle-xmark"
                 title="${t.ERROR_LOGS}"
                 appearance="${this.filter === 'error' ? 'filled' : 'plain'}"
@@ -152,9 +152,9 @@ export class LyraLogTerminal extends LyraPart {
                     this.saveSettings();
                 }}>
                 ${t.ERRORS}${errorCount > 0 ? ` (${errorCount})` : ''}
-            </lyra-command>
+            </docks-command>
 
-            <lyra-command 
+            <docks-command 
                 icon="bug"
                 title="${t.DEBUG_LOGS}"
                 appearance="${this.filter === 'debug' ? 'filled' : 'plain'}"
@@ -164,11 +164,11 @@ export class LyraLogTerminal extends LyraPart {
                     this.saveSettings();
                 }}>
                 ${t.DEBUG}${debugCount > 0 ? ` (${debugCount})` : ''}
-            </lyra-command>
+            </docks-command>
 
             <wa-divider orientation="vertical"></wa-divider>
 
-            <lyra-command 
+            <docks-command 
                 icon="arrow-down" 
                 title="${this.autoScroll ? t.AUTO_SCROLL_ENABLED : t.AUTO_SCROLL_DISABLED}"
                 appearance="${this.autoScroll ? 'filled' : 'plain'}"
@@ -178,14 +178,14 @@ export class LyraLogTerminal extends LyraPart {
                     this.saveSettings();
                 }}>
                 ${this.autoScroll ? t.AUTO_SCROLL : t.MANUAL}
-            </lyra-command>
+            </docks-command>
 
-            <lyra-command 
+            <docks-command 
                 icon="trash" 
                 title="${t.CLEAR_LOGS}"
                 .action=${() => this.clear()}>
                 ${t.CLEAR}
-            </lyra-command>
+            </docks-command>
         `;
     }
 
@@ -318,7 +318,7 @@ export class LyraLogTerminal extends LyraPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-log-terminal': LyraLogTerminal;
+        'docks-log-terminal': DocksLogTerminal;
     }
     
     interface Window {

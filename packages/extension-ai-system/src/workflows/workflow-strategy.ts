@@ -1,4 +1,4 @@
-import type { ExecutionContext } from "@eclipse-lyra/core";
+import type { ExecutionContext } from "@eclipse-docks/core";
 import type { AgentContribution, AgentWorkflowOptions, AgentWorkflowResult } from "../core/interfaces";
 import type { ChatMessage, ChatProvider } from "../core/types";
 

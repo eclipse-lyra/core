@@ -1,4 +1,4 @@
-import { registerAll, toastError } from "@eclipse-lyra/core";
+import { registerAll, toastError } from "@eclipse-docks/core";
 import { PyEnv } from "./pyservice";
 
 registerAll({

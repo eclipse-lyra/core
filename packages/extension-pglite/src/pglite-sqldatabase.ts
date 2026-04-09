@@ -4,13 +4,13 @@ import type {
   SqlConnectionInfo,
   SqlDatabase,
   SqlDatabaseExtensionInfo,
-} from '@eclipse-lyra/extension-sqleditor';
+} from '@eclipse-docks/extension-sqleditor';
 import {
   appSettings,
   toastError,
   toastInfo,
   promptDialog,
-} from '@eclipse-lyra/core';
+} from '@eclipse-docks/core';
 import {
   listPgliteExtensions,
   loadPgliteExtensionModule,

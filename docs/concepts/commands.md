@@ -7,7 +7,7 @@
 Use `registerAll` with a command descriptor and handler:
 
 ```ts
-import { registerAll } from '@eclipse-lyra/core';
+import { registerAll } from '@eclipse-docks/core';
 
 registerAll({
   command: {

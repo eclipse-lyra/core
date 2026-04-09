@@ -8,7 +8,7 @@
 ## Run the default app
 
 ```bash
-git clone https://github.com/eclipse-lyra/core.git
+git clone https://github.com/eclipse-docks/core.git
 cd core
 npm install
 npm run dev
@@ -27,10 +27,10 @@ The app output is in `packages/app/dist/`.
 
 ## Create a new app
 
-To scaffold a new Eclipse Lyra app (monorepo with app + example extension) without cloning this repo:
+To scaffold a new Eclipse Docks app (monorepo with app + example extension) without cloning this repo:
 
 ```bash
-npm create @eclipse-lyra/app my-app
+npm create @eclipse-docks/app my-app
 cd my-app
 npm run dev
 ```
@@ -41,10 +41,10 @@ See [Build your own app](/guide/build-your-own-app) for details and for customiz
 
 | Path | Role |
 |------|------|
-| `packages/core` (`@eclipse-lyra/core`) | Platform: registries, services, UI parts. Import this in apps and extensions. |
+| `packages/core` (`@eclipse-docks/core`) | Platform: registries, services, UI parts. Import this in apps and extensions. |
 | `packages/extension-*` | One package per extension (e.g. command palette, Monaco editor, settings). |
 | `packages/app` | Default app in this repo: defines the app and imports extensions. Use as reference when working in the monorepo. |
-| `packages/create-app` | Scaffolder: `npm create @eclipse-lyra/app` generates a new app elsewhere. |
+| `packages/create-app` | Scaffolder: `npm create @eclipse-docks/app` generates a new app elsewhere. |
 | Root | Scripts: `dev`, `build`, `build:app`, `test`, `docs:dev`, `docs:build`. |
 
 Next: [Build your own app](/guide/build-your-own-app) or [Concepts: Architecture](/concepts/architecture).

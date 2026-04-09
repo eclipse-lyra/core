@@ -1,14 +1,14 @@
-import { LyraContainer } from "./container";
+import { DocksContainer } from "./container";
 import { property } from "lit/decorators.js";
 import { css, CSSResultGroup, html, PropertyValues, TemplateResult, nothing } from "lit";
 import { partDirtySignal, activePartSignal, activeEditorSignal } from "../core/appstate";
 import { CommandStack } from "../core/commandregistry";
 import { TabContribution } from "../core/contributionregistry";
-import type { LyraTabs } from "./tabs";
+import type { DocksTabs } from "./tabs";
 import { ifDefined } from "lit/directives/if-defined.js";
-import { LyraContextMenu } from "./contextmenu";
+import { DocksContextMenu } from "./contextmenu";
 
-export abstract class LyraPart extends LyraContainer {
+export abstract class DocksPart extends DocksContainer {
     protected scrollMode: 'scroller' | 'native' = 'scroller';
 
     @property()
@@ -32,7 +32,7 @@ export abstract class LyraPart extends LyraContainer {
      * for actions that are scoped to this part instance.
      * 
      * IMPORTANT: Event handlers MUST use arrow functions to preserve the component's 'this' context.
-     * The toolbar template is rendered in a different component (lyra-toolbar), so direct method 
+     * The toolbar template is rendered in a different component (docks-toolbar), so direct method 
      * references lose their binding.
      * 
      * ✅ Correct:
@@ -61,9 +61,9 @@ export abstract class LyraPart extends LyraContainer {
 
     /**
      * Activates the tab that contains this part by walking up the DOM to the first
-     * lyra-tabs ancestor and activating the tab panel that contains this part.
+     * docks-tabs ancestor and activating the tab panel that contains this part.
      * Crosses Shadow DOM boundaries (e.g. wa-tab-group) via getRootNode().host.
-     * No-op if this part is not inside a lyra-tabs / wa-tab-panel.
+     * No-op if this part is not inside a docks-tabs / wa-tab-panel.
      */
     protected activateContainingTab(): void {
         let el: Element | null = this;
@@ -74,7 +74,7 @@ export abstract class LyraPart extends LyraContainer {
             if (tag === 'wa-tab-panel') {
                 panelName = el.getAttribute('name');
             }
-            if (tag === 'lyra-tabs') {
+            if (tag === 'docks-tabs') {
                 tabsEl = el;
                 break;
             }
@@ -87,7 +87,7 @@ export abstract class LyraPart extends LyraContainer {
             }
         }
         if (tabsEl && panelName != null && panelName !== '') {
-            (tabsEl as LyraTabs).activate(panelName);
+            (tabsEl as DocksTabs).activate(panelName);
         }
     }
 
@@ -145,7 +145,7 @@ export abstract class LyraPart extends LyraContainer {
     }
 
     private onContentContextMenu = (event: MouseEvent): void => {
-        const contextMenu = this.renderRoot.querySelector('lyra-contextmenu') as LyraContextMenu | null;
+        const contextMenu = this.renderRoot.querySelector('docks-contextmenu') as DocksContextMenu | null;
         if (!contextMenu) return;
         if (contextMenu.show({ x: event.clientX, y: event.clientY }, event)) {
             event.preventDefault();
@@ -153,7 +153,7 @@ export abstract class LyraPart extends LyraContainer {
     };
 
     private syncIsEditorCapability(): void {
-        const next = this.save !== LyraPart.prototype.save;
+        const next = this.save !== DocksPart.prototype.save;
         if (next === this.isEditor) return;
         this.isEditor = next;
     }
@@ -162,7 +162,7 @@ export abstract class LyraPart extends LyraContainer {
         const coupled = this.tabContribution?.coupledEditors;
         if (!coupled?.length) return;
         const active = activeEditorSignal.get();
-        if (!(active instanceof LyraPart)) return;
+        if (!(active instanceof DocksPart)) return;
         const editorId = active.tabContribution?.editorId;
         if (!editorId || !coupled.includes(editorId)) return;
         this.activateContainingTab();
@@ -186,22 +186,22 @@ export abstract class LyraPart extends LyraContainer {
         return html`
             <div class="part-shell">
                 ${toolbarEnabled ? html`
-                    <lyra-toolbar
+                    <docks-toolbar
                         class="part-toolbar"
                         id=${ifDefined(toolbarTarget)}
                         .scopeTokens=${scopeTokens}
                         .partToolbarRenderer=${() => this.renderToolbar()}>
-                    </lyra-toolbar>
+                    </docks-toolbar>
                 ` : nothing}
                 <div class="part-content ${scrollMode === 'native' ? 'native-scroll' : ''}" @contextmenu=${contextMenuEnabled ? this.onContentContextMenu : undefined}>
                     ${contentNode}
                 </div>
                 ${contextMenuEnabled ? html`
-                    <lyra-contextmenu
+                    <docks-contextmenu
                         id=${ifDefined(contextMenuTarget)}
                         .scopeTokens=${scopeTokens}
                         .partContextMenuRenderer=${() => this.renderContextMenu()}>
-                    </lyra-contextmenu>
+                    </docks-contextmenu>
                 ` : nothing}
             </div>
         `;
@@ -251,9 +251,9 @@ export abstract class LyraPart extends LyraContainer {
 
     public markDirty(dirty: boolean) {
         this.dirty = dirty
-        partDirtySignal.set(null as unknown as LyraPart)
+        partDirtySignal.set(null as unknown as DocksPart)
         partDirtySignal.set(this)
-        activePartSignal.set(null as unknown as LyraPart)
+        activePartSignal.set(null as unknown as DocksPart)
         activePartSignal.set(this)
     }
 
@@ -298,6 +298,6 @@ export abstract class LyraPart extends LyraContainer {
 
     static finalizeStyles(styles?: CSSResultGroup) {
         const own = super.finalizeStyles(styles);
-        return [LyraPart.baseStyles, ...own];
+        return [DocksPart.baseStyles, ...own];
     }
 }

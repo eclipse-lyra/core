@@ -1,13 +1,13 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { LyraElement } from '@eclipse-lyra/core';
-import { subscribe, confirmDialog } from '@eclipse-lyra/core';
+import { DocksElement } from '@eclipse-docks/core';
+import { subscribe, confirmDialog } from '@eclipse-docks/core';
 import { tokenUsageTracker, EMPTY_USAGE } from '../service/token-usage-tracker';
 import { TOPIC_AI_STREAM_COMPLETE } from '../core/constants';
 import type { ProviderTokenUsage } from '../core/types';
 
-@customElement('lyra-token-usage')
-export class LyraTokenUsage extends LyraElement {
+@customElement('docks-token-usage')
+export class DocksTokenUsage extends DocksElement {
     private totalUsage: ProviderTokenUsage = { ...EMPTY_USAGE };
     private providerUsage: Record<string, ProviderTokenUsage> = {};
 
@@ -132,6 +132,6 @@ export class LyraTokenUsage extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-token-usage': LyraTokenUsage;
+        'docks-token-usage': DocksTokenUsage;
     }
 }

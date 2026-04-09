@@ -2,9 +2,9 @@ import type {
   NotebookExecutionResult,
   NotebookKernel,
   NotebookKernelContribution,
-} from '@eclipse-lyra/extension-notebook';
-import { TARGET_NOTEBOOK_KERNELS } from '@eclipse-lyra/extension-notebook';
-import type { SqlDatabase } from '@eclipse-lyra/extension-sqleditor';
+} from '@eclipse-docks/extension-notebook';
+import { TARGET_NOTEBOOK_KERNELS } from '@eclipse-docks/extension-notebook';
+import type { SqlDatabase } from '@eclipse-docks/extension-sqleditor';
 import { pgliteSqlAdapterContribution } from './pglite-sqldatabase';
 
 function formatResult(columns: string[], rows: unknown[][]): string {

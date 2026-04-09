@@ -31,8 +31,8 @@ function compareCells(a: unknown, b: unknown, numeric: boolean): number {
   return cellString(a).localeCompare(cellString(b), undefined, { numeric: true });
 }
 
-@customElement('lyra-data-table')
-export class LyraDataTable extends LitElement {
+@customElement('docks-data-table')
+export class DocksDataTable extends LitElement {
   @property({ attribute: false })
   data: TabularData = { columns: [], rows: [] };
 
@@ -182,7 +182,7 @@ export class LyraDataTable extends LitElement {
             title="Rows per page"
             @change=${this.onPageSizeChange}
           >
-            ${LyraDataTable.PAGE_SIZE_OPTIONS.map(
+            ${DocksDataTable.PAGE_SIZE_OPTIONS.map(
               (n) => html`<wa-option value=${String(n)}>${n}</wa-option>`
             )}
           </wa-select>
@@ -362,6 +362,6 @@ export class LyraDataTable extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lyra-data-table': LyraDataTable;
+    'docks-data-table': DocksDataTable;
   }
 }

@@ -2,7 +2,7 @@
 # Configure npm trusted publishing (OIDC) for GitHub Actions on each publishable package.
 # Requires: npm@11.10.0+, 2FA enabled on npm account, packages already published at least once.
 # Usage: ./scripts/setup-npm-trusted-publishing.sh [--dry-run] [package]
-#   package: optional — package name (e.g. @eclipse-lyra/extension-foo) or path (e.g. packages/extension-foo).
+#   package: optional — package name (e.g. @eclipse-docks/extension-foo) or path (e.g. packages/extension-foo).
 #   If omitted, configures all publishable packages (core + extensions).
 # See: https://docs.npmjs.com/cli/v11/commands/npm-trust
 
@@ -21,7 +21,7 @@ for arg in "$@"; do
 done
 
 WORKFLOW_FILE="${WORKFLOW_FILE:-publish.yml}"
-REPO="${NPM_TRUST_REPO:-eclipse-lyra/core}"
+REPO="${NPM_TRUST_REPO:-eclipse-docks/core}"
 
 echo "Configuring npm trusted publishing (GitHub OIDC)"
 echo "  Workflow: $WORKFLOW_FILE"

@@ -1,4 +1,4 @@
-import { extensionRegistry, i18n } from '@eclipse-lyra/core';
+import { extensionRegistry, i18n } from '@eclipse-docks/core';
 import pkg from '../package.json';
 
 export type { GitHubRelease } from './github-service';

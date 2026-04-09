@@ -2,7 +2,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 
-@customElement('lyra-ai-chat-input')
+@customElement('docks-ai-chat-input')
 export class AIChatInput extends LitElement {
     @property({ type: String }) public value = '';
     @property({ type: Boolean }) public disabled = false;
@@ -74,6 +74,6 @@ export class AIChatInput extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-ai-chat-input': AIChatInput;
+        'docks-ai-chat-input': AIChatInput;
     }
 }

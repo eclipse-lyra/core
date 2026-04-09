@@ -1,6 +1,6 @@
-# What is Eclipse Lyra
+# What is Eclipse Docks
 
-Eclipse Lyra is a **modular web framework** for building IDE-like applications. It provides:
+Eclipse Docks is a **modular web framework** for building IDE-like applications. It provides:
 
 - **App layer** — You define an app by its extensions and optional layout; the app root is the chosen layout's component. Layouts (e.g. IDE, dashboard) are registered via contributions; users switch via the toolbar. The framework handles registration, lifecycle, and rendering.
 - **Extension system** — Features (editor, terminal, AI, settings, etc.) are packaged as extensions. Each extension registers with the core and can contribute UI and commands.

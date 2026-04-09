@@ -3,7 +3,7 @@
 Use `registerAll` to register the command, handler, and the toolbar (or other UI) contribution in one call:
 
 ```ts
-import { registerAll, TOOLBAR_MAIN_RIGHT } from '@eclipse-lyra/core';
+import { registerAll, TOOLBAR_MAIN_RIGHT } from '@eclipse-docks/core';
 
 registerAll({
   command: {

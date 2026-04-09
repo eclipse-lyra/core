@@ -1,10 +1,10 @@
-# @eclipse-lyra/create-app
+# @eclipse-docks/create-app
 
-Scaffold a new Eclipse Lyra app with a single command.
+Scaffold a new Eclipse Docks app with a single command.
 
 ## Testing locally
 
-From the Eclipse Lyra monorepo root, run the CLI with Node (no publish needed):
+From the Eclipse Docks monorepo root, run the CLI with Node (no publish needed):
 
 ```bash
 node packages/create-app/index.js my-app
@@ -23,19 +23,19 @@ Then `cd my-app && npm run dev` to run the scaffolded app.
 ## Usage (published package)
 
 ```bash
-npm create @eclipse-lyra/app
+npm create @eclipse-docks/app
 ```
 
 With a project name (directory):
 
 ```bash
-npm create @eclipse-lyra/app my-app
+npm create @eclipse-docks/app my-app
 ```
 
 To skip prompts when a project name is provided:
 
 ```bash
-npm create @eclipse-lyra/app my-app -- --yes
+npm create @eclipse-docks/app my-app -- --yes
 ```
 
 ## Next steps
@@ -52,7 +52,7 @@ From the created project root, `npm run dev` runs the app (Vite). Use `npm run b
 ## What you get
 
 - A **monorepo** with two workspace packages:
-  - **`packages/app`** – the Lyra app (Vite, core + extensions from npm).
+  - **`packages/app`** – the Docks app (Vite, core + extensions from npm).
   - **`packages/example-extension`** – a minimal example extension you can copy or extend.
 - The app registers a **logo contribution** on the left main toolbar (slot `start`) with the text `my!app`; you can change it in `packages/app/src/main.ts`.
 - The example extension is loaded by the app and adds an "Example" view in the left side panel.
@@ -61,7 +61,7 @@ From the created project root, `npm run dev` runs the app (Vite). Use `npm run b
 
 The template includes an example extension in **`packages/example-extension`** to show how to build your own extensions without publishing a separate npm package.
 
-- **`src/index.ts`** – Registers the extension with `extensionRegistry.registerExtension()` (id, name, description, loader, icon). Same pattern as published extensions like `@eclipse-lyra/extension-howto-system` and `@eclipse-lyra/extension-utils`.
+- **`src/index.ts`** – Registers the extension with `extensionRegistry.registerExtension()` (id, name, description, loader, icon). Same pattern as published extensions like `@eclipse-docks/extension-howto-system` and `@eclipse-docks/extension-utils`.
 - **`src/example-extension-loader.ts`** – Loaded when the extension is activated. Registers a **TabContribution** to `SIDEBAR_MAIN` (the left side panel), so the "Example" tab appears alongside the workspace file browser.
 - **`tsconfig.json`** – TypeScript config for the extension (IDE and type-checking).
 - **`vite.config.ts`** – Vite lib build; run `npm run build -w example-extension` to output `dist/` when you want to publish the extension.

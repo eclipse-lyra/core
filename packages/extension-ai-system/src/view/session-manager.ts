@@ -1,4 +1,4 @@
-import { appSettings } from "@eclipse-lyra/core";
+import { appSettings } from "@eclipse-docks/core";
 import type { ChatMessage } from "../core/types";
 
 export interface Session {

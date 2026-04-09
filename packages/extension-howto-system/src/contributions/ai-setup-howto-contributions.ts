@@ -1,10 +1,10 @@
-import { contributionRegistry, activeEditorSignal, partDirtySignal, subscribe, appLoaderService, appSettings } from '@eclipse-lyra/core';
-import type { EditorContentProvider } from '@eclipse-lyra/core';
-import { watchSignal } from '@eclipse-lyra/core';
+import { contributionRegistry, activeEditorSignal, partDirtySignal, subscribe, appLoaderService, appSettings } from '@eclipse-docks/core';
+import type { EditorContentProvider } from '@eclipse-docks/core';
+import { watchSignal } from '@eclipse-docks/core';
 import { HOWTO_CONTRIBUTION_TARGET } from '../howto-service';
 import type { HowToContribution, HowToContext } from '../howto-contribution';
-import { KEY_AI_CONFIG, TOPIC_AICONFIG_CHANGED } from '@eclipse-lyra/extension-ai-system/api';
-import type { AIConfig } from '@eclipse-lyra/extension-ai-system/api';
+import { KEY_AI_CONFIG, TOPIC_AICONFIG_CHANGED } from '@eclipse-docks/extension-ai-system/api';
+import type { AIConfig } from '@eclipse-docks/extension-ai-system/api';
 
 const AI_CONFIG_EDITOR_KEY = '.system.ai-config';
 
@@ -125,7 +125,7 @@ function getAppName(): string {
 
 // Create the AI setup HowTo contribution
 const aiSetupContribution: HowToContribution = {
-    id: 'appspace.ai-setup',
+    id: 'docks.ai-setup',
     title: () => `Set up AI in ${getAppName()}`,
     description: () => `Configure an LLM provider to enable AI chat features in ${getAppName()}`,
     icon: 'robot',

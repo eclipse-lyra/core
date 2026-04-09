@@ -1,5 +1,5 @@
-import { createLogger, workspaceService } from '@eclipse-lyra/core';
-import type { File } from '@eclipse-lyra/core';
+import { createLogger, workspaceService } from '@eclipse-docks/core';
+import type { File } from '@eclipse-docks/core';
 import * as DuckDBWasm from '@duckdb/duckdb-wasm';
 import * as duckdb from '@duckdb/duckdb-wasm';
 
@@ -251,7 +251,7 @@ export class DuckDBService {
   }
 
   /**
-   * Close the database if open and remove its file from OPFS. Name is the simple database name (e.g. `appspace`).
+   * Close the database if open and remove its file from OPFS. Name is the simple database name (e.g. `mydb`).
    */
   async delete(name: string): Promise<void> {
     if (!DB_NAME_REGEX.test(name)) {

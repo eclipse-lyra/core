@@ -1,4 +1,4 @@
-import { contributionRegistry } from '@eclipse-lyra/core';
+import { contributionRegistry } from '@eclipse-docks/core';
 import { CID_CHAT_PROVIDERS } from './core/constants';
 import type { ChatProviderContribution } from './core/interfaces';
 

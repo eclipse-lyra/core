@@ -1,19 +1,19 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { rootContext, taskService, toastError } from '@eclipse-lyra/core';
+import { rootContext, taskService, toastError } from '@eclipse-docks/core';
 import type {
   SqlDatabase,
   SqlDatabaseExtensionInfo,
-} from '@eclipse-lyra/extension-sqleditor';
+} from '@eclipse-docks/extension-sqleditor';
 
 export interface SqlExtensionManagerOptions {
   db: SqlDatabase | null;
   databaseLabel: string;
 }
 
-@customElement('lyra-sql-extension-manager')
-export class LyraSqlExtensionManager extends LitElement {
+@customElement('docks-sql-extension-manager')
+export class DocksSqlExtensionManager extends LitElement {
   @property({ type: Boolean })
   open = false;
 
@@ -370,19 +370,19 @@ export class LyraSqlExtensionManager extends LitElement {
 }
 
 class SqlExtensionManagerService {
-  private managerInstance: LyraSqlExtensionManager | null = null;
+  private managerInstance: DocksSqlExtensionManager | null = null;
 
   public showExtensionManager(
     options: SqlExtensionManagerOptions,
-  ): LyraSqlExtensionManager | null {
+  ): DocksSqlExtensionManager | null {
     if (!options.db || !options.db.listDbExtensions) {
       toastError('The current SQL engine does not support extensions.');
       return null;
     }
     if (!this.managerInstance) {
       this.managerInstance = document.createElement(
-        'lyra-sql-extension-manager',
-      ) as LyraSqlExtensionManager;
+        'docks-sql-extension-manager',
+      ) as DocksSqlExtensionManager;
       document.body.appendChild(this.managerInstance);
     }
     this.managerInstance.configure(options);
@@ -390,7 +390,7 @@ class SqlExtensionManagerService {
     return this.managerInstance;
   }
 
-  public getManager(): LyraSqlExtensionManager | null {
+  public getManager(): DocksSqlExtensionManager | null {
     return this.managerInstance;
   }
 }
@@ -400,7 +400,7 @@ rootContext.put('sqlExtensionManagerService', sqlExtensionManagerService);
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lyra-sql-extension-manager': LyraSqlExtensionManager;
+    'docks-sql-extension-manager': DocksSqlExtensionManager;
   }
 }
 

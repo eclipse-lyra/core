@@ -1,14 +1,14 @@
 import { customElement, state } from "lit/decorators.js";
-import { LyraDialogContent } from "@eclipse-lyra/core";
+import { DocksDialogContent } from "@eclipse-docks/core";
 import { html } from "lit";
-import { workspaceService } from "@eclipse-lyra/core";
+import { workspaceService } from "@eclipse-docks/core";
 import type { WebDAVConnectionInfo } from "./webdav-client";
-import { createLogger } from "@eclipse-lyra/core";
+import { createLogger } from "@eclipse-docks/core";
 
 const logger = createLogger('WebDAV');
 
-@customElement('lyra-webdav-connect')
-export class LyraWebDAVConnect extends LyraDialogContent {
+@customElement('docks-webdav-connect')
+export class DocksWebDAVConnect extends DocksDialogContent {
     
     @state()
     private url = '';
@@ -230,6 +230,6 @@ export class LyraWebDAVConnect extends LyraDialogContent {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-webdav-connect': LyraWebDAVConnect;
+        'docks-webdav-connect': DocksWebDAVConnect;
     }
 }

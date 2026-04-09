@@ -1,5 +1,5 @@
 import { documentIndexService, IndexedDocument, DocumentSearchScope } from './document-index-service';
-import { createLogger } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-docks/core';
 import { getWorkspacePath } from './utils/workspace-utils';
 import { extractQueryTerms, normalizeQuery } from './utils/query-utils';
 import { SnippetExtractor } from './utils/snippet-extractor';

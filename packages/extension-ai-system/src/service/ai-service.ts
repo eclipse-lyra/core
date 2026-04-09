@@ -1,9 +1,9 @@
-import { DependencyContext, rootContext } from "@eclipse-lyra/core";
-import { publish, subscribe } from "@eclipse-lyra/core";
-import { appSettings, TOPIC_SETTINGS_CHANGED } from "@eclipse-lyra/core";
-import { contributionRegistry } from "@eclipse-lyra/core";
-import type { ExecutionContext } from "@eclipse-lyra/core";
-import { logger } from "@eclipse-lyra/core";
+import { DependencyContext, rootContext } from "@eclipse-docks/core";
+import { publish, subscribe } from "@eclipse-docks/core";
+import { appSettings, TOPIC_SETTINGS_CHANGED } from "@eclipse-docks/core";
+import { contributionRegistry } from "@eclipse-docks/core";
+import type { ExecutionContext } from "@eclipse-docks/core";
+import { logger } from "@eclipse-docks/core";
 
 import {
     TOPIC_AI_STREAM_STARTED,

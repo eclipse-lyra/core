@@ -1,8 +1,8 @@
 import type { RxDatabase, RxCollection } from 'rxdb';
-import { rootContext } from '@eclipse-lyra/core';
-import { workspaceService, File, Directory, FileContentType, TOPIC_WORKSPACE_CONNECTED, TOPIC_WORKSPACE_CHANGED } from '@eclipse-lyra/core';
-import { subscribe } from '@eclipse-lyra/core';
-import { createLogger } from '@eclipse-lyra/core';
+import { rootContext } from '@eclipse-docks/core';
+import { workspaceService, File, Directory, FileContentType, TOPIC_WORKSPACE_CONNECTED, TOPIC_WORKSPACE_CHANGED } from '@eclipse-docks/core';
+import { subscribe } from '@eclipse-docks/core';
+import { createLogger } from '@eclipse-docks/core';
 import { embeddingService } from './embedding-service';
 import { VectorEmbedding, generateSampleVectors, calculateIndexValues, euclideanDistance, cosineSimilarity, SampleVector, IndexValues } from './vector-utils';
 import { VECTOR_SEARCH_CONFIG, INDEX_FIELD_NAMES } from './utils/constants';

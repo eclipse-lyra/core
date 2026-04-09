@@ -9,14 +9,14 @@ test.describe('Workspace (IndexedDB) persistence', () => {
 
         await page.goto('/');
 
-        await expect(page.locator('lyra-standard-layout')).toBeVisible({ timeout: 120_000 });
+        await expect(page.locator('docks-standard-layout')).toBeVisible({ timeout: 120_000 });
 
         // Workspace tab + default IndexedDB root (see WorkspaceService in core).
-        const mainSidebar = page.locator('lyra-tabs#sidebar-main');
+        const mainSidebar = page.locator('docks-tabs#sidebar-main');
         await expect(mainSidebar).toBeVisible({ timeout: 30_000 });
         await mainSidebar.locator('wa-tab[panel="view.filebrowser"]').click();
 
-        const fileBrowser = page.locator('lyra-filebrowser');
+        const fileBrowser = page.locator('docks-filebrowser');
         await expect(fileBrowser).toBeVisible({ timeout: 30_000 });
         await expect(fileBrowser.locator('wa-tree')).toBeVisible({ timeout: 30_000 });
 
@@ -25,13 +25,13 @@ test.describe('Workspace (IndexedDB) persistence', () => {
         await rootFolder.click();
 
         // touch with ask: Create → Create File… → prompt path (relative to selected folder).
-        const createMenu = fileBrowser.locator('lyra-command[dropdown="filebrowser.create"]');
+        const createMenu = fileBrowser.locator('docks-command[dropdown="filebrowser.create"]');
         await createMenu.locator('wa-button[slot="trigger"]').click();
         await page.getByText('Create File...', { exact: true }).click();
 
         const dialog = page.locator('wa-dialog[open][label="Input"]');
         await expect(dialog).toBeAttached({ timeout: 15_000 });
-        const pathInput = dialog.locator('lyra-prompt-dialog-content wa-input');
+        const pathInput = dialog.locator('docks-prompt-dialog-content wa-input');
         await pathInput.waitFor({ state: 'attached', timeout: 15_000 });
         await pathInput.locator('input').fill(fileName);
         await dialog.locator('.dialog-service-footer wa-button').filter({ hasText: 'OK' }).click({ force: true });
@@ -43,10 +43,10 @@ test.describe('Workspace (IndexedDB) persistence', () => {
         await fileRow.dblclick();
 
         // Monaco: system.monaco-editor; save via global save command (Ctrl+S).
-        const editorHost = page.locator('lyra-tabs#editor-area-main lyra-monaco-editor');
+        const editorHost = page.locator('docks-tabs#editor-area-main docks-monaco-editor');
         await expect(editorHost).toBeVisible({ timeout: 120_000 });
 
-        const monaco = page.locator('lyra-monaco-editor .monaco-editor');
+        const monaco = page.locator('docks-monaco-editor .monaco-editor');
         await expect(monaco).toBeVisible({ timeout: 120_000 });
         await monaco.click();
         await page.keyboard.press('ControlOrMeta+a');
@@ -54,7 +54,7 @@ test.describe('Workspace (IndexedDB) persistence', () => {
 
         await page.keyboard.press('ControlOrMeta+s');
 
-        const editorTabs = page.locator('lyra-tabs#editor-area-main');
+        const editorTabs = page.locator('docks-tabs#editor-area-main');
         const activeTab = editorTabs.locator('wa-tab[aria-selected="true"]');
         await activeTab.locator('wa-icon[name="xmark"]').click();
 
@@ -64,7 +64,7 @@ test.describe('Workspace (IndexedDB) persistence', () => {
         const fileRowAgain = fileBrowser.locator('wa-tree-item').filter({ hasText: fileName }).first();
         await fileRowAgain.dblclick();
 
-        const editorAfterReopen = page.locator('lyra-tabs#editor-area-main lyra-monaco-editor');
+        const editorAfterReopen = page.locator('docks-tabs#editor-area-main docks-monaco-editor');
         await expect(editorAfterReopen).toBeVisible({ timeout: 120_000 });
         await expect(editorAfterReopen.locator('.monaco-editor')).toBeVisible({ timeout: 120_000 });
 

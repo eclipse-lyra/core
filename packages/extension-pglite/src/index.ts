@@ -1,4 +1,4 @@
-import { extensionRegistry } from '@eclipse-lyra/core';
+import { extensionRegistry } from '@eclipse-docks/core';
 import pkg from '../package.json';
 
 extensionRegistry.registerExtension({
@@ -7,7 +7,7 @@ extensionRegistry.registerExtension({
   description: 'In-browser PostgreSQL via PGlite',
   loader: () => import('./pglite-extension'),
   icon: 'database',
-  dependencies: ['@eclipse-lyra/extension-sqleditor'],
+  dependencies: ['@eclipse-docks/extension-sqleditor'],
   experimental: true,
 });
 

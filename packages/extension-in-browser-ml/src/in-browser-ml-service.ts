@@ -1,4 +1,4 @@
-import { createLogger } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-docks/core';
 import { MLTask, MLModel, getModelForTask } from './ml-models';
 import MLWorker from './ml-worker?worker';
 

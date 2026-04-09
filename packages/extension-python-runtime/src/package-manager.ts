@@ -3,7 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { ref } from "lit/directives/ref.js";
 import { repeat } from "lit/directives/repeat.js";
 import { PyEnv } from "./pyservice";
-import { rootContext } from "@eclipse-lyra/core";
+import { rootContext } from "@eclipse-docks/core";
 
 export interface PackageManagerOptions {
     packages: string[];
@@ -12,8 +12,8 @@ export interface PackageManagerOptions {
     pyenv?: PyEnv;
 }
 
-@customElement('lyra-python-package-manager')
-export class LyraPythonPackageManager extends LitElement {
+@customElement('docks-python-package-manager')
+export class DocksPythonPackageManager extends LitElement {
     @property({ type: Boolean })
     open: boolean = false;
 
@@ -284,11 +284,11 @@ export class LyraPythonPackageManager extends LitElement {
 }
 
 class PythonPackageManagerService {
-    private managerInstance?: LyraPythonPackageManager;
+    private managerInstance?: DocksPythonPackageManager;
 
-    public showPackageManager(options: PackageManagerOptions): LyraPythonPackageManager {
+    public showPackageManager(options: PackageManagerOptions): DocksPythonPackageManager {
         if (!this.managerInstance) {
-            this.managerInstance = document.createElement('lyra-python-package-manager') as LyraPythonPackageManager;
+            this.managerInstance = document.createElement('docks-python-package-manager') as DocksPythonPackageManager;
             document.body.appendChild(this.managerInstance);
         }
 
@@ -298,7 +298,7 @@ class PythonPackageManagerService {
         return this.managerInstance;
     }
 
-    public getManager(): LyraPythonPackageManager | undefined {
+    public getManager(): DocksPythonPackageManager | undefined {
         return this.managerInstance;
     }
 }

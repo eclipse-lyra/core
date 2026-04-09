@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { EditorInput, editorRegistry, File } from "@eclipse-lyra/core";
+import { EditorInput, editorRegistry, File } from "@eclipse-docks/core";
 
 import "./monaco-widget";
 
@@ -21,7 +21,7 @@ editorRegistry.registerEditorInputHandler({
             state: {},
         } as EditorInput
         editorInput.component = (id: string) => html`
-            <lyra-monaco-editor id=${id} .input=${editorInput}></lyra-monaco-editor>`
+            <docks-monaco-editor id=${id} .input=${editorInput}></docks-monaco-editor>`
         return editorInput;
     }
 })

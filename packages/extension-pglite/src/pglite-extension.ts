@@ -1,5 +1,5 @@
-import { contributionRegistry } from '@eclipse-lyra/core';
-import { TARGET_NOTEBOOK_KERNELS } from '@eclipse-lyra/extension-notebook';
+import { contributionRegistry } from '@eclipse-docks/core';
+import { TARGET_NOTEBOOK_KERNELS } from '@eclipse-docks/extension-notebook';
 import { registerPgliteCatalog } from './pglite-catalog';
 import { pgliteSqlAdapterContribution } from './pglite-sqldatabase';
 import { pgliteNotebookKernelContribution } from './pglite-notebook-kernel';

@@ -1,13 +1,13 @@
 import {customElement, property, state} from "lit/decorators.js";
 import {css, html, nothing} from "lit";
-import {LyraContainer} from "./container";
+import {DocksContainer} from "./container";
 import {contributionRegistry, ContributionChangeEvent, TabContribution, TOPIC_CONTRIBUTEIONS_CHANGED} from "../core/contributionregistry";
 import {when} from "lit/directives/when.js";
 import {repeat} from "lit/directives/repeat.js";
 import {createRef, ref} from "lit/directives/ref.js";
 import { icon } from "../core/icon-utils";
 import {subscribe} from "../core/events";
-import { LyraPart } from "./part";
+import { DocksPart } from "./part";
 import {MouseButton, EDITOR_AREA_MAIN} from "../core/constants";
 import {activePartSignal, activeEditorSignal, partDirtySignal} from "../core/appstate";
 import {watchSignal} from "../core/signals";
@@ -15,7 +15,7 @@ import {confirmDialog} from "../dialogs";
 import {appLoaderService} from "../core/apploader";
 
 /**
- * LyraTabs - A dynamic tab container component
+ * DocksTabs - A dynamic tab container component
  * 
  * Architecture:
  * - Fixed layout (VS Code style) - each tab is registered to a specific container
@@ -27,8 +27,8 @@ import {appLoaderService} from "../core/apploader";
  * 2. render():        Create tab UI from contributions
  * 3. open/closeTab(): Dynamic tab operations
  */
-@customElement('lyra-tabs')
-export class LyraTabs extends LyraContainer {
+@customElement('docks-tabs')
+export class DocksTabs extends DocksContainer {
     @property({reflect: true})
     placement: "top" | "bottom" | "start" | "end" = "top";
 
@@ -51,7 +51,7 @@ export class LyraTabs extends LyraContainer {
     protected doBeforeUI() {
         this.containerId = this.getAttribute("id");
         if (!this.containerId) {
-            throw new Error("lyra-tabs requires an 'id' attribute to function");
+            throw new Error("docks-tabs requires an 'id' attribute to function");
         }
         this.loadAndResolveContributions();
     }
@@ -238,7 +238,7 @@ export class LyraTabs extends LyraContainer {
 
 
         this.dirtySignalCleanup?.();
-        this.dirtySignalCleanup = watchSignal(partDirtySignal, (part: LyraPart | null) => {
+        this.dirtySignalCleanup = watchSignal(partDirtySignal, (part: DocksPart | null) => {
             if (!part) return;
             const panel = part.closest('wa-tab-panel') as HTMLElement | null;
             if (!panel) return;
@@ -282,34 +282,34 @@ export class LyraTabs extends LyraContainer {
 
     private syncActiveSignalsFromPanel(tabPanel: HTMLElement): void {
         const part = this.getPartFromPanel(tabPanel);
-        if (!(part instanceof LyraPart)) return;
+        if (!(part instanceof DocksPart)) return;
 
         // Always update the active part to reflect current focus
-        activePartSignal.set(null as unknown as LyraPart);
+        activePartSignal.set(null as unknown as DocksPart);
         activePartSignal.set(part);
 
         // Only update the active editor when an editor in the main editor area changes.
         // Do NOT clear the existing active editor when non-editor parts gain focus so
         // commands depending on the active editor keep working while other views are active.
         if (this.containerId === EDITOR_AREA_MAIN && part.isEditor) {
-            activeEditorSignal.set(null as unknown as LyraPart);
+            activeEditorSignal.set(null as unknown as DocksPart);
             activeEditorSignal.set(part);
         }
     }
 
     private clearActiveSignalsIfPartInPanel(tabPanel: HTMLElement): void {
         const parts = Array.from(tabPanel.querySelectorAll('*')).filter(
-            (el): el is LyraPart => el instanceof LyraPart
+            (el): el is DocksPart => el instanceof DocksPart
         );
         for (const part of parts) {
-            if (activePartSignal.get() === part) activePartSignal.set(null as unknown as LyraPart);
-            if (activeEditorSignal.get() === part) activeEditorSignal.set(null as unknown as LyraPart);
+            if (activePartSignal.get() === part) activePartSignal.set(null as unknown as DocksPart);
+            if (activeEditorSignal.get() === part) activeEditorSignal.set(null as unknown as DocksPart);
         }
     }
 
-    private getPartFromPanel(tabPanel: HTMLElement): LyraPart | null {
+    private getPartFromPanel(tabPanel: HTMLElement): DocksPart | null {
         const first = tabPanel.firstElementChild;
-        return first instanceof LyraPart ? first : null;
+        return first instanceof DocksPart ? first : null;
     }
 
     // ============= Render Method =============
@@ -317,9 +317,9 @@ export class LyraTabs extends LyraContainer {
     private static readonly MAX_TAB_LABEL = 16;
 
     private truncateTabLabel(label: string): string {
-        if (!label || label.length <= LyraTabs.MAX_TAB_LABEL) return label;
+        if (!label || label.length <= DocksTabs.MAX_TAB_LABEL) return label;
         const ellipsis = '…';
-        const take = LyraTabs.MAX_TAB_LABEL - ellipsis.length;
+        const take = DocksTabs.MAX_TAB_LABEL - ellipsis.length;
         const startLen = Math.floor(take / 2);
         return label.slice(0, startLen) + ellipsis + label.slice(-(take - startLen));
     }

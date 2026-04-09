@@ -4,7 +4,7 @@
 
 Create a new package under `packages/` (e.g. `packages/extension-myfeature`) with:
 
-- `package.json` — name `@eclipse-lyra/extension-myfeature`, dependency on `@eclipse-lyra/core`.
+- `package.json` — name `@eclipse-docks/extension-myfeature`, dependency on `@eclipse-docks/core`.
 - `tsconfig.json` — extends or matches the repo TypeScript setup.
 - `src/index.ts` — entry that registers the extension.
 
@@ -15,7 +15,7 @@ Ensure the root `package.json` workspaces include `packages/*`.
 In `src/index.ts`, register with `extensionRegistry` and provide a **loader** that runs when the extension is enabled:
 
 ```ts
-import { extensionRegistry, i18n } from '@eclipse-lyra/core';
+import { extensionRegistry, i18n } from '@eclipse-docks/core';
 import pkg from '../package.json';
 
 const t = await i18n(import.meta.glob('./i18n*.json'), true);
@@ -26,13 +26,13 @@ extensionRegistry.registerExtension({
   description: t.EXT_MYFEATURE_DESC,
   loader: () => import('./myfeature-extension'),
   icon: 'puzzle-piece',
-  dependencies: ['@eclipse-lyra/extension-someother'], // optional
+  dependencies: ['@eclipse-docks/extension-someother'], // optional
 });
 ```
 
 Add `src/i18n.en.json` (and optionally `src/i18n.de.json`) with flat key-value objects, e.g. `{ "EXT_MYFEATURE_NAME": "My Feature", "EXT_MYFEATURE_DESC": "Description." }`.
 
-The extension id should match the package name (e.g. `@eclipse-lyra/extension-myfeature`).
+The extension id should match the package name (e.g. `@eclipse-docks/extension-myfeature`).
 
 The **loader** should dynamically import the module that performs the actual registration (commands, contributions, editors).
 
@@ -41,7 +41,7 @@ The **loader** should dynamically import the module that performs the actual reg
 In `myfeature-extension.ts` (or similar), register commands and optionally the UI contribution (e.g. toolbar button) in one call:
 
 ```ts
-import { registerAll, TOOLBAR_MAIN_RIGHT } from '@eclipse-lyra/core';
+import { registerAll, TOOLBAR_MAIN_RIGHT } from '@eclipse-docks/core';
 
 registerAll({
   command: {

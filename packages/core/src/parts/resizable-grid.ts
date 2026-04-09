@@ -1,5 +1,5 @@
 /**
- * LyraResizableGrid - A simple resizable grid layout component
+ * DocksResizableGrid - A simple resizable grid layout component
  * 
  * Uses CSS Grid with explicit column/row templates and manual resize handles.
  * Much simpler and more predictable than flex-based layouts.
@@ -11,18 +11,18 @@
  * - Min size constraints (5% of container)
  * 
  * Example usage:
- * <lyra-resizable-grid orientation="horizontal" sizes="20%, 60%, 20%">
+ * <docks-resizable-grid orientation="horizontal" sizes="20%, 60%, 20%">
  *   <div>Left</div>
  *   <div>Center</div>
  *   <div>Right</div>
- * </lyra-resizable-grid>
+ * </docks-resizable-grid>
  */
 import {customElement, property, state} from "lit/decorators.js";
 import {html, nothing} from "lit";
-import {LyraElement} from "./element";
+import {DocksElement} from "./element";
 
-@customElement('lyra-resizable-grid')
-export class LyraResizableGrid extends LyraElement {
+@customElement('docks-resizable-grid')
+export class DocksResizableGrid extends DocksElement {
     private static readonly HANDLE_VISUAL_SIZE_PX = 1;
     private static readonly HANDLE_HITBOX_PADDING_PX = 4;
 
@@ -237,7 +237,7 @@ export class LyraResizableGrid extends LyraElement {
                 if (index === newSizes.length - 1) {
                     return sizeStr;
                 }
-                return `${sizeStr} ${LyraResizableGrid.HANDLE_VISUAL_SIZE_PX}px`;
+                return `${sizeStr} ${DocksResizableGrid.HANDLE_VISUAL_SIZE_PX}px`;
             }).join(' ');
             
             if (this.orientation === 'horizontal') {
@@ -290,7 +290,7 @@ export class LyraResizableGrid extends LyraElement {
             if (index === this.gridSizes.length - 1) {
                 return [size];
             }
-            return [size, `${LyraResizableGrid.HANDLE_VISUAL_SIZE_PX}px`];
+            return [size, `${DocksResizableGrid.HANDLE_VISUAL_SIZE_PX}px`];
         }).join(' ');
 
         // Apply grid layout to the custom element itself
@@ -322,13 +322,13 @@ export class LyraResizableGrid extends LyraElement {
                 }
 
                 .resize-handle.horizontal::before {
-                    right: -${LyraResizableGrid.HANDLE_HITBOX_PADDING_PX}px;
-                    left: -${LyraResizableGrid.HANDLE_HITBOX_PADDING_PX}px;
+                    right: -${DocksResizableGrid.HANDLE_HITBOX_PADDING_PX}px;
+                    left: -${DocksResizableGrid.HANDLE_HITBOX_PADDING_PX}px;
                 }
 
                 .resize-handle.vertical::before {
-                    top: -${LyraResizableGrid.HANDLE_HITBOX_PADDING_PX}px;
-                    bottom: -${LyraResizableGrid.HANDLE_HITBOX_PADDING_PX}px;
+                    top: -${DocksResizableGrid.HANDLE_HITBOX_PADDING_PX}px;
+                    bottom: -${DocksResizableGrid.HANDLE_HITBOX_PADDING_PX}px;
                 }
                 
                 .resize-handle:hover {
@@ -379,7 +379,7 @@ export class LyraResizableGrid extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-resizable-grid': LyraResizableGrid
+        'docks-resizable-grid': DocksResizableGrid
     }
 }
 

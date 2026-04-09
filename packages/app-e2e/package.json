@@ -1,7 +1,7 @@
 {
-  "name": "@eclipse-lyra/app-e2e",
+  "name": "@eclipse-docks/app-e2e",
   "version": "0.0.0",
-  "description": "Minimal Lyra shell used only for Playwright E2E (not the demo app).",
+  "description": "Minimal Docks shell used only for Playwright E2E (not the demo app).",
   "type": "module",
   "private": true,
   "scripts": {
@@ -12,9 +12,9 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
-    "@eclipse-lyra/extension-ai-system": "*",
-    "@eclipse-lyra/extension-monaco-editor": "*"
+    "@eclipse-docks/core": "*",
+    "@eclipse-docks/extension-ai-system": "*",
+    "@eclipse-docks/extension-monaco-editor": "*"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",

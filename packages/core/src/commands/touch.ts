@@ -8,7 +8,7 @@ registerAll({
     command: {
         id: "touch",
         name: "Touch - Create new file",
-        description: "Creates a new file within the workspace. For .geospace map files, use create_map_file instead.",
+        description: "Creates a new file within the workspace. For .docks map files, use create_map_file instead.",
         parameters: [
             {
                 name: "path",
@@ -27,7 +27,7 @@ registerAll({
             },
             {
                 name: "extension",
-                description: "required file extension (e.g., '.geospace'), will be appended if missing",
+                description: "required file extension (e.g., '.docks'), will be appended if missing",
                 required: false
             }
         ],

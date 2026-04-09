@@ -40,7 +40,7 @@ export interface TabContribution extends Contribution {
      */
     editorId?: string;
     closable?: boolean;
-    /** When true or omitted, a lyra-toolbar is rendered for this tab; when false, no toolbar is shown. */
+    /** When true or omitted, a docks-toolbar is rendered for this tab; when false, no toolbar is shown. */
     toolbar?: boolean;
     /** When true or omitted, a contextmenu is rendered for this tab; when false, no context menu is shown. */
     contextMenu?: boolean;
@@ -93,7 +93,7 @@ class ContributionRegistry {
      *
      * Note: This currently scans all registered contributions and resolves
      * remaps on each call (O(N) in number of contributions). This is acceptable
-     * for typical Lyra apps (dozens/hundreds of contributions and few slots),
+     * for typical Docks apps (dozens/hundreds of contributions and few slots),
      * but if contribution counts grow significantly we may want to introduce a
      * cached index of effective targets per slot to keep lookups O(1).
      */

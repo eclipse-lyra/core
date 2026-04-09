@@ -13,7 +13,7 @@ const ARTIFACT_TYPE_ICON: Record<ArtifactType, string> = {
     text: 'file-lines'
 };
 
-@customElement('lyra-ai-workspace-panel')
+@customElement('docks-ai-workspace-panel')
 export class AIWorkspacePanel extends LitElement {
     @property({ type: Array, attribute: false })
     public artifacts: Artifact[] = [];
@@ -152,6 +152,6 @@ export class AIWorkspacePanel extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-ai-workspace-panel': AIWorkspacePanel;
+        'docks-ai-workspace-panel': AIWorkspacePanel;
     }
 }

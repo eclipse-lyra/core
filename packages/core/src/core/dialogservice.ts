@@ -3,7 +3,7 @@ import { contributionRegistry, Contribution, TOPIC_CONTRIBUTEIONS_CHANGED } from
 import { subscribe } from "./events";
 import { createLogger } from "./logger";
 import { rootContext } from "./di";
-import { LyraDialogContent } from "../parts/dialog-content";
+import { DocksDialogContent } from "../parts/dialog-content";
 
 const logger = createLogger('DialogService');
 
@@ -131,7 +131,7 @@ class DialogService {
         return new Promise((resolve) => {
             const container = getDialogContainer();
             let isOpen = true;
-            let dialogContentElement: LyraDialogContent | null = null;
+            let dialogContentElement: DocksDialogContent | null = null;
 
             const cleanup = async () => {
                 if (!isOpen) return;
@@ -244,7 +244,7 @@ class DialogService {
             (async () => {
                 const allElements = Array.from(container.querySelectorAll('*'));
                 for (const element of allElements) {
-                    if (element instanceof LyraDialogContent) {
+                    if (element instanceof DocksDialogContent) {
                         await element.updateComplete;
                         dialogContentElement = element;
                         break;

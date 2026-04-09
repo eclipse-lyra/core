@@ -1,4 +1,4 @@
-import type { CommandRegistry, Command } from "@eclipse-lyra/core";
+import type { CommandRegistry, Command } from "@eclipse-docks/core";
 
 export interface ParsedCommand {
   commandId: string;

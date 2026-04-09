@@ -5,14 +5,14 @@
 The easiest way to start is to scaffold a new app with the official CLI. You get a monorepo with an app package and an example extension.
 
 ```bash
-npm create @eclipse-lyra/app my-app
+npm create @eclipse-docks/app my-app
 cd my-app
 npm run dev
 ```
 
 This creates a project with:
 
-- **`packages/app`** — The Lyra app (entry point, extension list, logo). Edit `packages/app/src/main.ts` to add or remove extensions and customize the toolbar.
+- **`packages/app`** — The Docks app (entry point, extension list, logo). Edit `packages/app/src/main.ts` to add or remove extensions and customize the toolbar.
 - **`packages/example-extension`** — A sample extension that adds a view to the left sidebar (same tab bar as the Workspace / file browser). Use it as a reference for your own extensions.
 
 ### Customizing the logo
@@ -23,13 +23,13 @@ From the new project root: `npm run dev` starts the app, `npm run build` builds 
 
 ## Alternative: manual setup in the monorepo
 
-If you prefer to work inside the Eclipse Lyra repo or copy the default app by hand:
+If you prefer to work inside the Eclipse Docks repo or copy the default app by hand:
 
 1. **Create or copy the app package**  
    Add a new package under `packages/` (e.g. `packages/my-app`) or duplicate `packages/app`. Ensure the root `package.json` `workspaces` includes `packages/*`.
 
 2. **Install and wire the app**  
-   In the app package, depend on `@eclipse-lyra/core` and the extensions you need (`@eclipse-lyra/extension-*`).
+   In the app package, depend on `@eclipse-docks/core` and the extensions you need (`@eclipse-docks/extension-*`).
 
 3. **Entry point**  
    In your app entry (e.g. `main.ts`):
@@ -40,14 +40,14 @@ If you prefer to work inside the Eclipse Lyra repo or copy the default app by ha
    Minimal example (default layout is `standard`, i.e. IDE):
 
 ```ts
-import { appLoaderService } from '@eclipse-lyra/core';
+import { appLoaderService } from '@eclipse-docks/core';
 
 appLoaderService.registerApp(
   {
     extensions: [
-      '@eclipse-lyra/extension-command-palette',
-      '@eclipse-lyra/extension-settings-tree',
-      '@eclipse-lyra/extension-ai-system',
+      '@eclipse-docks/extension-command-palette',
+      '@eclipse-docks/extension-settings-tree',
+      '@eclipse-docks/extension-ai-system',
     ],
     layout: 'standard',
   },

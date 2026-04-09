@@ -3,7 +3,7 @@
  * 
  * Provides a clean separation between the framework and applications built on it.
  * This allows the framework (k-* components and core services) to be published
- * as a reusable npm package, while applications like geospace can be loaded
+ * as a reusable npm package, while applications like `my-app` can be loaded
  * dynamically.
  * 
  * Architecture:
@@ -66,7 +66,7 @@ function extractLastPathSegment(urlString: string): string | undefined {
 
 /**
  * Extracts the first path segment from the current page URL.
- * This allows loading apps by path, e.g., /geospace loads the geospace app.
+ * This allows loading apps by path, e.g., /my-app loads the my-app app.
  */
 function extractAppIdFromPath(): string | undefined {
     const pathname = window.location.pathname;
@@ -152,7 +152,7 @@ export interface AppDefinition {
     /** Application description. Set by hostConfig resolution from package.json when omitted. */
     description?: string;
 
-    /** Optional URL path segment for routing (e.g. "geospace"). When absent, name is used for lookup. */
+    /** Optional URL path segment for routing (e.g. "my-app"). When absent, name is used for lookup. */
     path?: string;
     
     /**
@@ -703,7 +703,7 @@ class AppLoaderService {
     /**
      * Select which app to load based on priority:
      * 1. appId URL parameter (?appId=...)
-     * 2. App from current page URL path (/geospace)
+     * 2. App from current page URL path (/my-app)
      * 3. App from app URL parameter (?app=...)
      * 4. App registered by extension
      * 5. Preferred app from settings

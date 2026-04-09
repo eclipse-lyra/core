@@ -9,7 +9,7 @@ import { css } from 'lit';
  * misses leave the wrong row selected. `flex: 1` makes the label column fill the row
  * so hits stay on the item’s content.
  *
- * Applied via `LyraWidget.finalizeStyles`: document-level CSS cannot target `::part()`
+ * Applied via `DocksWidget.finalizeStyles`: document-level CSS cannot target `::part()`
  * on `wa-tree-item` that lives only inside nested Lit shadow roots.
  */
 export const waTreeLabelSlotStretch = css`

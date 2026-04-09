@@ -1,4 +1,4 @@
-import { commandRegistry, type CommandRegistry, type Command } from "@eclipse-lyra/core";
+import { commandRegistry, type CommandRegistry, type Command } from "@eclipse-docks/core";
 import { parseShellLine } from "./shell-parser";
 
 export interface RunResult {

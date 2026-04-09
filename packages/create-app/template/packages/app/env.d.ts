@@ -10,7 +10,7 @@ declare module 'vite-plugin-cross-origin-isolation' {
   export default plugin;
 }
 
-declare module '@eclipse-lyra/core/vite-plugin-resolve-deps' {
+declare module '@eclipse-docks/core/vite-plugin-resolve-deps' {
   import type { Plugin } from 'vite';
   export function resolveDepVersionsPlugin(options?: { includeDevDependencies?: boolean }): Plugin;
 }

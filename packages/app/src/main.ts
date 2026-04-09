@@ -1,12 +1,12 @@
-import { TOOLBAR_MAIN, appLoaderService, contributionRegistry, type HTMLContribution } from '@eclipse-lyra/core';
-import { html } from '@eclipse-lyra/core/externals/lit';
-import { fetchReleases } from "@eclipse-lyra/extension-github-service";
+import { TOOLBAR_MAIN, appLoaderService, contributionRegistry, type HTMLContribution } from '@eclipse-docks/core';
+import { html } from '@eclipse-docks/core/externals/lit';
+import { fetchReleases } from "@eclipse-docks/extension-github-service";
 
 import './extensions';
 import './dashboard-layout';
 
 contributionRegistry.registerContribution(TOOLBAR_MAIN, {
-  label: "Eclipse Lyra",
+  label: "Eclipse Docks",
   slot: "start",
   component: () => html`
     <div
@@ -19,7 +19,7 @@ contributionRegistry.registerContribution(TOOLBAR_MAIN, {
     >
       <img
         src="/logo.svg"
-        alt="Eclipse Lyra"
+        alt="Eclipse Docks"
         style="display: block; height: 28px; width: auto;"
       />
     </div>
@@ -29,27 +29,27 @@ contributionRegistry.registerContribution(TOOLBAR_MAIN, {
 const appRoot = document.getElementById('app-root') ?? document.body;
 appLoaderService.registerApp(
   {
-    name: 'Eclipse Lyra',
-    description: 'Eclipse Lyra demo app with default extensions.',
+    name: 'Eclipse Docks',
+    description: 'Eclipse Docks demo app with default extensions.',
     layoutId: 'standard-full',
     metadata: {
       github: {
-        owner: 'eclipse-lyra',
+        owner: 'eclipse-docks',
         repo: 'core',
       },
     },
     releaseHistory: fetchReleases,
     extensions: [
-      '@eclipse-lyra/extension-command-palette',
-      '@eclipse-lyra/extension-command-shell',
-      '@eclipse-lyra/extension-catalog',
-      '@eclipse-lyra/extension-md-editor',
-      '@eclipse-lyra/extension-monaco-editor',
-      '@eclipse-lyra/extension-media-viewer',
-      '@eclipse-lyra/extension-settings-tree',
-      '@eclipse-lyra/extension-memory-usage',
-      '@eclipse-lyra/extension-ai-system',
-      '@eclipse-lyra/extension-dataviewer',
+      '@eclipse-docks/extension-command-palette',
+      '@eclipse-docks/extension-command-shell',
+      '@eclipse-docks/extension-catalog',
+      '@eclipse-docks/extension-md-editor',
+      '@eclipse-docks/extension-monaco-editor',
+      '@eclipse-docks/extension-media-viewer',
+      '@eclipse-docks/extension-settings-tree',
+      '@eclipse-docks/extension-memory-usage',
+      '@eclipse-docks/extension-ai-system',
+      '@eclipse-docks/extension-dataviewer',
     ],
   },
   { autoStart: true, hostConfig: true, container: appRoot },

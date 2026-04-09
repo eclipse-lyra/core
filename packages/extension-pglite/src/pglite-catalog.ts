@@ -1,5 +1,5 @@
-import type { CatalogContribution } from "@eclipse-lyra/extension-catalog/api";
-import { registerCatalog } from "@eclipse-lyra/extension-catalog/api";
+import type { CatalogContribution } from "@eclipse-docks/extension-catalog/api";
+import { registerCatalog } from "@eclipse-docks/extension-catalog/api";
 
 const PGLITE_CATALOG: CatalogContribution = {
     label: "PGlite",

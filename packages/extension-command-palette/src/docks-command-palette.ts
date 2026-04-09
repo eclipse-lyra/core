@@ -2,19 +2,19 @@ import { html } from "lit";
 import { css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { createRef, ref, type Ref } from "lit/directives/ref.js";
-import { LyraPart } from "@eclipse-lyra/core";
-import { subscribe } from "@eclipse-lyra/core";
-import { commandRegistry, type ExecutionContext } from "@eclipse-lyra/core";
-import { i18n } from "@eclipse-lyra/core";
-import { toastError } from "@eclipse-lyra/core";
+import { DocksPart } from "@eclipse-docks/core";
+import { subscribe } from "@eclipse-docks/core";
+import { commandRegistry, type ExecutionContext } from "@eclipse-docks/core";
+import { i18n } from "@eclipse-docks/core";
+import { toastError } from "@eclipse-docks/core";
 
 export const t = await i18n(import.meta.glob("./commandpalette*.json"));
 
 // Event topic for opening the command palette
 export const TOPIC_OPEN_COMMAND_PALETTE = "commandpalette/open";
 
-@customElement("lyra-command-palette")
-export class LyraCommandPalette extends LyraPart {
+@customElement("docks-command-palette")
+export class DocksCommandPalette extends DocksPart {
   @state()
   private inputValue: string = "";
 
@@ -469,6 +469,6 @@ export class LyraCommandPalette extends LyraPart {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "lyra-command-palette": LyraCommandPalette;
+    "docks-command-palette": DocksCommandPalette;
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-webllm",
+  "name": "@eclipse-docks/extension-webllm",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,8 +10,8 @@
     }
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
-    "@eclipse-lyra/extension-ai-system": "*",
+    "@eclipse-docks/core": "*",
+    "@eclipse-docks/extension-ai-system": "*",
     "@mlc-ai/web-llm": "^0.2.79"
   },
   "devDependencies": {
@@ -29,6 +29,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }

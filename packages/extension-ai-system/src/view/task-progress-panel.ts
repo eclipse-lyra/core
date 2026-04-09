@@ -20,7 +20,7 @@ const STATUS_COLOR: Record<StepStatus, string> = {
     pending: 'var(--wa-color-neutral-40)'
 };
 
-@customElement('lyra-ai-task-progress-panel')
+@customElement('docks-ai-task-progress-panel')
 export class AITaskProgressPanel extends LitElement {
     @property({ type: Object, attribute: false })
     public plan?: TaskPlan;
@@ -156,6 +156,6 @@ export class AITaskProgressPanel extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-ai-task-progress-panel': AITaskProgressPanel;
+        'docks-ai-task-progress-panel': AITaskProgressPanel;
     }
 }

@@ -28,8 +28,8 @@ function getMonacoWorker(_: unknown, label: string): Worker {
 
 self.MonacoEnvironment = { getWorker: getMonacoWorker };
 
-@customElement('lyra-monaco-widget')
-export class LyraMonacoWidget extends LitElement {
+@customElement('docks-monaco-widget')
+export class DocksMonacoWidget extends LitElement {
     @property({ attribute: false })
     value?: string;
 
@@ -231,6 +231,6 @@ export class LyraMonacoWidget extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-monaco-widget': LyraMonacoWidget;
+        'docks-monaco-widget': DocksMonacoWidget;
     }
 }

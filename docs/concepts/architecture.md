@@ -28,7 +28,7 @@
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  UI (core)                                                   │
-│  lyra-standard-layout · lyra-tabs · lyra-toolbar · lyra-filebrowser · …    │
+│  docks-standard-layout · docks-tabs · docks-toolbar · docks-filebrowser · …    │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -42,9 +42,9 @@
 
 | Path | Role |
 |------|------|
-| **`packages/core`** (`@eclipse-lyra/core`) | Platform: registries, services, parts, widgets, dialogs. No extension logic; extensions live in separate packages. |
+| **`packages/core`** (`@eclipse-docks/core`) | Platform: registries, services, parts, widgets, dialogs. No extension logic; extensions live in separate packages. |
 | **`packages/extension-*`** | One package per extension. Each depends on core and registers commands, contributions, and optionally editors. |
-| **`packages/create-app`** | Scaffolder: `npm create @eclipse-lyra/app` generates a new app elsewhere (monorepo with app + example extension). |
+| **`packages/create-app`** | Scaffolder: `npm create @eclipse-docks/app` generates a new app elsewhere (monorepo with app + example extension). |
 | **`packages/app`** | Default app in this repo: imports core and extensions, defines `AppDefinition` and `extensions[]`, registers with the app loader. Use as reference when working in the monorepo. |
 | **Root** | Workspace root. Scripts: `dev`, `build`, `build:app`, `test`, `docs:dev`, `docs:build`. |
 

@@ -65,7 +65,7 @@ import '@awesome.me/webawesome/dist/styles/themes/default.css';
 
 import {registerIconLibrary} from '@awesome.me/webawesome'
 
-registerIconLibrary('lyra', {
+registerIconLibrary('docks', {
     resolver: (name: string) => {
         return new URL(`../icons/${name}.svg`, import.meta.url).href;
     },

@@ -2,7 +2,7 @@
  * Commands for WebDAV workspace integration
  */
 
-import { registerAll, workspaceService, createLogger, dialogService } from "@eclipse-lyra/core";
+import { registerAll, workspaceService, createLogger, dialogService } from "@eclipse-docks/core";
 import type { WebDAVConnectionInfo } from "./webdav-client";
 
 const logger = createLogger('WebDAV');

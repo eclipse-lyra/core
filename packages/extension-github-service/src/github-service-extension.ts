@@ -1,4 +1,4 @@
-import { registerAll, TOOLBAR_MAIN_RIGHT, appLoaderService } from '@eclipse-lyra/core';
+import { registerAll, TOOLBAR_MAIN_RIGHT, appLoaderService } from '@eclipse-docks/core';
 
 export default (_: unknown) => {
     registerAll({
@@ -35,7 +35,7 @@ export default (_: unknown) => {
         },
         contribution: {
             target: TOOLBAR_MAIN_RIGHT,
-            icon: 'lyra mark-github',
+            icon: 'docks mark-github',
             label: 'GitHub',
             slot: 'end',
             disabled: () => {

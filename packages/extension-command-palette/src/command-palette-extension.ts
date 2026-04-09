@@ -1,6 +1,6 @@
-import { contributionRegistry, registerAll, TOOLBAR_MAIN_CENTER, publish } from "@eclipse-lyra/core";
-import { t, TOPIC_OPEN_COMMAND_PALETTE } from "./lyra-command-palette";
-import { html } from "@eclipse-lyra/core/externals/lit";
+import { contributionRegistry, registerAll, TOOLBAR_MAIN_CENTER, publish } from "@eclipse-docks/core";
+import { t, TOPIC_OPEN_COMMAND_PALETTE } from "./docks-command-palette";
+import { html } from "@eclipse-docks/core/externals/lit";
 
 registerAll({
   command: {
@@ -21,6 +21,6 @@ registerAll({
 contributionRegistry.registerContribution(TOOLBAR_MAIN_CENTER, {
   label: "Command Palette",
   icon: "terminal",
-  component: () => html`<lyra-command-palette></lyra-command-palette>`,
+  component: () => html`<docks-command-palette></docks-command-palette>`,
 });
 

@@ -3,13 +3,13 @@ import { css, html, TemplateResult } from "lit";
 import { PropertyValues } from "lit";
 import { createRef, ref } from "lit/directives/ref.js";
 import { repeat } from "lit/directives/repeat.js";
-import { LyraPart } from "@eclipse-lyra/core";
-import type { EditorInput } from "@eclipse-lyra/core";
-import { appSettings, TOPIC_SETTINGS_CHANGED } from "@eclipse-lyra/core";
-import type { SettingsJsonSchema } from "@eclipse-lyra/core";
-import { subscribe } from "@eclipse-lyra/core";
-import { promptDialog } from "@eclipse-lyra/core";
-import type { SettingsCategoryInfo } from "@eclipse-lyra/core";
+import { DocksPart } from "@eclipse-docks/core";
+import type { EditorInput } from "@eclipse-docks/core";
+import { appSettings, TOPIC_SETTINGS_CHANGED } from "@eclipse-docks/core";
+import type { SettingsJsonSchema } from "@eclipse-docks/core";
+import { subscribe } from "@eclipse-docks/core";
+import { promptDialog } from "@eclipse-docks/core";
+import type { SettingsCategoryInfo } from "@eclipse-docks/core";
 
 interface CategoryTreeNode {
     path: string;
@@ -29,8 +29,8 @@ interface SettingRow {
     groupLabel?: string;
 }
 
-@customElement('lyra-settings-tree')
-export class LyraSettingsTree extends LyraPart {
+@customElement('docks-settings-tree')
+export class DocksSettingsTree extends DocksPart {
     @property({ attribute: false })
     public input?: EditorInput;
 
@@ -117,14 +117,14 @@ export class LyraSettingsTree extends LyraPart {
             for (const [k, s] of Object.entries(schemaProps)) {
                 const path = `${parentPath}.${k}`;
                 const label = (s?.title as string) ?? k;
-                const subValue = LyraSettingsTree.isRecord(value) ? value[k] : undefined;
+                const subValue = DocksSettingsTree.isRecord(value) ? value[k] : undefined;
                 const subChildren = this.buildChildNodes(path, s?.properties, subValue);
                 if (this.matchesSearch(label, path)) {
                     children.push({ path, label, children: subChildren, expanded: false });
                 }
             }
         }
-        if (LyraSettingsTree.isRecord(value) && !schemaProps) {
+        if (DocksSettingsTree.isRecord(value) && !schemaProps) {
             for (const [k, v] of Object.entries(value)) {
                 const path = `${parentPath}.${k}`;
                 const subChildren = this.buildChildNodes(path, undefined, v);
@@ -201,7 +201,7 @@ export class LyraSettingsTree extends LyraPart {
     }
 
     private getArrayItemLabel(item: unknown, index: number): string {
-        if (LyraSettingsTree.isRecord(item)) {
+        if (DocksSettingsTree.isRecord(item)) {
             if (typeof item.id === 'string') return item.id;
             if (typeof item.name === 'string') return item.name;
         }
@@ -211,7 +211,7 @@ export class LyraSettingsTree extends LyraPart {
     private async updateDetailForPath(path: string): Promise<void> {
         const containerSchema = appSettings.getSchemaForSettingKey(path);
         const containerValue = this.getValueAtPath(path);
-        const valueObj = LyraSettingsTree.isRecord(containerValue) ? containerValue : null;
+        const valueObj = DocksSettingsTree.isRecord(containerValue) ? containerValue : null;
         const isArray = Array.isArray(containerValue);
 
         let rows: SettingRow[];
@@ -222,7 +222,7 @@ export class LyraSettingsTree extends LyraPart {
             arr.forEach((item, index) => {
                 const subPath = `${path}.${index}`;
                 const groupLabel = this.getArrayItemLabel(item, index);
-                if (LyraSettingsTree.isRecord(item)) {
+                if (DocksSettingsTree.isRecord(item)) {
                     Object.keys(item).forEach(k => {
                         flat.push({
                             key: k,
@@ -322,7 +322,7 @@ export class LyraSettingsTree extends LyraPart {
     private renameKey(parentPath: string, oldKey: string, newKey: string): void {
         if (newKey.trim() === '' || newKey === oldKey) return;
         const parent = this.getValueAtPath(parentPath);
-        if (!LyraSettingsTree.isRecord(parent)) return;
+        if (!DocksSettingsTree.isRecord(parent)) return;
         const value = parent[oldKey];
         const updated = { ...parent };
         delete updated[oldKey];
@@ -333,7 +333,7 @@ export class LyraSettingsTree extends LyraPart {
 
     private deleteKey(parentPath: string, key: string): void {
         const parent = this.getValueAtPath(parentPath);
-        if (!LyraSettingsTree.isRecord(parent)) return;
+        if (!DocksSettingsTree.isRecord(parent)) return;
         const updated = { ...parent };
         delete updated[key];
         this.setAtInMemory(parentPath, updated);
@@ -405,7 +405,7 @@ export class LyraSettingsTree extends LyraPart {
         }
 
         const isObjectOrArray = current !== null && typeof current === 'object';
-        if (isObjectOrArray && !schema && LyraSettingsTree.isRecord(current)) {
+        if (isObjectOrArray && !schema && DocksSettingsTree.isRecord(current)) {
             return this.renderObjectFields(row.path, current, 0);
         }
         if (isObjectOrArray) {
@@ -469,7 +469,7 @@ export class LyraSettingsTree extends LyraPart {
                 ${entries.map(([k, v]) => {
                     const subPath = `${parentPath}.${k}`;
                     const subRow: SettingRow = { key: k, path: subPath, title: k, description: '', value: v, parentPath };
-                    const isNestedObj = LyraSettingsTree.isRecord(v);
+                    const isNestedObj = DocksSettingsTree.isRecord(v);
                     const isArray = Array.isArray(v);
                     return html`
                         <div class="nested-row">
@@ -531,7 +531,7 @@ export class LyraSettingsTree extends LyraPart {
         });
 
         const containerValue = this.selectedPath ? this.getValueAtPath(this.selectedPath) : undefined;
-        const isObjectContainer = LyraSettingsTree.isRecord(containerValue);
+        const isObjectContainer = DocksSettingsTree.isRecord(containerValue);
         const isTopLevel = this.selectedPath !== null && !this.selectedPath.includes('.');
         const canAddToSelection = isObjectContainer || isTopLevel;
 
@@ -540,10 +540,10 @@ export class LyraSettingsTree extends LyraPart {
                 <div class="detail-heading-row">
                     <h2 class="detail-heading">${this.detailTitle}</h2>
                     ${canAddToSelection ? html`
-                        <lyra-command size="small" icon="plus" title="Add setting" .action=${() => this.addKeyToGroup(this.selectedPath!)}>Add</lyra-command>
+                        <docks-command size="small" icon="plus" title="Add setting" .action=${() => this.addKeyToGroup(this.selectedPath!)}>Add</docks-command>
                     ` : ''}
                     ${isTopLevel ? html`
-                        <lyra-command size="small" icon="trash" title="Delete category" .action=${() => this.deleteTopLevelKey(this.selectedPath!)}></lyra-command>
+                        <docks-command size="small" icon="trash" title="Delete category" .action=${() => this.deleteTopLevelKey(this.selectedPath!)}></docks-command>
                     ` : ''}
                 </div>
                 <wa-scroller class="detail-scroller" orientation="vertical">
@@ -564,7 +564,7 @@ export class LyraSettingsTree extends LyraPart {
                                     ${showGroup ? html`
                                         <div class="detail-group-header">
                                             <span>${row.groupLabel}</span>
-                                            <lyra-command size="small" icon="plus" title="Add setting" .action=${() => this.addKeyToGroup(row.parentPath!)}>Add</lyra-command>
+                                            <docks-command size="small" icon="plus" title="Add setting" .action=${() => this.addKeyToGroup(row.parentPath!)}>Add</docks-command>
                                         </div>
                                     ` : ''}
                                     <div class="setting-row ${inGroup ? 'setting-row-in-group' : ''}">
@@ -584,7 +584,7 @@ export class LyraSettingsTree extends LyraPart {
                                         </div>
                                         <div class="setting-control">${this.renderDetailControl(row)}</div>
                                         ${row.parentPath != null ? html`
-                                            <lyra-command size="small" icon="trash" title="Delete setting" .action=${() => this.deleteKey(row.parentPath!, row.key)}></lyra-command>
+                                            <docks-command size="small" icon="trash" title="Delete setting" .action=${() => this.deleteKey(row.parentPath!, row.key)}></docks-command>
                                         ` : ''}
                                     </div>
                                 `;
@@ -661,9 +661,9 @@ export class LyraSettingsTree extends LyraPart {
                 size="small"
                 class="toolbar-search">
             </wa-input>
-            <lyra-command size="small" icon="plus" title="Add Key" .action=${() => this.addKey()}>Add Key</lyra-command>
-            <lyra-command size="small" icon="chevron-down" title="Expand All" .action=${() => this.setAllExpanded(true)}>Expand All</lyra-command>
-            <lyra-command size="small" icon="chevron-right" title="Collapse All" .action=${() => this.setAllExpanded(false)}>Collapse All</lyra-command>
+            <docks-command size="small" icon="plus" title="Add Key" .action=${() => this.addKey()}>Add Key</docks-command>
+            <docks-command size="small" icon="chevron-down" title="Expand All" .action=${() => this.setAllExpanded(true)}>Expand All</docks-command>
+            <docks-command size="small" icon="chevron-right" title="Collapse All" .action=${() => this.setAllExpanded(false)}>Collapse All</docks-command>
         `;
     }
 

@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-command-shell",
+  "name": "@eclipse-docks/extension-command-shell",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,7 +18,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*"
+    "@eclipse-docks/core": "*"
   },
   "devDependencies": {
     "typescript": "^6.0.0",
@@ -27,6 +27,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }

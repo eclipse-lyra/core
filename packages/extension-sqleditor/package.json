@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-sqleditor",
+  "name": "@eclipse-docks/extension-sqleditor",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,8 +18,8 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
-    "@eclipse-lyra/extension-monaco-editor": "*"
+    "@eclipse-docks/core": "*",
+    "@eclipse-docks/extension-monaco-editor": "*"
   },
   "devDependencies": {
     "typescript": "^6.0.0",
@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }
 

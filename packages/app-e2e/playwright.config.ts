@@ -20,7 +20,7 @@ export default defineConfig({
     projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
     webServer: {
         command:
-            'npm run build -w @eclipse-lyra/core && npm run build -w @eclipse-lyra/app-e2e && E2E_HTTP_PREVIEW=1 npm run preview -w @eclipse-lyra/app-e2e -- --host 127.0.0.1 --port 4173 --strictPort',
+            'npm run build -w @eclipse-docks/core && npm run build -w @eclipse-docks/app-e2e && E2E_HTTP_PREVIEW=1 npm run preview -w @eclipse-docks/app-e2e -- --host 127.0.0.1 --port 4173 --strictPort',
         cwd: repoRoot,
         url: 'http://127.0.0.1:4173',
         reuseExistingServer: !process.env.CI,

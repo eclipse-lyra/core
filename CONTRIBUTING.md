@@ -1,6 +1,6 @@
-# Contributing to Eclipse Lyra
+# Contributing to Eclipse Docks
 
-Thank you for your interest in contributing to Eclipse Lyra.
+Thank you for your interest in contributing to Eclipse Docks.
 
 ## License
 
@@ -12,7 +12,7 @@ Before your first contribution can be accepted, you must complete the [Eclipse C
 
 ## How to contribute
 
-1. **Open an issue** — For bugs or feature requests, open an [issue](https://github.com/eclipse-lyra/core/issues) to discuss.
+1. **Open an issue** — For bugs or feature requests, open an [issue](https://github.com/eclipse-docks/core/issues) to discuss.
 2. **Fork and clone** — Fork the repository and clone your fork locally.
 3. **Create a branch** — Use a short, descriptive branch name (e.g. `fix/command-palette`, `feat/settings-panel`).
 4. **Make changes** — Follow the existing code style and run the test suite.
@@ -22,7 +22,7 @@ Before your first contribution can be accepted, you must complete the [Eclipse C
 ## Development setup
 
 ```bash
-git clone https://github.com/eclipse-lyra/core.git
+git clone https://github.com/eclipse-docks/core.git
 cd core
 npm install
 npm run dev          # run the default app
@@ -33,10 +33,10 @@ npm run type-check   # TypeScript check
 
 ## Testing
 
-- **Unit tests:** `npm run test` — Vitest in `@eclipse-lyra/core`.
+- **Unit tests:** `npm run test` — Vitest in `@eclipse-docks/core`.
 - **End-to-end:** `npm run test:e2e` — Playwright against the minimal app in `packages/app-e2e` (builds core + E2E shell, serves preview, runs specs in `packages/app-e2e/e2e/`). Install browsers once:  
-  `npm exec --workspace=@eclipse-lyra/app-e2e -- playwright install chromium`  
-  (use `playwright install chromium --with-deps` on fresh Linux CI images, as in CI).
+  `npm run playwright:install-chromium`  
+  (on fresh Linux CI images use `npm run playwright:install-chromium-ci`, as in [.github/workflows/ci.yml](.github/workflows/ci.yml)).
 - **E2E harness and strategy** (tab order, coupled-editor specs, CI behavior): see [packages/app-e2e/README.md](packages/app-e2e/README.md).
 
 ## Code and PR expectations
@@ -47,4 +47,4 @@ npm run type-check   # TypeScript check
 
 ## Questions
 
-For questions or discussion, open a [GitHub Discussion](https://github.com/eclipse-lyra/core/discussions) or an issue.
+For questions or discussion, open a [GitHub Discussion](https://github.com/eclipse-docks/core/discussions) or an issue.

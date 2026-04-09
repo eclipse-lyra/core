@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-monaco-editor",
+  "name": "@eclipse-docks/extension-monaco-editor",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,7 +14,7 @@
     }
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
+    "@eclipse-docks/core": "*",
     "monaco-editor": "0.55.1"
   },
   "devDependencies": {
@@ -32,6 +32,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }

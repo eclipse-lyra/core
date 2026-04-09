@@ -1,7 +1,7 @@
-import {LyraWidget} from "../widgets/widget";
+import {DocksWidget} from "../widgets/widget";
 import {appSettings} from "../core/settingsservice";
 
-export abstract class LyraElement extends LyraWidget {
+export abstract class DocksElement extends DocksWidget {
     /**
      * Unique settings key for this element, used for persisting dialog settings.
      * Automatically initialized on first access via getDialogSetting() or setDialogSetting().

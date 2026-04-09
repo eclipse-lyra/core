@@ -2,19 +2,19 @@ import { css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { when } from 'lit/directives/when.js';
-import { LyraPart } from '@eclipse-lyra/core';
-import { EditorInput } from '@eclipse-lyra/core';
-import { appSettings, TOPIC_SETTINGS_CHANGED } from '@eclipse-lyra/core';
+import { DocksPart } from '@eclipse-docks/core';
+import { EditorInput } from '@eclipse-docks/core';
+import { appSettings, TOPIC_SETTINGS_CHANGED } from '@eclipse-docks/core';
 import { KEY_AI_CONFIG, TOPIC_AICONFIG_CHANGED, CID_CHAT_PROVIDERS } from '../../core/constants';
-import { subscribe } from '@eclipse-lyra/core';
-import { confirmDialog } from '@eclipse-lyra/core';
-import { contributionRegistry } from '@eclipse-lyra/core';
+import { subscribe } from '@eclipse-docks/core';
+import { confirmDialog } from '@eclipse-docks/core';
+import { contributionRegistry } from '@eclipse-docks/core';
 import { ProviderFactory } from '../../providers/provider-factory';
 import type { AIConfig, ChatProvider } from '../../core/types';
 import type { ChatProviderContribution } from '../../core/interfaces';
 
-@customElement('lyra-ai-config-editor')
-export class LyraAIConfigEditor extends LyraPart {
+@customElement('docks-ai-config-editor')
+export class DocksAIConfigEditor extends DocksPart {
     @property({ attribute: false }) public input?: EditorInput;
 
     @state() private providers: ChatProvider[] = [];
@@ -330,6 +330,6 @@ export class LyraAIConfigEditor extends LyraPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-ai-config-editor': LyraAIConfigEditor;
+        'docks-ai-config-editor': DocksAIConfigEditor;
     }
 }

@@ -1,9 +1,9 @@
 import {customElement} from "lit/decorators.js";
-import {LyraElement} from "@eclipse-lyra/core";
+import {DocksElement} from "@eclipse-docks/core";
 import {html} from "lit";
 
-@customElement('lyra-memory-usage')
-export class LyraMemoryUsage extends LyraElement {
+@customElement('docks-memory-usage')
+export class DocksMemoryUsage extends DocksElement {
     
     private updateInterval: number | null = null;
 
@@ -53,7 +53,7 @@ export class LyraMemoryUsage extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-memory-usage': LyraMemoryUsage
+        'docks-memory-usage': DocksMemoryUsage
     }
 }
 

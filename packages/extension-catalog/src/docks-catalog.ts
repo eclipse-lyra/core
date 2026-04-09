@@ -6,9 +6,9 @@ import {
     state,
     createRef,
     ref,
-} from "@eclipse-lyra/core/externals/lit";
+} from "@eclipse-docks/core/externals/lit";
 import {
-    LyraPart,
+    DocksPart,
     TreeContribution,
     TreeNode,
     contributionRegistry,
@@ -19,12 +19,12 @@ import {
     TOPIC_CONTRIBUTEIONS_CHANGED,
     type ContributionChangeEvent,
     icon,
-} from "@eclipse-lyra/core";
+} from "@eclipse-docks/core";
 
 export const CID_CATALOG_ROOT = "catalog.root";
 
-@customElement("lyra-catalog")
-export class LyraCatalog extends LyraPart {
+@customElement("docks-catalog")
+export class DocksCatalog extends DocksPart {
     @state()
     private rootNodes?: TreeNode[];
 
@@ -58,19 +58,19 @@ export class LyraCatalog extends LyraPart {
 
     protected renderToolbar() {
         const isActiveAndHasSelection =
-            activePartSignal.get() instanceof LyraCatalog &&
+            activePartSignal.get() instanceof DocksCatalog &&
             activeSelectionSignal.get() !== undefined;
 
         return html`
-            <lyra-command
+            <docks-command
                 icon="file-arrow-down"
                 title="Checkout"
                 ?disabled=${!isActiveAndHasSelection}
                 .action=${() => this.runWgetForSelection()}
-            ></lyra-command>
-            <lyra-command icon="arrows-rotate" title="Refresh Catalog" .action=${() => this.refresh()}></lyra-command>
-            <lyra-command icon="angles-down" slot="end" title="Expand All" .action=${() => this.setAllExpanded(true)}></lyra-command>
-            <lyra-command icon="angles-up" slot="end" title="Collapse All" .action=${() => this.setAllExpanded(false)}></lyra-command>
+            ></docks-command>
+            <docks-command icon="arrows-rotate" title="Refresh Catalog" .action=${() => this.refresh()}></docks-command>
+            <docks-command icon="angles-down" slot="end" title="Expand All" .action=${() => this.setAllExpanded(true)}></docks-command>
+            <docks-command icon="angles-up" slot="end" title="Collapse All" .action=${() => this.setAllExpanded(false)}></docks-command>
         `;
     }
 
@@ -131,15 +131,15 @@ export class LyraCatalog extends LyraPart {
     }
 
     protected renderContextMenu() {
-        const item = activePartSignal.get() instanceof LyraCatalog ? activeSelectionSignal.get() : undefined;
+        const item = activePartSignal.get() instanceof DocksCatalog ? activeSelectionSignal.get() : undefined;
         const hasUrl = item && "url" in item && item.url;
         return html`
-            <lyra-command
+            <docks-command
                 icon="file-arrow-down"
                 title="Checkout"
                 ?disabled=${!hasUrl}
                 .action=${() => this.runWgetForSelection()}
-            >Checkout</lyra-command>
+            >Checkout</docks-command>
         `;
     }
 
@@ -196,6 +196,6 @@ export class LyraCatalog extends LyraPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        "lyra-catalog": LyraCatalog;
+        "docks-catalog": DocksCatalog;
     }
 }

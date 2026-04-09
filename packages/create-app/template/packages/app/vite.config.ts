@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 import crossOriginIsolation from 'vite-plugin-cross-origin-isolation';
-import { resolveDepVersionsPlugin } from '@eclipse-lyra/core/vite-plugin-resolve-deps';
-import { localAliasesPlugin } from '@eclipse-lyra/core/vite-plugin-local-aliases';
+import { resolveDepVersionsPlugin } from '@eclipse-docks/core/vite-plugin-resolve-deps';
+import { localAliasesPlugin } from '@eclipse-docks/core/vite-plugin-local-aliases';
 import path from 'path';
 import { fileURLToPath } from 'url';
 

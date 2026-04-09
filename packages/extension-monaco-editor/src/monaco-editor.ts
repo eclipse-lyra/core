@@ -1,12 +1,12 @@
 import { customElement, property, state } from "lit/decorators.js";
-import { LyraPart } from "@eclipse-lyra/core";
+import { DocksPart } from "@eclipse-docks/core";
 import { css, html } from "lit";
 import { createRef, ref } from "lit/directives/ref.js";
-import { EditorInput, EditorContentProvider } from "@eclipse-lyra/core";
-import type { LyraMonacoWidget } from "./monaco-widget";
+import { EditorInput, EditorContentProvider } from "@eclipse-docks/core";
+import type { DocksMonacoWidget } from "./monaco-widget";
 
-@customElement('lyra-monaco-editor')
-export class LyraMonacoEditor extends LyraPart implements EditorContentProvider {
+@customElement('docks-monaco-editor')
+export class DocksMonacoEditor extends DocksPart implements EditorContentProvider {
     @property({ attribute: false })
     public input?: EditorInput;
     @property()
@@ -19,7 +19,7 @@ export class LyraMonacoEditor extends LyraPart implements EditorContentProvider 
     @state()
     private initialLanguage: string | undefined = undefined;
 
-    private widgetRef = createRef<LyraMonacoWidget>();
+    private widgetRef = createRef<DocksMonacoWidget>();
 
     protected async doInitUI() {
         const file = this.input!.data;
@@ -77,14 +77,14 @@ export class LyraMonacoEditor extends LyraPart implements EditorContentProvider 
             return html`<div class="monaco-editor-placeholder"></div>`;
         }
         return html`
-            <lyra-monaco-widget
+            <docks-monaco-widget
                 .value=${this.initialContent}
                 .uri=${this.initialUri}
                 .language=${this.initialLanguage}
                 .readOnly=${this.readOnly}
                 @content-change=${this._onContentChange}
                 ${ref(this.widgetRef)}
-            ></lyra-monaco-widget>
+            ></docks-monaco-widget>
         `;
     }
 
@@ -105,6 +105,6 @@ export class LyraMonacoEditor extends LyraPart implements EditorContentProvider 
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-monaco-editor': LyraMonacoEditor;
+        'docks-monaco-editor': DocksMonacoEditor;
     }
 }

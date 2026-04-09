@@ -1,14 +1,14 @@
 import { customElement, property, state } from 'lit/decorators.js';
 import { css, html } from 'lit';
-import { LyraPart, toastError, filebrowserDialog } from '@eclipse-lyra/core';
+import { DocksPart, toastError, filebrowserDialog } from '@eclipse-docks/core';
 import { dataviewerService, type DataviewListEntry } from './dataviewer-service';
 import type { DataView } from './api';
 import { TOPIC_DATAVIEW_ADDED } from './api';
-import { when } from '@eclipse-lyra/core/externals/lit';
-import './lyra-data-table';
+import { when } from '@eclipse-docks/core/externals/lit';
+import './docks-data-table';
 
-@customElement('lyra-dataview')
-export class DataViewPart extends LyraPart {
+@customElement('docks-dataview')
+export class DataViewPart extends DocksPart {
   @property({ attribute: false })
   dataview: DataView | null = null;
 
@@ -262,7 +262,7 @@ export class DataViewPart extends LyraPart {
     if (!this.hasData) {
       return html`<div class="result-empty">No data.</div>`;
     }
-    return html`<lyra-data-table .data=${dv.data}></lyra-data-table>`;
+    return html`<docks-data-table .data=${dv.data}></docks-data-table>`;
   }
 
   protected renderContent() {
@@ -290,6 +290,6 @@ export class DataViewPart extends LyraPart {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lyra-dataview': DataViewPart;
+    'docks-dataview': DataViewPart;
   }
 }

@@ -1,7 +1,7 @@
 
 import { css, html, TemplateResult, nothing } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { LyraPart } from "../parts/part";
+import { DocksPart } from "../parts/part";
 import {
     Directory,
     File,
@@ -25,7 +25,7 @@ import { icon } from '../core/icon-utils';
 import { i18n } from '../core/i18n';
 import { createLogger } from '../core/logger';
 
-const logger = createLogger('LyraFileBrowser');
+const logger = createLogger('DocksFileBrowser');
 const t = await i18n(import.meta.glob('./filebrowser*.json'));
 
 const WORKSPACE_CHANGED_DEBOUNCE_MS = 250;
@@ -33,8 +33,8 @@ const WORKSPACE_CHANGED_DEBOUNCE_MS = 250;
 /** `wa-tree-item` exposes `.model` for the bound {@link TreeNode} (not in generated element types). */
 type WaTreeItemElement = HTMLElement & { model?: TreeNode };
 
-@customElement('lyra-filebrowser')
-export class LyraFileBrowser extends LyraPart {
+@customElement('docks-filebrowser')
+export class DocksFileBrowser extends DocksPart {
 
     private static readonly SETTINGS_VERSION = 1;
     private static readonly SETTINGS_KEY_SELECTED_PATH = 'selectedPath';
@@ -93,9 +93,9 @@ export class LyraFileBrowser extends LyraPart {
 
     protected renderToolbar() {
         return html`
-            <lyra-command icon="folder-open" title="${t.CONNECT_WORKSPACE}" dropdown="filebrowser.connections"></lyra-command>
-            <lyra-command cmd="refresh_resource" icon="repeat" title="${t.REFRESH_RESOURCE}"></lyra-command>
-            <lyra-command cmd="touch" icon="plus" title="${t.CREATE_NEW}" dropdown="filebrowser.create"></lyra-command>
+            <docks-command icon="folder-open" title="${t.CONNECT_WORKSPACE}" dropdown="filebrowser.connections"></docks-command>
+            <docks-command cmd="refresh_resource" icon="repeat" title="${t.REFRESH_RESOURCE}"></docks-command>
+            <docks-command cmd="touch" icon="plus" title="${t.CREATE_NEW}" dropdown="filebrowser.create"></docks-command>
         `;
     }
 
@@ -104,23 +104,23 @@ export class LyraFileBrowser extends LyraPart {
         const file = selection instanceof File ? selection : null
         const hasOpenWith = file && this.fileEditorOptions.length > 0
         return html`
-            <lyra-command cmd="open_editor" icon="folder-open">${t.OPEN}</lyra-command>
+            <docks-command cmd="open_editor" icon="folder-open">${t.OPEN}</docks-command>
             ${hasOpenWith ? html`
                 <wa-dropdown-item>
                     ${icon('folder-open', { slot: 'icon' })}
                     ${t.OPEN_WITH}
                     ${this.fileEditorOptions.map(opt => html`
-                        <lyra-command
+                        <docks-command
                             slot="submenu"
                             cmd="open_editor"
                             icon="${opt.icon ?? 'file'}"
                             .params=${{ path: file!.getWorkspacePath(), editorId: opt.editorId }}>
                             ${opt.title}
-                        </lyra-command>
+                        </docks-command>
                     `)}
                 </wa-dropdown-item>
             ` : nothing}
-            <lyra-command cmd="touch" icon="plus" dropdown="filebrowser.create">${t.CREATE_NEW}</lyra-command>
+            <docks-command cmd="touch" icon="plus" dropdown="filebrowser.create">${t.CREATE_NEW}</docks-command>
         `;
     }
 
@@ -174,8 +174,8 @@ export class LyraFileBrowser extends LyraPart {
 
     private async persistSelectedPath(path: string | null) {
         await this.setDialogSetting({
-            v: LyraFileBrowser.SETTINGS_VERSION,
-            [LyraFileBrowser.SETTINGS_KEY_SELECTED_PATH]: path
+            v: DocksFileBrowser.SETTINGS_VERSION,
+            [DocksFileBrowser.SETTINGS_KEY_SELECTED_PATH]: path
         });
     }
 
@@ -186,7 +186,7 @@ export class LyraFileBrowser extends LyraPart {
         this.settingsLoaded = true;
 
         const persisted = await this.getDialogSetting();
-        const selectedPath = persisted?.[LyraFileBrowser.SETTINGS_KEY_SELECTED_PATH];
+        const selectedPath = persisted?.[DocksFileBrowser.SETTINGS_KEY_SELECTED_PATH];
         if (typeof selectedPath !== 'string' || selectedPath.length === 0) {
             return;
         }
@@ -814,7 +814,7 @@ export class LyraFileBrowser extends LyraPart {
         return html`
             <div class="tree" ${ref(this.treeRef)} style="--drop-files-text: '${t.DROP_FILES_HERE}'">
                 ${when(!this.workspaceDir, () => html`
-                    <lyra-no-content message="${t.SELECT_WORKSPACE}"></lyra-no-content>`, () => when(this.root, () => html`
+                    <docks-no-content message="${t.SELECT_WORKSPACE}"></docks-no-content>`, () => when(this.root, () => html`
                 <wa-tree @wa-selection-change=${this.nobubble(this.onSelectionChanged)}
                          style="--indent-guide-width: 1px;">
                     ${this.root!.children.map(child => this.createTreeItems(child, true))}
@@ -904,6 +904,6 @@ export class LyraFileBrowser extends LyraPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-filebrowser': LyraFileBrowser
+        'docks-filebrowser': DocksFileBrowser
     }
 }

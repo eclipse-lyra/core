@@ -1,6 +1,6 @@
-import { contributionRegistry, workspaceService, File, TOPIC_WORKSPACE_CHANGED, TOPIC_WORKSPACE_CONNECTED, activeEditorSignal, partDirtySignal, subscribe, appLoaderService } from '@eclipse-lyra/core';
-import type { EditorContentProvider } from '@eclipse-lyra/core';
-import { watchSignal } from '@eclipse-lyra/core';
+import { contributionRegistry, workspaceService, File, TOPIC_WORKSPACE_CHANGED, TOPIC_WORKSPACE_CONNECTED, activeEditorSignal, partDirtySignal, subscribe, appLoaderService } from '@eclipse-docks/core';
+import type { EditorContentProvider } from '@eclipse-docks/core';
+import { watchSignal } from '@eclipse-docks/core';
 import { HOWTO_CONTRIBUTION_TARGET } from '../howto-service';
 import type { HowToContribution, HowToContext } from '../howto-contribution';
 
@@ -100,7 +100,7 @@ function getAppName(): string {
 // Create the onboarding HowTo contribution
 // Using callback functions so the app name is read when the HowTo is displayed
 const onboardingContribution: HowToContribution = {
-    id: 'appspace.onboarding',
+    id: 'docks.onboarding',
     title: () => `Welcome to ${getAppName()}`,
     description: () => `Get started with ${getAppName()} by learning the basics of workspace and file management`,
     icon: 'graduation-cap',

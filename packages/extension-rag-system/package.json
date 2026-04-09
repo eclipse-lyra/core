@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-rag-system",
+  "name": "@eclipse-docks/extension-rag-system",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,9 +14,9 @@
     }
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
-    "@eclipse-lyra/extension-ai-system": "*",
-    "@eclipse-lyra/extension-in-browser-ml": "*",
+    "@eclipse-docks/core": "*",
+    "@eclipse-docks/extension-ai-system": "*",
+    "@eclipse-docks/extension-in-browser-ml": "*",
     "@langchain/core": "^1.0.0",
     "@langchain/textsplitters": "^1.0.0",
     "pdfjs-dist": "^4.0.0",
@@ -38,6 +38,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }

@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-@customElement('lyra-ai-empty-state')
+@customElement('docks-ai-empty-state')
 export class AIEmptyState extends LitElement {
     @property({ type: String }) public message = 'No AI provider configured';
     @property({ type: String }) public hint = 'Click the settings icon to configure an AI provider';
@@ -42,6 +42,6 @@ export class AIEmptyState extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-ai-empty-state': AIEmptyState;
+        'docks-ai-empty-state': AIEmptyState;
     }
 }

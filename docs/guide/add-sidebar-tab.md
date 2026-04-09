@@ -7,12 +7,12 @@ Register a **tab contribution** to place a tab in the main or auxiliary sidebar.
 - `SIDEBAR_MAIN` — main sidebar (e.g. file tree).
 - `SIDEBAR_AUXILIARY` — secondary sidebar.
 
-Import the constants from `@eclipse-lyra/core` (they are re-exported from the API).
+Import the constants from `@eclipse-docks/core` (they are re-exported from the API).
 
 ## Example
 
 ```ts
-import { contributionRegistry, SIDEBAR_MAIN } from '@eclipse-lyra/core';
+import { contributionRegistry, SIDEBAR_MAIN } from '@eclipse-docks/core';
 import { html } from 'lit';
 
 contributionRegistry.registerContribution(SIDEBAR_MAIN, {

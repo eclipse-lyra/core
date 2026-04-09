@@ -1,5 +1,5 @@
-import { workspaceService, Directory } from '@eclipse-lyra/core';
-import { createLogger } from '@eclipse-lyra/core';
+import { workspaceService, Directory } from '@eclipse-docks/core';
+import { createLogger } from '@eclipse-docks/core';
 
 const logger = createLogger('WorkspaceUtils');
 

@@ -1,5 +1,5 @@
-import { contributionRegistry, workspaceService, editorRegistry } from '@eclipse-lyra/core';
-import type { ExecutionContext } from '@eclipse-lyra/core';
+import { contributionRegistry, workspaceService, editorRegistry } from '@eclipse-docks/core';
+import type { ExecutionContext } from '@eclipse-docks/core';
 import { CID_PROMPT_ENHANCERS } from './core/constants';
 import type { PromptEnhancer, PromptEnhancerContribution } from './core/interfaces';
 

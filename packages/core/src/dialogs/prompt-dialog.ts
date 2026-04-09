@@ -1,11 +1,11 @@
 import { html, css, PropertyValues } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
-import { LyraDialogContent } from "../parts/dialog-content";
+import { DocksDialogContent } from "../parts/dialog-content";
 import { contributionRegistry } from "../core/contributionregistry";
 import { DIALOG_CONTRIBUTION_TARGET, OK_BUTTON, CANCEL_BUTTON, DialogContribution, dialogService } from "../core/dialogservice";
 
-@customElement('lyra-prompt-dialog-content')
-export class LyraPromptDialogContent extends LyraDialogContent {
+@customElement('docks-prompt-dialog-content')
+export class DocksPromptDialogContent extends DocksDialogContent {
     @property({ type: String })
     message: string = '';
 
@@ -19,7 +19,7 @@ export class LyraPromptDialogContent extends LyraDialogContent {
     private inputValue: string = '';
 
     static styles = [
-        ...LyraDialogContent.styles,
+        ...DocksDialogContent.styles,
         css`
             wa-input {
                 width: 100%;
@@ -75,7 +75,7 @@ export class LyraPromptDialogContent extends LyraDialogContent {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-prompt-dialog-content': LyraPromptDialogContent;
+        'docks-prompt-dialog-content': DocksPromptDialogContent;
     }
 }
 
@@ -89,11 +89,11 @@ contributionRegistry.registerContribution(DIALOG_CONTRIBUTION_TARGET, {
         }
         
         return html`
-            <lyra-prompt-dialog-content 
+            <docks-prompt-dialog-content 
                 .message="${state.message}"
                 .defaultValue="${state.defaultValue}"
                 .markdown="${state.markdown}"
-            ></lyra-prompt-dialog-content>
+            ></docks-prompt-dialog-content>
         `;
     },
     onButton: async (id: string, result: any, state?: any) => {

@@ -9,7 +9,7 @@ An **app** is the top-level unit of the framework. You define it with an `AppDef
 | `name` | No* | Human-readable name. Set by hostConfig when omitted. |
 | `version` | No* | Semantic version string. Set by hostConfig when omitted. |
 | `description` | No | Short description. |
-| `extensions` | No | List of extension ids (e.g. `@eclipse-lyra/extension-command-palette`) to enable when the app loads. |
+| `extensions` | No | List of extension ids (e.g. `@eclipse-docks/extension-command-palette`) to enable when the app loads. |
 | `contributions` | No | App-level contributions (UI and/or extensions). |
 | `layout` | No | **LayoutDescriptor**: layout id (string) or `{ id, props? }` to parameterize the layout. The app root is the chosen layout's component. Props are merged as attributes when rendering (e.g. `show-bottom-panel`). Defaults to `'standard'`. |
 | `initialize` | No | Called after extensions and contributions are registered. |
@@ -33,11 +33,11 @@ Core registers the **standard** layout (IDE: sidebars, editor area, bottom panel
 ## Registration
 
 ```ts
-import { appLoaderService } from '@eclipse-lyra/core';
+import { appLoaderService } from '@eclipse-docks/core';
 
 appLoaderService.registerApp(
   {
-    extensions: ['@eclipse-lyra/extension-command-palette', '@eclipse-lyra/extension-settings-tree'],
+    extensions: ['@eclipse-docks/extension-command-palette', '@eclipse-docks/extension-settings-tree'],
     layout: 'standard',
   },
   { autoStart: true, hostConfig: true }
@@ -65,7 +65,7 @@ appLoaderService.registerApp(
 Add **`dependencies`** and **`marketplaceCatalogUrls`** to your app definition to show resolved dependency versions in About and to register marketplace catalog URLs. Use **`hostConfig: true`** in `registerApp` options so the framework fills name, version, and dependencies from the build-time plugin when available:
 
 ```ts
-import { appLoaderService } from '@eclipse-lyra/core';
+import { appLoaderService } from '@eclipse-docks/core';
 import appPkg from '../package.json';
 
 appLoaderService.registerApp(

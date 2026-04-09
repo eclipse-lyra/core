@@ -1,4 +1,4 @@
-import { appSettings } from "@eclipse-lyra/core";
+import { appSettings } from "@eclipse-docks/core";
 import { TaskWorkspace } from "../workspace/workspace";
 
 const CHECKPOINT_KEY_PREFIX = "ai_task_checkpoint_";

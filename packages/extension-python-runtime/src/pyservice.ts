@@ -1,4 +1,4 @@
-import { createLogger, workspaceService, File, Directory } from "@eclipse-lyra/core";
+import { createLogger, workspaceService, File, Directory } from "@eclipse-docks/core";
 
 const logger = createLogger('PyService');
 import type { PyWorkerMessage, PyWorkerResponse } from "./pyworker";

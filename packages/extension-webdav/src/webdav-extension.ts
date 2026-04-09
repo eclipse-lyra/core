@@ -14,7 +14,7 @@
  * Import this file to register the WebDAV extension and its commands.
  */
 
-import { workspaceService, createLogger, contributionRegistry } from '@eclipse-lyra/core';
+import { workspaceService, createLogger, contributionRegistry } from '@eclipse-docks/core';
 
 const logger = createLogger('WebDAVExtension');
 import { WebDAVClient, type WebDAVConnectionInfo } from './webdav-client';
@@ -28,7 +28,7 @@ export { WebDAVFileResource, WebDAVDirectoryResource } from './webdav-filesys';
 // Import UI component (registers itself)
 import './webdav-connect';
 import { html } from "lit";
-import { LyraWebDAVConnect } from "./webdav-connect";
+import { DocksWebDAVConnect } from "./webdav-connect";
 
 // Import commands (registers themselves)
 import './webdav-commands';
@@ -129,9 +129,9 @@ contributionRegistry.registerContribution("dialogs", {
         { id: "connect", label: "Connect", variant: "primary" }
     ],
     component: (_state?: WebDAVDialogState) =>
-        html`<lyra-webdav-connect></lyra-webdav-connect>`,
+        html`<docks-webdav-connect></docks-webdav-connect>`,
     onButton: async (id: string, result: any, state?: WebDAVDialogState) => {
-        const component = result as LyraWebDAVConnect | undefined;
+        const component = result as DocksWebDAVConnect | undefined;
 
         if (id === "help") {
             component?.toggleHelp();

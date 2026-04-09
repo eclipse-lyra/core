@@ -1,4 +1,4 @@
-import { publish } from "@eclipse-lyra/core";
+import { publish } from "@eclipse-docks/core";
 import type { AgentWorkflowOptions, AgentWorkflowResult, AgentContribution } from "../core/interfaces";
 import type { ChatMessage } from "../core/types";
 import { TOPIC_AGENT_WORKFLOW_STARTED, TOPIC_AGENT_WORKFLOW_COMPLETE, TOPIC_AGENT_WORKFLOW_ERROR } from "../core/constants";

@@ -1,4 +1,4 @@
-import { createLogger } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-docks/core';
 
 const logger = createLogger('ToolDetector');
 

@@ -19,14 +19,14 @@ contributionRegistry.registerContribution(SIDEBAR_MAIN, {
     name: VIEW_FILEBROWSER,
     label: "Workspace",
     icon: "folder-open",
-    component: (id: string) => html`<lyra-filebrowser id="${id}"></lyra-filebrowser>`
+    component: (id: string) => html`<docks-filebrowser id="${id}"></docks-filebrowser>`
 });
 
 contributionRegistry.registerContribution(PANEL_BOTTOM, {
     name: VIEW_LOG_TERMINAL,
     label: "Log Messages",
     icon: "list",
-    component: (id: string) => html`<lyra-log-terminal id="${id}"></lyra-log-terminal>`
+    component: (id: string) => html`<docks-log-terminal id="${id}"></docks-log-terminal>`
 });
 
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM_END, {
@@ -40,18 +40,18 @@ contributionRegistry.registerContribution(TOOLBAR_BOTTOM_END, {
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM_END, {
     name: TOOLBAR_FAST_VIEWS,
     label: `Fast Views`,
-    component: `<lyra-fastviews target="system.fastviews-bottomend" icon="bolt" title="Fast Views"></lyra-fastviews>`
+    component: `<docks-fastviews target="system.fastviews-bottomend" icon="bolt" title="Fast Views"></docks-fastviews>`
 });
 
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM_END, {
     name: TOOLBAR_LANGUAGE_SELECTOR,
     label: "Language",
-    component: () => html`<lyra-language-selector></lyra-language-selector>`
+    component: () => html`<docks-language-selector></docks-language-selector>`
 });
 
 contributionRegistry.registerContribution(TOOLBAR_MAIN_RIGHT, {
     name: TOOLBAR_APP_SWITCHER,
     label: "App Switcher",
-    component: () => html`<lyra-layout-switcher></lyra-layout-switcher>`
+    component: () => html`<docks-layout-switcher></docks-layout-switcher>`
 } as HTMLContribution);
 

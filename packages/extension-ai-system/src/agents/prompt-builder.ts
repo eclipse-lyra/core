@@ -1,5 +1,5 @@
-import type { ExecutionContext } from "@eclipse-lyra/core";
-import { contributionRegistry, createLogger } from "@eclipse-lyra/core";
+import type { ExecutionContext } from "@eclipse-docks/core";
+import { contributionRegistry, createLogger } from "@eclipse-docks/core";
 
 const logger = createLogger('PromptBuilder');
 import type { ChatMessage, ApiMessage, ToolDefinition } from "../core/types";

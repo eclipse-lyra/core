@@ -1,9 +1,9 @@
 {
-  "name": "@eclipse-lyra/extension-dataviewer",
+  "name": "@eclipse-docks/extension-dataviewer",
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   },
   "type": "module",
   "main": "./dist/index.js",
@@ -26,7 +26,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
+    "@eclipse-docks/core": "*",
     "papaparse": "^5.5.3"
   },
   "devDependencies": {

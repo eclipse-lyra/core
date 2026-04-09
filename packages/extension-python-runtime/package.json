@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-python-runtime",
+  "name": "@eclipse-docks/extension-python-runtime",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,9 +22,9 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
-    "@eclipse-lyra/extension-monaco-editor": "*",
-    "@eclipse-lyra/extension-notebook": "*",
+    "@eclipse-docks/core": "*",
+    "@eclipse-docks/extension-monaco-editor": "*",
+    "@eclipse-docks/extension-notebook": "*",
     "pyodide": "^0.29.3"
   },
   "devDependencies": {
@@ -34,6 +34,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }

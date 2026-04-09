@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-in-browser-ml",
+  "name": "@eclipse-docks/extension-in-browser-ml",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +22,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
+    "@eclipse-docks/core": "*",
     "@huggingface/transformers": "^3.8.0"
   },
   "devDependencies": {
@@ -32,6 +32,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }

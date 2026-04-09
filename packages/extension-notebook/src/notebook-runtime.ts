@@ -5,17 +5,17 @@ import { repeat } from "lit/directives/repeat.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { marked } from "marked";
-import type { EditorInput } from "@eclipse-lyra/core";
-import { LyraMonacoWidget } from "@eclipse-lyra/extension-monaco-editor/widget";
-import { createLogger, File, LyraPart, contributionRegistry, subscribe, unsubscribe, TOPIC_CONTRIBUTEIONS_CHANGED } from "@eclipse-lyra/core";
+import type { EditorInput } from "@eclipse-docks/core";
+import { DocksMonacoWidget } from "@eclipse-docks/extension-monaco-editor/widget";
+import { createLogger, File, DocksPart, contributionRegistry, subscribe, unsubscribe, TOPIC_CONTRIBUTEIONS_CHANGED } from "@eclipse-docks/core";
 import type { NotebookCell, NotebookData, NotebookEditorLike } from "./notebook-types";
 import type { NotebookKernel, NotebookKernelContribution } from "./notebook-kernel-api";
 import { TARGET_NOTEBOOK_KERNELS } from "./notebook-kernel-api";
 
 const logger = createLogger('NotebookRuntime');
 
-@customElement('lyra-notebook-editor')
-export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
+@customElement('docks-notebook-editor')
+export class DocksNotebookEditor extends DocksPart implements NotebookEditorLike {
     @property({ attribute: false })
     public input?: EditorInput;
 
@@ -63,7 +63,7 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
     public focusedCellIndex: number = -1;
     private cancelRunAll: boolean = false;
 
-    private cellWidgetRefs: Map<number, Ref<LyraMonacoWidget>> = new Map();
+    private cellWidgetRefs: Map<number, Ref<DocksMonacoWidget>> = new Map();
     @state() private cellHeights: Map<number, number> = new Map();
 
     protected doClose() {
@@ -787,14 +787,14 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
                 <wa-icon name="stop" label="Stop" style="color: var(--wa-color-danger-500);"></wa-icon>
             </wa-button>
         ` : html`
-            <lyra-command 
+            <docks-command 
                 cmd="notebook.runCell"
                 icon="play"
                 title="Run cell"
                 size="small"
                 appearance="plain"
                 .params=${{ cellIndex: index }}>
-            </lyra-command>
+            </docks-command>
         `;
 
         return html`
@@ -823,7 +823,7 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
                             style=${styleMap({ height: `${cellHeight}px` })}
                             @wheel=${(e: WheelEvent) => this.onCellWheel(index, e)}
                         >
-                            <lyra-monaco-widget
+                            <docks-monaco-widget
                                 .value=${source}
                                 .language=${language}
                                 .uri=${cellUri}
@@ -833,7 +833,7 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
                                 @editor-blur=${() => { if (this.focusedCellIndex === index) this.focusedCellIndex = -1; }}
                                 @content-height-changed=${(e: CustomEvent<{ height: number }>) => this.onCellHeightChange(index, e.detail.height)}
                                 ${ref(this.getCellWidgetRef(index))}
-                            ></lyra-monaco-widget>
+                            ></docks-monaco-widget>
                         </div>
                         ${output ? html`
                             <div class="cell-output ${output.type === 'error' ? 'output-error' : ''}">
@@ -988,7 +988,7 @@ export class LyraNotebookEditor extends LyraPart implements NotebookEditorLike {
         shiftMap(this.cellHeights);
     }
 
-    private getCellWidgetRef(index: number): Ref<LyraMonacoWidget> {
+    private getCellWidgetRef(index: number): Ref<DocksMonacoWidget> {
         if (!this.cellWidgetRefs.has(index)) {
             this.cellWidgetRefs.set(index, createRef());
         }

@@ -15,7 +15,7 @@ export interface IconOptions {
  * Parses an icon spec string into `{ library, name }` for use with `wa-icon`.
  *
  * Icon specs support an optional icon library prefix followed by the icon name,
- * separated by whitespace, e.g. `"lyra mark-github"`.
+ * separated by whitespace, e.g. `"docks mark-github"`.
  *
  * - When the spec contains **no whitespace**, it is treated as the icon name only
  *   and `library` is omitted so the default Web Awesome / Font Awesome library is used.

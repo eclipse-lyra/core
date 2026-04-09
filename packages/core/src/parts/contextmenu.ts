@@ -1,6 +1,6 @@
 import {css, html, nothing} from 'lit'
 import {customElement, property, state} from 'lit/decorators.js'
-import {LyraElement} from "./element";
+import {DocksElement} from "./element";
 import {
     CommandContribution,
     Contribution,
@@ -15,8 +15,8 @@ import {subscribe} from "../core/events";
 import {createRef, ref} from "lit/directives/ref.js";
 import '../components/command';
 
-@customElement('lyra-contextmenu')
-export class LyraContextMenu extends LyraElement {
+@customElement('docks-contextmenu')
+export class DocksContextMenu extends DocksElement {
     @property({attribute: false})
     scopeTokens: string[] = [];
 
@@ -219,13 +219,13 @@ export class LyraContextMenu extends LyraElement {
             const commandContribution = contribution as CommandContribution;
             const disabled = (commandContribution.disabled as Signal.Computed<boolean>)?.get();
             return html`
-                <lyra-command
+                <docks-command
                     cmd="${commandContribution.command}"
                     icon="${commandContribution.icon ?? ''}"
                     .params=${commandContribution.params ?? {}}
                     ?disabled="${disabled}">
                     ${commandContribution.label}
-                </lyra-command>
+                </docks-command>
             `;
         } else if ("component" in contribution) {
             const contents = (contribution as HTMLContribution).component;
@@ -289,7 +289,7 @@ export class LyraContextMenu extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-contextmenu': LyraContextMenu
+        'docks-contextmenu': DocksContextMenu
     }
 }
 

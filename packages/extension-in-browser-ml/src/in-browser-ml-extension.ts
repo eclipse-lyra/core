@@ -1,4 +1,4 @@
-import { rootContext } from "@eclipse-lyra/core";
+import { rootContext } from "@eclipse-docks/core";
 import { inBrowserMLService } from "./in-browser-ml-service";
 import "./media-viewer-toolbar-contribution";
 //import "./ml-commands";

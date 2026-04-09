@@ -23,7 +23,7 @@ export default defineConfig({
       packagesRoot: packagesDir,
       useSrcInDev: true,
       patterns: [
-        { folderPrefix: 'core', packageNamePrefix: '@eclipse-lyra/' },
+        { folderPrefix: 'core', packageNamePrefix: '@eclipse-docks/' },
         { folderPrefix: 'extension-' },
       ],
     }),

@@ -16,10 +16,10 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "paths": {
-      "@eclipse-lyra/core": [
+      "@eclipse-docks/core": [
         "./src"
       ],
-      "@eclipse-lyra/core/*": [
+      "@eclipse-docks/core/*": [
         "./src/*"
       ]
     },

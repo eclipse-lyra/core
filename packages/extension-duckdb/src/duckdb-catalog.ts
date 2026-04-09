@@ -1,5 +1,5 @@
-import type { CatalogContribution } from "@eclipse-lyra/extension-catalog/api";
-import { registerCatalog } from "@eclipse-lyra/extension-catalog/api";
+import type { CatalogContribution } from "@eclipse-docks/extension-catalog/api";
+import { registerCatalog } from "@eclipse-docks/extension-catalog/api";
 
 const DUCKDB_CATALOG: CatalogContribution = {
     label: "DuckDB",

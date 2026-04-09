@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-pglite",
+  "name": "@eclipse-docks/extension-pglite",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -18,10 +18,10 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*",
-    "@eclipse-lyra/extension-catalog": "*",
-    "@eclipse-lyra/extension-notebook": "*",
-    "@eclipse-lyra/extension-sqleditor": "*",
+    "@eclipse-docks/core": "*",
+    "@eclipse-docks/extension-catalog": "*",
+    "@eclipse-docks/extension-notebook": "*",
+    "@eclipse-docks/extension-sqleditor": "*",
     "@electric-sql/pglite": "^0.3.0"
   },
   "devDependencies": {
@@ -31,6 +31,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }

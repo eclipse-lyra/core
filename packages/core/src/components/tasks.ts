@@ -1,7 +1,7 @@
 import {contributionRegistry, HTMLContribution} from "../core/contributionregistry";
 import {TOOLBAR_BOTTOM_CENTER} from "../core/constants";
 import {customElement} from "lit/decorators.js";
-import { LyraElement } from "../parts/element";
+import { DocksElement } from "../parts/element";
 import {css, html, render} from "lit";
 import {activeTasksSignal} from "../core/appstate";
 import {taskService, ProgressMonitor} from "../core/taskservice";
@@ -10,7 +10,7 @@ import {i18n} from "../core/i18n";
 const t = await i18n(import.meta.glob('./tasks*.json'));
 
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM_CENTER, {
-    component: "<lyra-tasks></lyra-tasks>"
+    component: "<docks-tasks></docks-tasks>"
 } as HTMLContribution)
 
 // Singleton dialog container for progress dialog
@@ -190,8 +190,8 @@ function updateProgressDialog(forceOpen = false) {
     render(template, container);
 }
 
-@customElement('lyra-tasks')
-export class LyraTasks extends LyraElement {
+@customElement('docks-tasks')
+export class DocksTasks extends DocksElement {
     static styles = css`
         :host {
             display: flex;
@@ -270,6 +270,6 @@ export class LyraTasks extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-tasks': LyraTasks
+        'docks-tasks': DocksTasks
     }
 }

@@ -1,6 +1,6 @@
 import { html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { LyraDialogContent } from "../parts/dialog-content";
+import { DocksDialogContent } from "../parts/dialog-content";
 import type { PropertyValues } from "lit";
 import { contributionRegistry } from "../core/contributionregistry";
 import {
@@ -14,8 +14,8 @@ import { Directory, File, type Resource, workspaceService } from "../core/filesy
 
 export type FilebrowserDialogMode = "file" | "directory" | "either";
 
-@customElement("lyra-filebrowser-dialog")
-export class LyraFilebrowserDialog extends LyraDialogContent {
+@customElement("docks-filebrowser-dialog")
+export class DocksFilebrowserDialog extends DocksDialogContent {
   @property({ type: String })
   mode: FilebrowserDialogMode = "either";
 
@@ -32,7 +32,7 @@ export class LyraFilebrowserDialog extends LyraDialogContent {
   private loadError: string | null = null;
 
   static styles = [
-    ...LyraDialogContent.styles,
+    ...DocksDialogContent.styles,
     css`
       :host {
         min-width: 0;
@@ -230,7 +230,7 @@ interface TreeNode {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "lyra-filebrowser-dialog": LyraFilebrowserDialog;
+    "docks-filebrowser-dialog": DocksFilebrowserDialog;
   }
 }
 
@@ -244,7 +244,7 @@ contributionRegistry.registerContribution<DialogContribution>(DIALOG_CONTRIBUTIO
   label: "Select Path",
   buttons: [OK_BUTTON, CANCEL_BUTTON],
   component: (state?: FilebrowserDialogState) =>
-    html`<lyra-filebrowser-dialog .mode=${state?.mode ?? "either"}></lyra-filebrowser-dialog>`,
+    html`<docks-filebrowser-dialog .mode=${state?.mode ?? "either"}></docks-filebrowser-dialog>`,
   onButton: async (id: string, result: any, state?: FilebrowserDialogState) => {
     if (!state) return true;
     if (id === "ok") {

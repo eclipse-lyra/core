@@ -2,8 +2,8 @@ import type {
   NotebookExecutionResult,
   NotebookKernel,
   NotebookKernelContribution,
-} from '@eclipse-lyra/extension-notebook';
-import { TARGET_NOTEBOOK_KERNELS } from '@eclipse-lyra/extension-notebook';
+} from '@eclipse-docks/extension-notebook';
+import { TARGET_NOTEBOOK_KERNELS } from '@eclipse-docks/extension-notebook';
 import { PyEnv } from './pyservice';
 import { pythonPackageManagerService } from './package-manager';
 

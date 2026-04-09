@@ -1,4 +1,4 @@
-import { createLogger } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-docks/core';
 import { SNIPPET_LENGTHS } from '../utils/constants';
 import type { DocumentChunk, ChunkingOptions, IDocumentChunker } from './chunker-interface';
 type RecursiveCharacterTextSplitter = import('@langchain/textsplitters').RecursiveCharacterTextSplitter;

@@ -1,14 +1,14 @@
 import { documentIndexService } from './document-index-service';
-import { registerAll } from '@eclipse-lyra/core';
-import { workspaceService, File } from '@eclipse-lyra/core';
-import { toastError, toastInfo } from '@eclipse-lyra/core';
-import { taskService } from '@eclipse-lyra/core';
-import { activeSelectionSignal } from '@eclipse-lyra/core';
-import { createLogger } from '@eclipse-lyra/core';
-import { contributionRegistry } from '@eclipse-lyra/core';
-import { editorRegistry, EditorInput } from '@eclipse-lyra/core';
+import { registerAll } from '@eclipse-docks/core';
+import { workspaceService, File } from '@eclipse-docks/core';
+import { toastError, toastInfo } from '@eclipse-docks/core';
+import { taskService } from '@eclipse-docks/core';
+import { activeSelectionSignal } from '@eclipse-docks/core';
+import { createLogger } from '@eclipse-docks/core';
+import { contributionRegistry } from '@eclipse-docks/core';
+import { editorRegistry, EditorInput } from '@eclipse-docks/core';
 import { html } from 'lit';
-import { TOOLBAR_MAIN_RIGHT } from '@eclipse-lyra/core';
+import { TOOLBAR_MAIN_RIGHT } from '@eclipse-docks/core';
 // Import the component to ensure it's registered
 import './rag-system-manager';
 
@@ -330,7 +330,7 @@ export default function ragSystemExtension(context: any) {
         },
         handle: async (input: EditorInput) => {
             input.component = (id: string) => html`
-                <lyra-rag-system-manager id="${id}" .input=${input}></lyra-rag-system-manager>
+                <docks-rag-system-manager id="${id}" .input=${input}></docks-rag-system-manager>
             `;
             return input;
         }

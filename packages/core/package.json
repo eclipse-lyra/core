@@ -1,12 +1,12 @@
 {
-  "name": "@eclipse-lyra/core",
+  "name": "@eclipse-docks/core",
   "version": "0.0.0",
-  "description": "Eclipse Lyra platform core: registries, services, parts, widgets, and API",
+  "description": "Eclipse Docks platform core: registries, services, parts, widgets, and API",
   "type": "module",
   "license": "EPL-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",

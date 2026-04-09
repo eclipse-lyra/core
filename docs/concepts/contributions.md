@@ -18,12 +18,12 @@ Contribution targets define where UI appears:
 | `TOOLBAR_BOTTOM`, `TOOLBAR_BOTTOM_END`, `TOOLBAR_BOTTOM_CENTER` | Bottom toolbar. |
 | `SYSTEM_LAYOUTS` | Layout contributions (id, name, component, optional onShow). See [Apps](/concepts/apps#layouts). |
 
-Import these from `@eclipse-lyra/core`.
+Import these from `@eclipse-docks/core`.
 
 ## Contribution types
 
 - **CommandContribution** — `command`, `label`, `icon`, optional `params`, `showLabel`, `disabled`. Used for toolbar buttons and menu items.
-- **TabContribution** — `name`, optional `editorId`, optional `coupledEditors` (list of main-area `editorId` values; when the active editor matches, the tab’s `LyraPart` can auto-activate its sidebar/panel tab), `closable`, `noOverflow`, `component` (function returning a Lit template). Used for sidebar and editor area tabs.
+- **TabContribution** — `name`, optional `editorId`, optional `coupledEditors` (list of main-area `editorId` values; when the active editor matches, the tab’s `DocksPart` can auto-activate its sidebar/panel tab), `closable`, `noOverflow`, `component` (function returning a Lit template). Used for sidebar and editor area tabs.
 - **HTMLContribution** — `component` (string or function returning a Lit `TemplateResult`). Raw HTML or template in a slot.
 - **LayoutContribution** — For `SYSTEM_LAYOUTS`: `id`, `name`, `component` (Lit template), optional `onShow`. Defines a layout shell; the app root is the chosen layout's component.
 - **IconContribution** — `mappings` (map of icon keys to identifiers), optional `priority`.
@@ -40,12 +40,12 @@ In many cases, the **platform or an extension decides where UI is contributed** 
 - Show the same contribution in multiple places.
 - Disable a contribution entirely (e.g. no AI view in this app).
 
-To support this without forking core or extension code, Lyra provides a **remapping layer**:
+To support this without forking core or extension code, Docks provides a **remapping layer**:
 
 - Each contribution can declare a globally unique `name` (semantic ID), such as:
   - `view.filebrowser`
   - `view.aiview`
-  - `toolbar.brand.geospace`
+  - `toolbar.brand.eclipse-docks`
 - An app can then provide `remaps` on its `AppDefinition`:
 
 ```ts
@@ -62,8 +62,8 @@ const app: AppDefinition = {
     { name: 'view.aiview', targets: [] },
   ],
   extensions: [
-    '@eclipse-lyra/extension-utils',
-    '@eclipse-lyra/extension-ai-system',
+    '@eclipse-docks/extension-utils',
+    '@eclipse-docks/extension-ai-system',
     // ...
   ],
 };

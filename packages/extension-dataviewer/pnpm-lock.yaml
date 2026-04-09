@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      '@eclipse-lyra/core':
+      '@eclipse-docks/core':
         specifier: '*'
         version: 0.7.16(@floating-ui/utils@0.2.11)(@types/react@19.2.14)(vite@7.3.1(@types/node@25.4.0))
       papaparse:
@@ -55,7 +55,7 @@ packages:
     resolution: {integrity: sha512-WyOx8cJQ+FQus4Mm4uPIZA64gbk3Wxh0so5Lcii0aJifqwoVOlfFtorjLE0Hen4OYyHZMXDWqMmaQemBhgxFRQ==}
     engines: {node: '>=14'}
 
-  '@eclipse-lyra/core@0.7.16':
+  '@eclipse-docks/core@0.7.16':
     resolution: {integrity: sha512-kHCKzcKpyeOD4EnidkPDDLlOsC/JRhISvtLaE4FbTJvwiOEV2GqiiSp1LIMidAoXyJtVFIPcjCaZm9P5JfXNBA==}
     peerDependencies:
       vite: '>=5'
@@ -895,7 +895,7 @@ snapshots:
 
   '@ctrl/tinycolor@4.1.0': {}
 
-  '@eclipse-lyra/core@0.7.16(@floating-ui/utils@0.2.11)(@types/react@19.2.14)(vite@7.3.1(@types/node@25.4.0))':
+  '@eclipse-docks/core@0.7.16(@floating-ui/utils@0.2.11)(@types/react@19.2.14)(vite@7.3.1(@types/node@25.4.0))':
     dependencies:
       '@awesome.me/webawesome': 3.3.1(@floating-ui/utils@0.2.11)(@types/react@19.2.14)
       '@fortawesome/fontawesome-free': 7.2.0

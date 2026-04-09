@@ -1,4 +1,4 @@
-import { persistenceService } from "@eclipse-lyra/core";
+import { persistenceService } from "@eclipse-docks/core";
 import type { TokenUsage, ProviderTokenUsage } from "../core/types";
 
 interface TokenUsageData {

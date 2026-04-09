@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
-  title: 'Eclipse Lyra',
-  description: 'Developer documentation for building IDE-like applications with the Eclipse Lyra framework',
+  title: 'Eclipse Docks',
+  description: 'Developer documentation for building IDE-like applications with the Eclipse Docks framework',
   base: '/docs/',
   ignoreDeadLinks: true,
   themeConfig: {
@@ -10,12 +10,12 @@ export default defineConfig({
       { text: 'Guide', link: '/guide/getting-started' },
       { text: 'Concepts', link: '/concepts/architecture' },
       { text: 'API', link: '/api' },
-      { text: 'Repo', link: 'https://github.com/eclipse-lyra/core' },
+      { text: 'Repo', link: 'https://github.com/eclipse-docks/core' },
     ],
     sidebar: [
       {
         text: 'Introduction',
-        items: [{ text: 'What is Eclipse Lyra', link: '/intro' }],
+        items: [{ text: 'What is Eclipse Docks', link: '/intro' }],
       },
       {
         text: 'Guide',
@@ -46,6 +46,6 @@ export default defineConfig({
         ],
       },
     ],
-    socialLinks: [{ icon: 'github', link: 'https://github.com/eclipse-lyra/core' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/eclipse-docks/core' }],
   },
 });

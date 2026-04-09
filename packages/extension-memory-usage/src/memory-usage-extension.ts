@@ -1,10 +1,10 @@
-import {contributionRegistry, HTMLContribution} from "@eclipse-lyra/core";
-import {TOOLBAR_BOTTOM} from "@eclipse-lyra/core";
+import {contributionRegistry, HTMLContribution} from "@eclipse-docks/core";
+import {TOOLBAR_BOTTOM} from "@eclipse-docks/core";
 import "./memory-usage";
 
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM, {
     target: TOOLBAR_BOTTOM,
     label: "Memory",
-    component: `<lyra-memory-usage></lyra-memory-usage>`
+    component: `<docks-memory-usage></docks-memory-usage>`
 } as HTMLContribution)
 

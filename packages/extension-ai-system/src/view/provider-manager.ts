@@ -1,4 +1,4 @@
-import { appSettings } from "@eclipse-lyra/core";
+import { appSettings } from "@eclipse-docks/core";
 import type { ChatProvider } from "../core/types";
 import type { AIService } from "../service/ai-service";
 import { KEY_AI_CONFIG } from "../core/constants";

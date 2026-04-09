@@ -1,5 +1,5 @@
-import { persistenceService, subscribe, publish } from '@eclipse-lyra/core';
-import { v4 } from '@eclipse-lyra/core/externals/third-party';
+import { persistenceService, subscribe, publish } from '@eclipse-docks/core';
+import { v4 } from '@eclipse-docks/core/externals/third-party';
 import type { DataView } from './api';
 import { TOPIC_DATAVIEW_PUBLISH, TOPIC_DATAVIEW_ADDED } from './api';
 

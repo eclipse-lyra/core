@@ -1,41 +1,41 @@
 <p align="center">
-  <img src="packages/app/public/logo.svg" alt="Eclipse Lyra" width="280" />
+  <img src="packages/app/public/logo.svg" alt="Eclipse Docks" width="280" />
 </p>
 
 <p align="center">
-  <a href="https://deepwiki.com/eclipse-lyra/core"><img src="https://deepwiki.com/badge.svg" alt="DeepWiki" /></a>
-  <a href="https://github.com/eclipse-lyra/core/actions/workflows/ci.yml"><img src="https://github.com/eclipse-lyra/core/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://www.npmjs.com/package/@eclipse-lyra/core"><img src="https://img.shields.io/npm/v/@eclipse-lyra/core" alt="npm @eclipse-lyra/core" /></a>
-  <a href="https://github.com/eclipse-lyra/core/blob/main/LICENSE"><img src="https://img.shields.io/github/license/eclipse-lyra/core" alt="License EPL-2.0" /></a>
+  <a href="https://deepwiki.com/eclipse-docks/core"><img src="https://deepwiki.com/badge.svg" alt="DeepWiki" /></a>
+  <a href="https://github.com/eclipse-docks/core/actions/workflows/ci.yml"><img src="https://github.com/eclipse-docks/core/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://www.npmjs.com/package/@eclipse-docks/core"><img src="https://img.shields.io/npm/v/@eclipse-docks/core" alt="npm @eclipse-docks/core" /></a>
+  <a href="https://github.com/eclipse-docks/core/blob/main/LICENSE"><img src="https://img.shields.io/github/license/eclipse-docks/core" alt="License EPL-2.0" /></a>
 </p>
 
-# Eclipse Lyra
+# Eclipse Docks
 
-Eclipse Lyra is a runtime web platform for building modular, extensible desktop- and dashboard-style web applications, running fully in the browser and integrating with any existing backend.
+Eclipse Docks is a runtime web platform for building modular, extensible desktop- and dashboard-style web applications, running fully in the browser and integrating with any existing backend.
 
 **Demo app:** [https://app.kispace.de](https://app.kispace.de)
 
 **Docs:** [https://app.kispace.de/docs/](https://app.kispace.de/docs/)
 
-**DeepWiki (interactive docs):** [talk to the code and architecture](https://deepwiki.com/eclipse-lyra/core) — the recommended way to explore internals and ask questions about the codebase.
+**DeepWiki (interactive docs):** [talk to the code and architecture](https://deepwiki.com/eclipse-docks/core) — the recommended way to explore internals and ask questions about the codebase.
 
 ---
 
 ## How to get started
 
-### Create a new Lyra app (recommended)
+### Create a new Docks app (recommended)
 
-Use the official scaffolder to create a new Eclipse Lyra app (monorepo with app + example extension):
+Use the official scaffolder to create a new Eclipse Docks app (monorepo with app + example extension):
 
 ```bash
-npm create @eclipse-lyra/app my-app
+npm create @eclipse-docks/app my-app
 cd my-app
 npm run dev
 ```
 
 This gives you a project with:
 
-- `packages/app` — your Lyra app (configure logo, layout, and extensions).
+- `packages/app` — your Docks app (configure logo, layout, and extensions).
 - `packages/example-extension` — a sample extension that adds a view to the left sidebar.
 
 Common places to start customizing:
@@ -45,15 +45,15 @@ Common places to start customizing:
 
 ### Explore and learn the internals
 
-- Use **DeepWiki** at [https://deepwiki.com/eclipse-lyra/core](https://deepwiki.com/eclipse-lyra/core) to ask questions about architecture, services, and extension points directly against the codebase.
+- Use **DeepWiki** at [https://deepwiki.com/eclipse-docks/core](https://deepwiki.com/eclipse-docks/core) to ask questions about architecture, services, and extension points directly against the codebase.
 - Browse the docs at [https://app.kispace.de/docs/](https://app.kispace.de/docs/) for conceptual overviews and examples.
 
 ### Advanced: work on this repo
 
-If you want to work on the Lyra core itself or run the default example app from this repository:
+If you want to work on the Docks core itself or run the default example app from this repository:
 
 ```bash
-git clone https://github.com/eclipse-lyra/core.git
+git clone https://github.com/eclipse-docks/core.git
 cd core
 npm install
 npm run dev
@@ -72,7 +72,7 @@ npm run build:app    # build the default app (depends on core)
 
 ## Architecture (for app authors)
 
-At a high level, a downstream Lyra app wires together an app definition, extensions, and the core services and UI components.
+At a high level, a downstream Docks app wires together an app definition, extensions, and the core services and UI components.
 
 ```mermaid
 flowchart TD
@@ -86,16 +86,16 @@ flowchart TD
 - **App** — defines which extensions are enabled, which layout to use, and high-level contributions (tabs, toolbars, views).
 - **Extensions** — feature bundles that register views, commands, and services for your domain.
 - **Registries** — keep track of extensions, UI contributions, and commands so they can be enabled, disabled, or remapped per app.
-- **UI components** — Lit-based `lyra-*` components plus WebAwesome UI primitives.
+- **UI components** — Lit-based `docks-*` components plus WebAwesome UI primitives.
 - **Core services** — workspace, settings, editors, tasks, events, and dependency injection.
 
-For a deeper, more detailed tour of the architecture (including concepts like contribution remapping), use **DeepWiki** on the `eclipse-lyra/core` project or see the docs under `docs/concepts/`.
+For a deeper, more detailed tour of the architecture (including concepts like contribution remapping), use **DeepWiki** on the `eclipse-docks/core` project or see the docs under `docs/concepts/`.
 
 ### Monorepo layout
 
 | Path | Role |
 |------|------|
-| **`packages/core`** (`@eclipse-lyra/core`) | Platform: registries, services, parts, widgets, dialogs, default UI contributions. No extension logic; extensions are separate packages. |
+| **`packages/core`** (`@eclipse-docks/core`) | Platform: registries, services, parts, widgets, dialogs, default UI contributions. No extension logic; extensions are separate packages. |
 | **`packages/extension-*`** | One package per extension (e.g. `extension-ai-system`, `extension-settings-tree`, `extension-monaco-editor`). Each depends on core and registers commands/contributions/editors. |
 | **`packages/app`** | Default app: imports core + extensions, defines `AppDefinition` and `extensions[]`, registers with app loader. Use as template for your own app. |
 | **`packages/app-e2e`** | Playwright harness only: minimal Vite app + specs under `packages/app-e2e/e2e/`. Not the product demo. Run `npm run test:e2e` from the repo root. |
@@ -103,7 +103,7 @@ For a deeper, more detailed tour of the architecture (including concepts like co
 
 ### Testing
 
-- **Unit:** `npm run test` — Vitest in `@eclipse-lyra/core`.
+- **Unit:** `npm run test` — Vitest in `@eclipse-docks/core`.
 - **E2E:** `npm run test:e2e` — Playwright against the minimal shell in `packages/app-e2e` (headless by default; CI runs the same command). See [packages/app-e2e/README.md](packages/app-e2e/README.md) for how the harness is wired and why (e.g. extension load order for auxiliary tabs).
 
 ### Main concepts
@@ -119,7 +119,7 @@ For a deeper, more detailed tour of the architecture (including concepts like co
 
 ## Technology stack
 
-Eclipse Lyra is built on a lightweight, browser-native stack:
+Eclipse Docks is built on a lightweight, browser-native stack:
 
 - **Lit** — Web components for core and extensions ([Lit docs](https://lit.dev/)).
 - **WebAwesome** — UI primitives and theming.
@@ -132,12 +132,12 @@ Optional extensions add capabilities like the Monaco editor, Pyodide, WebLLM, We
 
 ## Comparison with other frameworks
 
-For those comparing frameworks, here is how Eclipse Lyra lines up with Angular, React, and Vue on common dimensions.
+For those comparing frameworks, here is how Eclipse Docks lines up with Angular, React, and Vue on common dimensions.
 
-| Dimension | **Eclipse Lyra** | **Angular** | **React** | **Vue** |
+| Dimension | **Eclipse Docks** | **Angular** | **React** | **Vue** |
 | --------- | ------------ | ----------- | --------- | ------- |
 | **Paradigm** | App framework for IDE-like and dashboard-like apps; declarative contributions (tabs, toolbars, commands) | Full framework; components + services + modules | Library; components + hooks | Progressive framework; SFCs + composition API |
-| **Component tech** | Lit web components (`lyra-*` custom elements) | Angular components (decorators/templates) | JSX/TSX components | Single-File Components (`.vue`) or JSX |
+| **Component tech** | Lit web components (`docks-*` custom elements) | Angular components (decorators/templates) | JSX/TSX components | Single-File Components (`.vue`) or JSX |
 | **Templating** | Lit `html` tagged templates | HTML-like templates + directives | JSX | HTML-like template or JSX |
 | **TypeScript** | First-class; strict, declarations published | First-class; full TS support | Supported (TS + React types) | First-class; full TS in SFC and script |
 | **State management** | `@lit-labs/signals` in core; `watchSignal()`; signals for app state (active part, editor, selection, tasks) | RxJS + services; optional NgRx/Akita | useState/useReducer; ecosystem (Redux, Zustand, Jotai) | reactivity (ref, reactive); Pinia optional |
@@ -148,7 +148,7 @@ For those comparing frameworks, here is how Eclipse Lyra lines up with Angular, 
 | **Testing** | Vitest (unit tests in core); Playwright E2E harness (`packages/app-e2e`) | Jasmine/Karma or Jest; Angular Testing Library | Jest + React Testing Library; Vitest | Jest/Vitest + Vue Test Utils |
 | **Build / Bundling** | Vite 7; core as library (ES, multiple entries); app as Vite SPA | Angular CLI (esbuild/webpack) | Vite, Create React App, Next.js, etc. | Vite (default), Vue CLI, Nuxt |
 | **Runtime footprint** | **Browser-native** tech stack (Lit, standard DOM, Web APIs); **very lightweight** runtime; no heavy framework runtime layer | Full framework runtime; larger baseline | Small library; ecosystem can add weight | Small core; ecosystem can add weight |
-| **CLI** | `npm create @eclipse-lyra/app` (scaffold new app); npm scripts: dev, build, build:app, test | Angular CLI (generate, build, serve) | Create React App, Vite templates | Vue CLI, create-vue; Nuxt CLI |
+| **CLI** | `npm create @eclipse-docks/app` (scaffold new app); npm scripts: dev, build, build:app, test | Angular CLI (generate, build, serve) | Create React App, Vite templates | Vue CLI, create-vue; Nuxt CLI |
 | **SSR** | Client-only; no app-level SSR | Angular Universal | Next.js, Remix, etc. | Nuxt, Vite SSR |
 | **Styling / Theming** | WebAwesome themes (theme classes, palettes); CSS in components | Encapsulated CSS; Angular Material theming | CSS Modules, styled-components, Tailwind | Scoped CSS; Vuetify/Quasar theming |
 | **Dependency injection** | Built-in: `rootContext`, `uiContext`; services (appLoader, commandRegistry, workspace, settings, etc.) | Built-in hierarchical injector | Context API or external (Inversify, etc.) | provide/inject (composition API) |
@@ -160,8 +160,8 @@ For those comparing frameworks, here is how Eclipse Lyra lines up with Angular, 
 
 ## Repository and license
 
-- **Repository:** [github.com/eclipse-lyra/core](https://github.com/eclipse-lyra/core)
+- **Repository:** [github.com/eclipse-docks/core](https://github.com/eclipse-docks/core)
 - **License:** EPL-2.0 (see [LICENSE](LICENSE) and [NOTICE](NOTICE))
 - **Contributing:** See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-Publishing of `@eclipse-lyra/core` and extensions is done via GitHub Actions on version tags; see workflow and npm trusted publishing in the repo.
+Publishing of `@eclipse-docks/core` and extensions is done via GitHub Actions on version tags; see workflow and npm trusted publishing in the repo.

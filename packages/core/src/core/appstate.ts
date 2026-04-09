@@ -1,12 +1,12 @@
 import { signal } from '@lit-labs/signals';
-import { LyraPart } from "../parts/part";
+import { DocksPart } from "../parts/part";
 
 export const EMPTY_SIGNALPORT = {} as any
 
-export const activePartSignal = signal<LyraPart>(null as unknown as LyraPart)
-export const activeEditorSignal = signal<LyraPart>(null as unknown as LyraPart)
+export const activePartSignal = signal<DocksPart>(null as unknown as DocksPart)
+export const activeEditorSignal = signal<DocksPart>(null as unknown as DocksPart)
 
-export const partDirtySignal = signal<LyraPart>(null as unknown as LyraPart)
+export const partDirtySignal = signal<DocksPart>(null as unknown as DocksPart)
 
 export const activeTasksSignal = signal<number>(0)
 

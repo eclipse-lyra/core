@@ -1,14 +1,14 @@
 import { customElement, property, state } from 'lit/decorators.js';
-import { LyraPart, type EditorInput, type EditorContentProvider, toastError, toastInfo, confirmDialog, publish, contributionRegistry, subscribe, unsubscribe, TOPIC_CONTRIBUTEIONS_CHANGED, taskService } from '@eclipse-lyra/core';
+import { DocksPart, type EditorInput, type EditorContentProvider, toastError, toastInfo, confirmDialog, publish, contributionRegistry, subscribe, unsubscribe, TOPIC_CONTRIBUTEIONS_CHANGED, taskService } from '@eclipse-docks/core';
 import type {
   SqlAdapterContribution,
   SqlConnectionInfo,
   SqlDatabase,
-} from '@eclipse-lyra/extension-sqleditor';
+} from '@eclipse-docks/extension-sqleditor';
 import { sqlExtensionManagerService } from './sql-extension-manager';
 import { css, html } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { LyraMonacoWidget } from '@eclipse-lyra/extension-monaco-editor/widget';
+import { DocksMonacoWidget } from '@eclipse-docks/extension-monaco-editor/widget';
 
 const MAX_TAB_LABEL = 28;
 
@@ -18,8 +18,8 @@ function truncateLabel(sql: string): string {
   return `${oneLine.slice(0, MAX_TAB_LABEL)}…`;
 }
 
-@customElement('lyra-sql-editor')
-export class LyraSqlEditor extends LyraPart implements EditorContentProvider {
+@customElement('docks-sql-editor')
+export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
   @property({ attribute: false })
   public input?: EditorInput;
 
@@ -47,7 +47,7 @@ export class LyraSqlEditor extends LyraPart implements EditorContentProvider {
   @state()
   private selectedConnectionId: string | null = null;
 
-  private widgetRef = createRef<LyraMonacoWidget>();
+  private widgetRef = createRef<DocksMonacoWidget>();
   private databases = new Map<string, SqlDatabase>();
   private unsubscribeContributionsToken?: string;
 
@@ -513,14 +513,14 @@ export class LyraSqlEditor extends LyraPart implements EditorContentProvider {
 
     return html`
       <div class="editor-area">
-        <lyra-monaco-widget
+        <docks-monaco-widget
           .value=${this.initialContent}
           .uri=${this.initialUri}
           .language=${'sql'}
           .readOnly=${this.readOnly}
           @content-change=${this._onContentChange}
           ${ref(this.widgetRef)}
-        ></lyra-monaco-widget>
+        ></docks-monaco-widget>
       </div>
     `;
   }
@@ -547,7 +547,7 @@ export class LyraSqlEditor extends LyraPart implements EditorContentProvider {
       flex-direction: column;
       overflow: hidden;
     }
-    .editor-area lyra-monaco-widget,
+    .editor-area docks-monaco-widget,
     .editor-area monaco-widget {
       flex: 1;
       min-height: 0;
@@ -561,7 +561,7 @@ export class LyraSqlEditor extends LyraPart implements EditorContentProvider {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lyra-sql-editor': LyraSqlEditor;
+    'docks-sql-editor': DocksSqlEditor;
   }
 }
 

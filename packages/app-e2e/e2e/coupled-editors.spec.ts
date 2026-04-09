@@ -4,10 +4,10 @@ async function openAiConfigWithAuxOnAiAssistant(page: Page) {
     // Boot harness and wait for auxiliary strip.
     await page.goto('/');
 
-    const layout = page.locator('lyra-standard-layout');
+    const layout = page.locator('docks-standard-layout');
     await expect(layout).toBeVisible({ timeout: 120_000 });
 
-    const auxTabs = page.locator('lyra-tabs#sidebar-auxiliary');
+    const auxTabs = page.locator('docks-tabs#sidebar-auxiliary');
     await expect(auxTabs).toBeVisible({ timeout: 30_000 });
 
     // Tabs: AI Assistant (aiview), real coupled panel, decoy with wrong editor id.
@@ -33,7 +33,7 @@ async function openAiConfigWithAuxOnAiAssistant(page: Page) {
     await expect(aiConfigButton).toBeVisible({ timeout: 30_000 });
     await aiConfigButton.click();
 
-    const aiEditor = page.locator('lyra-tabs#editor-area-main lyra-ai-config-editor');
+    const aiEditor = page.locator('docks-tabs#editor-area-main docks-ai-config-editor');
     await expect(aiEditor).toBeVisible({ timeout: 30_000 });
 
     return { auxTabs, coupledTab, coupledPanel, decoyTab, decoyPanel };

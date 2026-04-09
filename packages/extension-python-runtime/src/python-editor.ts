@@ -1,16 +1,16 @@
 import { customElement, property, state } from "lit/decorators.js";
-import { LyraPart } from "@eclipse-lyra/core";
+import { DocksPart } from "@eclipse-docks/core";
 import { css, html } from "lit";
 import { createRef, ref } from "lit/directives/ref.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { EditorInput, EditorContentProvider } from "@eclipse-lyra/core";
-import { LyraMonacoWidget } from '@eclipse-lyra/extension-monaco-editor/widget';
+import { EditorInput, EditorContentProvider } from "@eclipse-docks/core";
+import { DocksMonacoWidget } from '@eclipse-docks/extension-monaco-editor/widget';
 import { PyEnv, pythonPackageManagerService } from "./api";
 import { parsePackagesFromContent, contentWithPackagesLine } from "./editor-python-run";
-import { toastError } from "@eclipse-lyra/core";
+import { toastError } from "@eclipse-docks/core";
 
-@customElement("lyra-python-editor")
-export class LyraPythonEditor extends LyraPart implements EditorContentProvider {
+@customElement("docks-python-editor")
+export class DocksPythonEditor extends DocksPart implements EditorContentProvider {
     @property({ attribute: false })
     public input?: EditorInput;
     @property({ type: Boolean })
@@ -30,7 +30,7 @@ export class LyraPythonEditor extends LyraPart implements EditorContentProvider 
     @state()
     private pyVersion?: string;
 
-    private widgetRef = createRef<LyraMonacoWidget>();
+    private widgetRef = createRef<DocksMonacoWidget>();
 
     protected async doInitUI() {
         const file = this.input!.data;
@@ -225,14 +225,14 @@ export class LyraPythonEditor extends LyraPart implements EditorContentProvider 
             return html`<div class="monaco-editor-placeholder"></div>`;
         }
         return html`
-            <lyra-monaco-widget
+            <docks-monaco-widget
                 .value=${this.initialContent}
                 .uri=${this.initialUri}
                 .language=${"python"}
                 .readOnly=${this.readOnly}
                 @content-change=${this._onContentChange}
                 ${ref(this.widgetRef)}
-            ></lyra-monaco-widget>
+            ></docks-monaco-widget>
         `;
     }
 
@@ -253,6 +253,6 @@ export class LyraPythonEditor extends LyraPart implements EditorContentProvider 
 
 declare global {
     interface HTMLElementTagNameMap {
-        "lyra-python-editor": LyraPythonEditor;
+        "docks-python-editor": DocksPythonEditor;
     }
 }

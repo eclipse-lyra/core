@@ -111,7 +111,7 @@ function createWorkspaceRequest(op: string, path?: string, extra?: Record<string
     });
 }
 
-function createLyraBridge() {
+function createDocksBridge() {
     return {
         read_file: (path: string, binary?: boolean) =>
             createWorkspaceRequest('read', path, { binary: !!binary }),
@@ -245,18 +245,18 @@ async function initPyodide(payload: { vars?: any }) {
         }
     });
     
-    const lyraBridge = createLyraBridge();
-    pyodide.globals.set('__lyra_bridge__', lyraBridge);
-    // make the bridge available to the Python code as a module: > import lyra
+    const docksBridge = createDocksBridge();
+    pyodide.globals.set('__docks_bridge__', docksBridge);
+    // make the bridge available to the Python code as a module: > import docks
     pyodide.runPython(`
 import sys
 import types
-__bridge__ = __lyra_bridge__
-__m__ = types.ModuleType('lyra')
+__bridge__ = __docks_bridge__
+__m__ = types.ModuleType('docks')
 for __a__ in ('read_file', 'write_file', 'list_dir', 'exists', 'is_file', 'is_dir', 'get_uri', 'revoke_uri', 'fetch', 'uri'):
     setattr(__m__, __a__, getattr(__bridge__, __a__))
-sys.modules['lyra'] = __m__
-del __lyra_bridge__, __bridge__, __m__, __a__
+sys.modules['docks'] = __m__
+del __docks_bridge__, __bridge__, __m__, __a__
 `);
 
     if (payload.vars) {

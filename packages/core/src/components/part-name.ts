@@ -1,5 +1,5 @@
 import {customElement} from "lit/decorators.js";
-import {LyraElement} from "../parts/element";
+import {DocksElement} from "../parts/element";
 import {html} from "lit";
 import {activePartSignal} from "../core/appstate";
 import {contributionRegistry, HTMLContribution} from "../core/contributionregistry";
@@ -10,11 +10,11 @@ import {i18n} from "../core/i18n";
 const t = await i18n(import.meta.glob('./partname*.json'));
 
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM_CENTER, {
-    component: "<lyra-part-name></lyra-part-name>"
+    component: "<docks-part-name></docks-part-name>"
 } as HTMLContribution)
 
-@customElement('lyra-part-name')
-export class LyraPartName extends LyraElement {
+@customElement('docks-part-name')
+export class DocksPartName extends DocksElement {
     protected doBeforeUI() {
         this.watch(activePartSignal, () => {
             this.requestUpdate();
@@ -48,7 +48,7 @@ export class LyraPartName extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-part-name': LyraPartName
+        'docks-part-name': DocksPartName
     }
 }
 

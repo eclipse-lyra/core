@@ -4,8 +4,8 @@ import {
     appLoaderService,
     contributionRegistry,
     type HTMLContribution,
-} from '@eclipse-lyra/core';
-import { html } from '@eclipse-lyra/core/externals/lit';
+} from '@eclipse-docks/core';
+import { html } from '@eclipse-docks/core/externals/lit';
 
 import './extensions';
 import './e2e-coupled-panel';
@@ -29,7 +29,7 @@ contributionRegistry.registerContribution(SIDEBAR_AUXILIARY, {
 });
 
 contributionRegistry.registerContribution(TOOLBAR_MAIN, {
-    label: 'Lyra E2E',
+    label: 'Docks E2E',
     slot: 'start',
     component: () => html`
     <div
@@ -42,7 +42,7 @@ contributionRegistry.registerContribution(TOOLBAR_MAIN, {
     >
       <img
         src="/logo.svg"
-        alt="Lyra E2E"
+        alt="Docks E2E"
         style="display: block; height: 28px; width: auto;"
       />
     </div>
@@ -52,10 +52,10 @@ contributionRegistry.registerContribution(TOOLBAR_MAIN, {
 const appRoot = document.getElementById('app-root') ?? document.body;
 appLoaderService.registerApp(
     {
-        name: 'Lyra E2E',
+        name: 'Docks E2E',
         description: 'Playwright harness — not the product demo.',
         layoutId: 'standard-full',
-        extensions: ['@eclipse-lyra/extension-ai-system', '@eclipse-lyra/extension-monaco-editor'],
+        extensions: ['@eclipse-docks/extension-ai-system', '@eclipse-docks/extension-monaco-editor'],
     },
     { autoStart: true, hostConfig: true, container: appRoot },
 );

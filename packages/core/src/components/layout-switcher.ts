@@ -1,11 +1,11 @@
 import { html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { LyraElement } from "../parts/element";
+import { DocksElement } from "../parts/element";
 import { appLoaderService } from "../core/apploader";
 import { icon } from '../core/icon-utils';
 
-@customElement('lyra-layout-switcher')
-export class LyraLayoutSwitcher extends LyraElement {
+@customElement('docks-layout-switcher')
+export class DocksLayoutSwitcher extends DocksElement {
     @state()
     private currentLayoutId = 'standard';
 
@@ -80,6 +80,6 @@ export class LyraLayoutSwitcher extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-layout-switcher': LyraLayoutSwitcher;
+        'docks-layout-switcher': DocksLayoutSwitcher;
     }
 }

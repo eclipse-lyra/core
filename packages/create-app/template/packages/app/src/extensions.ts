@@ -4,13 +4,13 @@
  * in module URLs (servers often map .ts to video/mp2t MIME type).
  * Add or remove imports when you add or remove extensions from the app config.
  */
-import '@eclipse-lyra/extension-ai-system';
-import '@eclipse-lyra/extension-command-palette';
-import '@eclipse-lyra/extension-catalog';
-import '@eclipse-lyra/extension-md-editor';
-import '@eclipse-lyra/extension-media-viewer';
-import '@eclipse-lyra/extension-memory-usage';
-import '@eclipse-lyra/extension-monaco-editor';
-import '@eclipse-lyra/extension-settings-tree';
-import '@eclipse-lyra/extension-utils';
+import '@eclipse-docks/extension-ai-system';
+import '@eclipse-docks/extension-command-palette';
+import '@eclipse-docks/extension-catalog';
+import '@eclipse-docks/extension-md-editor';
+import '@eclipse-docks/extension-media-viewer';
+import '@eclipse-docks/extension-memory-usage';
+import '@eclipse-docks/extension-monaco-editor';
+import '@eclipse-docks/extension-settings-tree';
+import '@eclipse-docks/extension-utils';
 import 'example-extension';

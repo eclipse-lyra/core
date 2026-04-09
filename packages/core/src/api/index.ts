@@ -7,7 +7,7 @@
 //
 // Usage:
 //   import { appLoaderService, commandRegistry, createLogger } from '../api/index.ts';
-//   import { LyraPart, LyraContainer } from '../api/index.ts';
+//   import { DocksPart, DocksContainer } from '../api/index.ts';
 //   import { AppDefinition } from '../api/index.ts';
 
 // Bootstrap framework when API is first accessed

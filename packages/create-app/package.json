@@ -1,7 +1,7 @@
 {
-  "name": "@eclipse-lyra/create-app",
+  "name": "@eclipse-docks/create-app",
   "version": "0.0.0",
-  "description": "Scaffold a new Eclipse Lyra app (monorepo with app + example extension)",
+  "description": "Scaffold a new Eclipse Docks app (monorepo with app + example extension)",
   "type": "module",
   "bin": "index.js",
   "files": [
@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   },
   "license": "EPL-2.0"
 }

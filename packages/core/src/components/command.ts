@@ -1,6 +1,6 @@
 import { css, html, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { LyraWidget } from '../widgets/widget'
+import { DocksWidget } from '../widgets/widget'
 import { icon } from '../core/icon-utils'
 import { keyBindingManager } from '../core/keybindings'
 import { contributionRegistry, Contribution, CommandContribution, HTMLContribution, ContributionChangeEvent, TOPIC_CONTRIBUTEIONS_CHANGED } from '../core/contributionregistry'
@@ -8,8 +8,8 @@ import { subscribe } from '../core/events'
 import { Signal } from '@lit-labs/signals'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 
-@customElement('lyra-command')
-export class LyraCommand extends LyraWidget {
+@customElement('docks-command')
+export class DocksCommand extends DocksWidget {
     @property()
     cmd: string = ''
 
@@ -113,13 +113,13 @@ export class LyraCommand extends LyraWidget {
             const commandContribution = contribution as CommandContribution
             const disabled = (commandContribution.disabled as Signal.Computed<boolean>)?.get()
             return html`
-                <lyra-command 
+                <docks-command 
                     cmd="${commandContribution.command}"
                     icon="${commandContribution.icon || ''}"
                     .params=${commandContribution.params || {}}
                     ?disabled="${disabled}">
                     ${commandContribution.label}
-                </lyra-command>
+                </docks-command>
             `
         }
         
@@ -178,14 +178,14 @@ export class LyraCommand extends LyraWidget {
                     
                     ${this.cmd ? html`
                         <wa-divider></wa-divider>
-                        <lyra-command 
+                        <docks-command 
                             cmd="${this.cmd}"
                             icon="${this.icon || ''}"
                             .params=${this.params}
                             ?disabled=${this.disabled}>
                             <slot></slot>
                             ${this.title}
-                        </lyra-command>
+                        </docks-command>
                     ` : nothing}
                 </wa-dropdown>
             `
@@ -230,7 +230,7 @@ export class LyraCommand extends LyraWidget {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-command': LyraCommand
+        'docks-command': DocksCommand
     }
 }
 

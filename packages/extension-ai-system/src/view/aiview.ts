@@ -1,11 +1,11 @@
 import { css, html, nothing, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { LyraPart } from '@eclipse-lyra/core';
+import { DocksPart } from '@eclipse-docks/core';
 import { when } from 'lit/directives/when.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { commandRegistry as globalCommandRegistry } from '@eclipse-lyra/core';
-import { taskService, uiContext, appSettings } from '@eclipse-lyra/core';
-import { toastError } from '@eclipse-lyra/core';
+import { commandRegistry as globalCommandRegistry } from '@eclipse-docks/core';
+import { taskService, uiContext, appSettings } from '@eclipse-docks/core';
+import { toastError } from '@eclipse-docks/core';
 
 import type { ChatMessage, ChatHistory, ChatProvider, TaskPlan, Artifact } from '../core/types';
 import { TOPIC_AICONFIG_CHANGED, KEY_AI_CONFIG } from '../core/constants';
@@ -25,8 +25,8 @@ import './task-progress-panel';
 import './workspace-panel';
 import type { PendingApproval } from './components/ai-tool-approval';
 
-@customElement('lyra-aiview')
-export class LyraAIView extends LyraPart {
+@customElement('docks-aiview')
+export class DocksAIView extends DocksPart {
     private sessionManager = new SessionManager();
     private scrollDebounceTimer?: ReturnType<typeof setTimeout>;
 
@@ -304,13 +304,13 @@ export class LyraAIView extends LyraPart {
 
     private renderMessage(message: ChatMessage, index: number, isStreaming = false): TemplateResult {
         return html`
-            <lyra-ai-chat-message
+            <docks-ai-chat-message
                 .message="${message}"
                 .isStreaming="${isStreaming}"
                 .showHeader="${true}"
                 .messageIndex="${index}"
                 @resend="${(e: CustomEvent) => this.handleResend(e.detail.message)}">
-            </lyra-ai-chat-message>
+            </docks-ai-chat-message>
         `;
     }
 
@@ -346,7 +346,7 @@ export class LyraAIView extends LyraPart {
                     `)}
                 </wa-dropdown>
             ` : nothing}
-            <lyra-command cmd="open_ai_config" icon="gear" title="AI Settings"></lyra-command>
+            <docks-command cmd="open_ai_config" icon="gear" title="AI Settings"></docks-command>
         `;
     }
 
@@ -359,28 +359,28 @@ export class LyraAIView extends LyraPart {
                 <wa-scroller class="chat-messages" orientation="vertical">
                     <div class="chat-content">
                         ${when(!selectedProvider, () => html`
-                            <lyra-ai-empty-state
+                            <docks-ai-empty-state
                                 message="No AI provider configured"
                                 hint='Click the settings icon below to configure an AI provider'>
-                            </lyra-ai-empty-state>
+                            </docks-ai-empty-state>
                         `, () => when(!session || session.history.length === 0, () => html`
-                            <lyra-ai-empty-state message="How can I help you?" hint=""></lyra-ai-empty-state>
+                            <docks-ai-empty-state message="How can I help you?" hint=""></docks-ai-empty-state>
                         `, () => html`
                             ${session!.history.map((message: ChatMessage, idx: number) => {
                                 const group = this.agentGroupManager.findGroupForUserMessage(session!.id, idx, message);
                                 if (group && message.role === 'user') {
                                     return html`
-                                        <lyra-ai-chat-message
+                                        <docks-ai-chat-message
                                             .message="${message}"
                                             .isStreaming="${false}"
                                             .showHeader="${true}"
                                             .messageIndex="${idx}"
                                             @resend="${(e: CustomEvent) => this.handleResend(e.detail.message)}">
-                                        </lyra-ai-chat-message>
-                                        <lyra-ai-agent-response-group
+                                        </docks-ai-chat-message>
+                                        <docks-ai-agent-response-group
                                             .group="${group}"
                                             .findStreamingMessage="${(role: string) => this.streamManager.findStreamingMessage(role)}">
-                                        </lyra-ai-agent-response-group>
+                                        </docks-ai-agent-response-group>
                                     `;
                                 }
 
@@ -405,24 +405,24 @@ export class LyraAIView extends LyraPart {
                         `))}
 
                         ${when(this.currentTaskPlan, () => html`
-                            <lyra-ai-task-progress-panel .plan="${this.currentTaskPlan}"></lyra-ai-task-progress-panel>
+                            <docks-ai-task-progress-panel .plan="${this.currentTaskPlan}"></docks-ai-task-progress-panel>
                         `)}
 
                         ${when(this.currentArtifacts.length > 0, () => html`
-                            <lyra-ai-workspace-panel .artifacts="${this.currentArtifacts}"></lyra-ai-workspace-panel>
+                            <docks-ai-workspace-panel .artifacts="${this.currentArtifacts}"></docks-ai-workspace-panel>
                         `)}
                     </div>
                 </wa-scroller>
 
                 ${when(this.pendingToolApprovals.size > 0, () => html`
-                    <lyra-ai-tool-approval
+                    <docks-ai-tool-approval
                         .pendingApprovals="${this.pendingToolApprovals}"
                         @approve="${(e: CustomEvent) => this.handleToolApproval(e)}">
-                    </lyra-ai-tool-approval>
+                    </docks-ai-tool-approval>
                 `)}
 
                 <div class="input-area">
-                    <lyra-ai-chat-input
+                    <docks-ai-chat-input
                         .value="${this.inputValue}"
                         .busy="${this.busy}"
                         .disabled="${!selectedProvider}"
@@ -430,7 +430,7 @@ export class LyraAIView extends LyraPart {
                         @input-change="${(e: CustomEvent) => { this.inputValue = e.detail.value; }}"
                         @send="${(e: CustomEvent) => { this.inputValue = e.detail.value; this.sendMessage(); }}"
                         @cancel="${() => this.cancelStream()}">
-                    </lyra-ai-chat-input>
+                    </docks-ai-chat-input>
                 </div>
             </div>
         `;
@@ -485,6 +485,6 @@ export class LyraAIView extends LyraPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-aiview': LyraAIView;
+        'docks-aiview': DocksAIView;
     }
 }

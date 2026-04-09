@@ -1,6 +1,6 @@
 import { customElement, property, state } from "lit/decorators.js";
 import { css, html, nothing } from "lit";
-import { LyraPart, EditorInput, editorRegistry, File } from "@eclipse-lyra/core";
+import { DocksPart, EditorInput, editorRegistry, File } from "@eclipse-docks/core";
 
 const SUPPORTED_EXTENSIONS = [
     '.pdf',
@@ -62,14 +62,14 @@ editorRegistry.registerEditorInputHandler({
             state: {},
         } as EditorInput
         editorInput.component = (id: string) => html`
-            <lyra-media-viewer id="${id}" .input=${editorInput}></lyra-media-viewer>`
+            <docks-media-viewer id="${id}" .input=${editorInput}></docks-media-viewer>`
         return editorInput;
     },
     ranking: 1000
 })
 
-@customElement('lyra-media-viewer')
-export class LyraMediaViewer extends LyraPart {
+@customElement('docks-media-viewer')
+export class DocksMediaViewer extends DocksPart {
     protected scrollMode: 'scroller' | 'native' = 'native';
     @property({attribute: false})
     public input?: EditorInput
@@ -288,7 +288,7 @@ export class LyraMediaViewer extends LyraPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-media-viewer': LyraMediaViewer
+        'docks-media-viewer': DocksMediaViewer
     }
 }
 

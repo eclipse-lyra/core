@@ -2,10 +2,10 @@ import type {
   NotebookExecutionResult,
   NotebookKernel,
   NotebookKernelContribution,
-} from '@eclipse-lyra/extension-notebook';
-import { TARGET_NOTEBOOK_KERNELS } from '@eclipse-lyra/extension-notebook';
+} from '@eclipse-docks/extension-notebook';
+import { TARGET_NOTEBOOK_KERNELS } from '@eclipse-docks/extension-notebook';
 import { duckdbSqlAdapterContribution } from './duckdb-sqldatabase';
-import type { SqlDatabase } from '@eclipse-lyra/extension-sqleditor';
+import type { SqlDatabase } from '@eclipse-docks/extension-sqleditor';
 
 function formatResult(columns: string[], rows: unknown[][]): string {
   if (columns.length === 0 && rows.length === 0) return '';

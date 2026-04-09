@@ -5,7 +5,7 @@ import {
     commandRegistry,
     contributionRegistry,
     TOOLBAR_MAIN_RIGHT,
-} from "@eclipse-lyra/core";
+} from "@eclipse-docks/core";
 import "./settings-tree";
 
 export default (_uiContext: unknown) => {
@@ -16,7 +16,7 @@ export default (_uiContext: unknown) => {
         canHandle: (input: EditorInput) => input.key === '.system.settings',
         handle: async (input: EditorInput) => {
             input.component = (id: string) => html`
-                <lyra-settings-tree id="${id}" .input=${input}></lyra-settings-tree>
+                <docks-settings-tree id="${id}" .input=${input}></docks-settings-tree>
             `;
             return input;
         },

@@ -1,5 +1,5 @@
-import { contributionRegistry } from "@eclipse-lyra/core";
-import type { ExecutionContext } from "@eclipse-lyra/core";
+import { contributionRegistry } from "@eclipse-docks/core";
+import type { ExecutionContext } from "@eclipse-docks/core";
 import type { AgentContribution } from "../core/interfaces";
 import { CID_AGENTS } from "../core/constants";
 

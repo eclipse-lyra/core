@@ -1,8 +1,8 @@
 import { css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { createRef, ref, Ref } from "lit/directives/ref.js";
-import { LyraPart } from "@eclipse-lyra/core";
-import { i18n } from "@eclipse-lyra/core";
+import { DocksPart } from "@eclipse-docks/core";
+import { i18n } from "@eclipse-docks/core";
 import { runShellLine, type RunResult } from "./shell-runner";
 
 const t = await i18n(import.meta.glob("./commandshell*.json"));
@@ -13,8 +13,8 @@ export interface ShellHistoryEntry {
   timestamp: Date;
 }
 
-@customElement("lyra-command-shell")
-export class LyraCommandShell extends LyraPart {
+@customElement("docks-command-shell")
+export class DocksCommandShell extends DocksPart {
   @state()
   private inputValue = "";
 
@@ -117,9 +117,9 @@ export class LyraCommandShell extends LyraPart {
 
   protected renderToolbar() {
     return html`
-      <lyra-command icon="trash" title="${t.COMMANDSHELL_CLEAR}" .action=${() => this.clearOutput()}>
+      <docks-command icon="trash" title="${t.COMMANDSHELL_CLEAR}" .action=${() => this.clearOutput()}>
         ${t.COMMANDSHELL_CLEAR}
-      </lyra-command>
+      </docks-command>
     `;
   }
 
@@ -208,6 +208,6 @@ export class LyraCommandShell extends LyraPart {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "lyra-command-shell": LyraCommandShell;
+    "docks-command-shell": DocksCommandShell;
   }
 }

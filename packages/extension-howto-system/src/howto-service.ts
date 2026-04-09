@@ -1,7 +1,7 @@
-import { contributionRegistry, TOPIC_CONTRIBUTEIONS_CHANGED } from '@eclipse-lyra/core';
+import { contributionRegistry, TOPIC_CONTRIBUTEIONS_CHANGED } from '@eclipse-docks/core';
 import { HowToContribution, HowToStep } from './howto-contribution';
-import { subscribe } from '@eclipse-lyra/core';
-import { createLogger } from '@eclipse-lyra/core';
+import { subscribe } from '@eclipse-docks/core';
+import { createLogger } from '@eclipse-docks/core';
 import { Signal } from '@lit-labs/signals';
 
 const logger = createLogger('HowToService');

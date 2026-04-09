@@ -1,10 +1,10 @@
 import {customElement, property, state} from "lit/decorators.js";
-import {LyraPart} from "@eclipse-lyra/core";
+import {DocksPart} from "@eclipse-docks/core";
 import {html} from "lit";
 import {marked} from "marked";
-import {EditorInput, editorRegistry} from "@eclipse-lyra/core";
+import {EditorInput, editorRegistry} from "@eclipse-docks/core";
 import {unsafeHTML} from "lit/directives/unsafe-html.js";
-import {File} from "@eclipse-lyra/core";
+import {File} from "@eclipse-docks/core";
 
 editorRegistry.registerEditorInputHandler({
     editorId: "system.md-editor",
@@ -20,14 +20,14 @@ editorRegistry.registerEditorInputHandler({
             state: {},
         } as EditorInput
         editorInput.component = (id: string) => html`
-            <lyra-md-editor id="${id}" .input=${editorInput}></lyra-md-editor>`
+            <docks-md-editor id="${id}" .input=${editorInput}></docks-md-editor>`
         return editorInput;
     },
     ranking: 1000
 })
 
-@customElement('lyra-md-editor')
-export class LyraMDEditor extends LyraPart {
+@customElement('docks-md-editor')
+export class DocksMDEditor extends DocksPart {
     @property({attribute: false})
     public input?: EditorInput
     @state()

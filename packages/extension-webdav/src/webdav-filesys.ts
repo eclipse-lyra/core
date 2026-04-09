@@ -7,9 +7,9 @@ import {
     FileContentType,
     TOPIC_WORKSPACE_CHANGED,
     workspaceService
-} from '@eclipse-lyra/core';
+} from '@eclipse-docks/core';
 import { WebDAVClient, WebDAVResource, type WebDAVConnectionInfo } from './webdav-client';
-import { publish } from '@eclipse-lyra/core';
+import { publish } from '@eclipse-docks/core';
 
 export class WebDAVFileResource extends File {
     private client: WebDAVClient;

@@ -1,8 +1,8 @@
 import { html } from "lit";
-import type { EditorInput } from "@eclipse-lyra/core";
-import { File } from "@eclipse-lyra/core";
-import { activeEditorSignal } from "@eclipse-lyra/core";
-import type { ExecutionContext } from "@eclipse-lyra/core";
+import type { EditorInput } from "@eclipse-docks/core";
+import { File } from "@eclipse-docks/core";
+import { activeEditorSignal } from "@eclipse-docks/core";
+import type { ExecutionContext } from "@eclipse-docks/core";
 import { registerNotebookCatalog } from "./notebook-catalog";
 import { NotebookData, isNotebookEditorLike } from "./notebook-types";
 import { TARGET_NOTEBOOK_KERNELS } from "./notebook-kernel-api";
@@ -58,7 +58,7 @@ export default ({ editorRegistry, commandRegistry, contributionRegistry }: any) 
     editorRegistry.registerEditorInputHandler({
         editorId: "system.notebooeditor",
         label: "Jupyter Notebook",
-        icon: "lyra jupyter",
+        icon: "docks jupyter",
         lazyInit: () => import('./notebook-runtime'),
         canHandle: (input: any) => input instanceof File && input.getName().toLowerCase().endsWith(".ipynb"),
         handle: async (input: File) => {
@@ -66,11 +66,11 @@ export default ({ editorRegistry, commandRegistry, contributionRegistry }: any) 
                 title: input.getWorkspacePath(),
                 data: input,
                 key: input.getWorkspacePath(),
-                icon: "lyra jupyter",
+                icon: "docks jupyter",
                 state: {},
             } as EditorInput;
             editorInput.component = (id: string) => html`
-                <lyra-notebook-editor id="${id}" .input=${editorInput}></lyra-notebook-editor>`;
+                <docks-notebook-editor id="${id}" .input=${editorInput}></docks-notebook-editor>`;
             return editorInput;
         },
         ranking: 100,
@@ -78,7 +78,7 @@ export default ({ editorRegistry, commandRegistry, contributionRegistry }: any) 
 
     contributionRegistry.registerContribution('filebrowser.create', {
         label: 'Jupyter Notebook',
-        icon: 'lyra jupyter',
+        icon: 'docks jupyter',
         command: 'touch',
         params: {
             path: "notebook.ipynb",

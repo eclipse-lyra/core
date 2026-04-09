@@ -1,24 +1,24 @@
 import { customElement, property, state } from 'lit/decorators.js';
 import { css, html, TemplateResult, nothing } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { LyraPart } from '@eclipse-lyra/core';
-import { EditorInput } from '@eclipse-lyra/core';
+import { DocksPart } from '@eclipse-docks/core';
+import { EditorInput } from '@eclipse-docks/core';
 import { documentIndexService, IndexedDocument } from './document-index-service';
 import { searchWorkspaceDocuments, RAGSearchResult } from './rag-service';
-import { workspaceService, File } from '@eclipse-lyra/core';
-import { createLogger } from '@eclipse-lyra/core';
+import { workspaceService, File } from '@eclipse-docks/core';
+import { createLogger } from '@eclipse-docks/core';
 import { getWorkspacePath } from './utils/workspace-utils';
 import { SnippetExtractor } from './utils/snippet-extractor';
 import { CONTENT_PREVIEW_LENGTHS, SNIPPET_LENGTHS } from './utils/constants';
-import { toastError, toastInfo } from '@eclipse-lyra/core';
-import { taskService } from '@eclipse-lyra/core';
-import { editorRegistry } from '@eclipse-lyra/core';
+import { toastError, toastInfo } from '@eclipse-docks/core';
+import { taskService } from '@eclipse-docks/core';
+import { editorRegistry } from '@eclipse-docks/core';
 
 const logger = createLogger('RAGSystemManager');
 const snippetExtractor = new SnippetExtractor();
 
-@customElement('lyra-rag-system-manager')
-export class LyraRAGSystemManager extends LyraPart {
+@customElement('docks-rag-system-manager')
+export class DocksRAGSystemManager extends DocksPart {
     @property({ attribute: false })
     public input?: EditorInput;
 
@@ -110,7 +110,7 @@ export class LyraRAGSystemManager extends LyraPart {
         // Try getting from event detail first (as per extensions pattern)
         let selection = e.detail?.selection || [];
 
-        // If no selection in detail, try getting from tree element directly (as per lyra-filebrowser pattern)
+        // If no selection in detail, try getting from tree element directly (as per docks-filebrowser pattern)
         if (selection.length === 0 && this.treeRef.value) {
             // @ts-ignore
             selection = this.treeRef.value.selectedItems || [];
@@ -378,7 +378,7 @@ export class LyraRAGSystemManager extends LyraPart {
 
     private formatFileSize(bytes: number): string {
         if (bytes < 1024) return `${bytes} B`;
-        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} LyraB`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} MiB`;
         return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
 
@@ -451,23 +451,23 @@ export class LyraRAGSystemManager extends LyraPart {
                 </wa-select>
             ` : nothing}
             
-            <lyra-command 
+            <docks-command 
                 size="small" 
                 icon="arrow-rotate-right"
                 title="Refresh document list"
                 .action=${() => this.loadDocuments()}
                 ?disabled=${this.reindexing}>
                 Refresh
-            </lyra-command>
+            </docks-command>
             
-            <lyra-command 
+            <docks-command 
                 size="small" 
                 icon="database"
                 title="Re-index all documents"
                 .action=${() => this.reindexAllDocuments()}
                 ?disabled=${this.reindexing || this.loading}>
                 ${this.reindexing ? 'Reindexing...' : 'Re-index All'}
-            </lyra-command>
+            </docks-command>
         `;
     }
 
@@ -865,7 +865,7 @@ export class LyraRAGSystemManager extends LyraPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-rag-system-manager': LyraRAGSystemManager;
+        'docks-rag-system-manager': DocksRAGSystemManager;
     }
 }
 

@@ -2,7 +2,7 @@
  * GitHub API service for fetching release information
  */
 
-import { appLoaderService } from '@eclipse-lyra/core';
+import { appLoaderService } from '@eclipse-docks/core';
 
 export interface GitHubRelease {
     tag_name: string;

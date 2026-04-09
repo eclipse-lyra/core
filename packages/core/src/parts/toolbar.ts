@@ -1,6 +1,6 @@
 import {css, html, nothing} from 'lit'
 import {customElement, property, state} from 'lit/decorators.js'
-import {LyraElement} from "./element";
+import {DocksElement} from "./element";
 import {styleMap} from 'lit/directives/style-map.js';
 import {
     CommandContribution,
@@ -42,8 +42,8 @@ function renderButtonGroup(
     `;
 }
 
-@customElement('lyra-toolbar')
-export class LyraToolbar extends LyraElement {
+@customElement('docks-toolbar')
+export class DocksToolbar extends DocksElement {
     @property()
     private position: "start" | "center" | "end" = "start";
 
@@ -270,6 +270,6 @@ export class LyraToolbar extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-toolbar': LyraToolbar
+        'docks-toolbar': DocksToolbar
     }
 }

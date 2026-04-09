@@ -1,4 +1,4 @@
-import { Contribution } from '@eclipse-lyra/core';
+import { Contribution } from '@eclipse-docks/core';
 
 /**
  * HowTo Contribution System

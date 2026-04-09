@@ -2,7 +2,7 @@ import {publish} from "./events";
 import {persistenceService} from "./persistenceservice";
 import {rootContext} from "./di";
 
-export const SETTINGS_FILE_PATH = ".geospace/settings.json"
+export const SETTINGS_FILE_PATH = ".eclipse-docks/settings.json"
 
 export const DIALOG_SETTINGS_KEY = "dialogSettings"
 

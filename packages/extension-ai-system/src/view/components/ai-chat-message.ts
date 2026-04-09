@@ -5,7 +5,7 @@ import { when } from 'lit/directives/when.js';
 import { marked } from 'marked';
 import type { ChatMessage } from '../../core/types';
 
-@customElement('lyra-ai-chat-message')
+@customElement('docks-ai-chat-message')
 export class AIChatMessage extends LitElement {
     @property({ type: Object, attribute: false })
     public message?: ChatMessage;
@@ -251,6 +251,6 @@ export class AIChatMessage extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-ai-chat-message': AIChatMessage;
+        'docks-ai-chat-message': AIChatMessage;
     }
 }

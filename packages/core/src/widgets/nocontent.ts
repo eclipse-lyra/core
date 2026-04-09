@@ -1,10 +1,10 @@
 import {css, html} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 
-import {LyraWidget} from "./widget";
+import {DocksWidget} from "./widget";
 
-@customElement('lyra-no-content')
-export class LyraNoContent extends LyraWidget {
+@customElement('docks-no-content')
+export class DocksNoContent extends DocksWidget {
 
     @property()
     private message: string = "No content.";
@@ -43,6 +43,6 @@ export class LyraNoContent extends LyraWidget {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-no-content': LyraNoContent
+        'docks-no-content': DocksNoContent
     }
 }

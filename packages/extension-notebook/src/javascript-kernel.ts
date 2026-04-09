@@ -1,4 +1,4 @@
-import { createJsRuntime, type JsRuntime } from '@eclipse-lyra/core';
+import { createJsRuntime, type JsRuntime } from '@eclipse-docks/core';
 import type { NotebookExecutionResult, NotebookKernel, NotebookKernelContribution } from './notebook-kernel-api';
 
 class JavaScriptNotebookKernel implements NotebookKernel {

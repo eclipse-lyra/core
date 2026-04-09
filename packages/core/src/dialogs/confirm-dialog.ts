@@ -1,11 +1,11 @@
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { LyraDialogContent } from "../parts/dialog-content";
+import { DocksDialogContent } from "../parts/dialog-content";
 import { contributionRegistry } from "../core/contributionregistry";
 import { DIALOG_CONTRIBUTION_TARGET, OK_BUTTON, CANCEL_BUTTON, DialogContribution, dialogService } from "../core/dialogservice";
 
-@customElement('lyra-confirm-dialog-content')
-export class LyraConfirmDialogContent extends LyraDialogContent {
+@customElement('docks-confirm-dialog-content')
+export class DocksConfirmDialogContent extends DocksDialogContent {
     @property({ type: String })
     message: string = '';
 
@@ -25,7 +25,7 @@ export class LyraConfirmDialogContent extends LyraDialogContent {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-confirm-dialog-content': LyraConfirmDialogContent;
+        'docks-confirm-dialog-content': DocksConfirmDialogContent;
     }
 }
 
@@ -39,10 +39,10 @@ contributionRegistry.registerContribution(DIALOG_CONTRIBUTION_TARGET, {
         }
         
         return html`
-            <lyra-confirm-dialog-content 
+            <docks-confirm-dialog-content 
                 .message="${state.message}"
                 .markdown="${state.markdown}"
-            ></lyra-confirm-dialog-content>
+            ></docks-confirm-dialog-content>
         `;
     },
     onButton: async (id: string, result: any, state?: any) => {

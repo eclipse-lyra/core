@@ -2,13 +2,13 @@ import {css, html, unsafeCSS} from 'lit'
 import {customElement} from 'lit/decorators.js'
 import {createRef, ref} from "lit/directives/ref.js";
 import styles from "@xterm/xterm/css/xterm.css?raw";
-import {LyraElement} from "@eclipse-lyra/core";
+import {DocksElement} from "@eclipse-docks/core";
 
 // @ts-ignore
 const CheerpX = window.CheerpX;
 
-@customElement('lyra-linux-terminal')
-export class LyraLinuxTerminal extends LyraElement {
+@customElement('docks-linux-terminal')
+export class DocksLinuxTerminal extends DocksElement {
     private consoleRef = createRef()
 
     protected async doInitUI() {
@@ -78,6 +78,6 @@ export class LyraLinuxTerminal extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-linux-terminal': LyraLinuxTerminal
+        'docks-linux-terminal': DocksLinuxTerminal
     }
 }

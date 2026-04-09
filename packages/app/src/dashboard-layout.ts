@@ -1,5 +1,5 @@
 import "./dashboard-views";
-import { html } from "@eclipse-lyra/core/externals/lit";
+import { html } from "@eclipse-docks/core/externals/lit";
 import {
     contributionRegistry,
     type HTMLContribution,
@@ -7,11 +7,11 @@ import {
     SYSTEM_VIEWS,
     SYSTEM_LAYOUTS,
     TOOLBAR_MAIN_RIGHT,
-    LyraPart,
+    DocksPart,
     EDITOR_AREA_MAIN,
     commandRegistry,
-} from "@eclipse-lyra/core";
-import { customElement } from "@eclipse-lyra/core/externals/lit";
+} from "@eclipse-docks/core";
+import { customElement } from "@eclipse-docks/core/externals/lit";
 
 const dashboardLogo = () => html`
     <div style="padding: var(--wa-space-m); display: flex; justify-content: center; min-width: 48px; min-height: 48px; box-sizing: border-box;">
@@ -30,8 +30,8 @@ contributionRegistry.registerContribution("dashboard-toolbar-top", {
     component: dashboardLogo
 } as HTMLContribution);
 
-@customElement('lyra-view-wrapper')
-export class LyraViewWrapper extends LyraPart {
+@customElement('docks-view-wrapper')
+export class DocksViewWrapper extends DocksPart {
     protected renderContent() {
         return html`<slot></slot>`
     }
@@ -55,9 +55,9 @@ const makeView = (
 });
 
 const viewDefs: [string, string, string, ViewComponent, boolean][] = [
-    ["dashboard-home", "Overview", "house", () => html`<lyra-dashboard-welcome></lyra-dashboard-welcome>`, false],
-    ["dashboard-tasks", "My Tasks", "list-check", () => html`<lyra-dashboard-my-tasks></lyra-dashboard-my-tasks>`, true],
-    ["dashboard-meetings", "Meetings", "calendar-days", () => html`<lyra-dashboard-meetings></lyra-dashboard-meetings>`, true],
+    ["dashboard-home", "Overview", "house", () => html`<docks-dashboard-welcome></docks-dashboard-welcome>`, false],
+    ["dashboard-tasks", "My Tasks", "list-check", () => html`<docks-dashboard-my-tasks></docks-dashboard-my-tasks>`, true],
+    ["dashboard-meetings", "Meetings", "calendar-days", () => html`<docks-dashboard-meetings></docks-dashboard-meetings>`, true],
 ];
 
 for (const [name, label, icon, component, closable] of viewDefs) {
@@ -113,14 +113,14 @@ const dashboardShellTemplate = () =>
 
     <div class="dashboard-shell">
       <div class="toolbar-top">
-        <lyra-toolbar id="dashboard-toolbar-top"></lyra-toolbar>
-        <lyra-toolbar id="dashboard-toolbar-top-center"></lyra-toolbar>
-        <lyra-toolbar id=${TOOLBAR_MAIN_RIGHT}></lyra-toolbar>
+        <docks-toolbar id="dashboard-toolbar-top"></docks-toolbar>
+        <docks-toolbar id="dashboard-toolbar-top-center"></docks-toolbar>
+        <docks-toolbar id=${TOOLBAR_MAIN_RIGHT}></docks-toolbar>
       </div>
-      <lyra-resizable-grid class="dashboard-main" orientation="horizontal" sizes="15%, 85%">
-        <lyra-toolbar id="dashboard-views" size="large" orientation="vertical"></lyra-toolbar>
-        <lyra-tabs style="padding: 10px;" id=${EDITOR_AREA_MAIN}></lyra-tabs>
-      </lyra-resizable-grid>
+      <docks-resizable-grid class="dashboard-main" orientation="horizontal" sizes="15%, 85%">
+        <docks-toolbar id="dashboard-views" size="large" orientation="vertical"></docks-toolbar>
+        <docks-tabs style="padding: 10px;" id=${EDITOR_AREA_MAIN}></docks-tabs>
+      </docks-resizable-grid>
     </div>`;
 
 contributionRegistry.registerContribution(SYSTEM_LAYOUTS, {

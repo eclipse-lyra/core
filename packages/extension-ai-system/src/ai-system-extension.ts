@@ -1,12 +1,12 @@
 import { html } from 'lit';
-import { rootContext } from '@eclipse-lyra/core';
+import { rootContext } from '@eclipse-docks/core';
 import { aiService } from './service/ai-service';
-import { contributionRegistry } from '@eclipse-lyra/core';
-import type { HTMLContribution } from '@eclipse-lyra/core';
-import { editorRegistry } from '@eclipse-lyra/core';
-import type { EditorInput } from '@eclipse-lyra/core';
-import { registerAll, appSettings } from '@eclipse-lyra/core';
-import { TOOLBAR_BOTTOM, TOOLBAR_MAIN_RIGHT, SIDEBAR_AUXILIARY } from '@eclipse-lyra/core';
+import { contributionRegistry } from '@eclipse-docks/core';
+import type { HTMLContribution } from '@eclipse-docks/core';
+import { editorRegistry } from '@eclipse-docks/core';
+import type { EditorInput } from '@eclipse-docks/core';
+import { registerAll, appSettings } from '@eclipse-docks/core';
+import { TOOLBAR_BOTTOM, TOOLBAR_MAIN_RIGHT, SIDEBAR_AUXILIARY } from '@eclipse-docks/core';
 import { CID_AGENTS, KEY_AI_CONFIG } from './core/constants';
 import type { AgentContribution, AgentToolsConfig } from './core/interfaces';
 import type { AIConfig } from './core/types';
@@ -22,7 +22,7 @@ contributionRegistry.registerContribution(SIDEBAR_AUXILIARY, {
     name: 'aiview',
     label: 'AI Assistant',
     icon: 'robot',
-    component: (id: string) => html`<lyra-aiview id="${id}"></lyra-aiview>`
+    component: (id: string) => html`<docks-aiview id="${id}"></docks-aiview>`
 });
 
 contributionRegistry.registerContribution(CID_AGENTS, {
@@ -44,7 +44,7 @@ contributionRegistry.registerContribution(CID_AGENTS, {
 contributionRegistry.registerContribution(TOOLBAR_BOTTOM, {
     target: TOOLBAR_BOTTOM,
     label: 'Token Usage',
-    component: '<lyra-token-usage></lyra-token-usage>'
+    component: '<docks-token-usage></docks-token-usage>'
 } as HTMLContribution);
 
 editorRegistry.registerEditorInputHandler({
@@ -53,7 +53,7 @@ editorRegistry.registerEditorInputHandler({
     ranking: 1000,
     canHandle: (input: EditorInput) => input.key === '.system.ai-config',
     handle: async (input: EditorInput) => {
-        input.component = (id: string) => html`<lyra-ai-config-editor id="${id}" .input=${input}></lyra-ai-config-editor>`;
+        input.component = (id: string) => html`<docks-ai-config-editor id="${id}" .input=${input}></docks-ai-config-editor>`;
         return input;
     }
 });

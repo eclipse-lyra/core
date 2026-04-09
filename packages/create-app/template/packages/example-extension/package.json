@@ -10,7 +10,7 @@
     }
   },
   "dependencies": {
-    "@eclipse-lyra/core": "^0.x"
+    "@eclipse-docks/core": "^0.x"
   },
   "devDependencies": {
     "typescript": "^6.0.0",

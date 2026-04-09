@@ -1,4 +1,4 @@
-import type { ExecutionContext, Contribution, DependencyContext } from "@eclipse-lyra/core";
+import type { ExecutionContext, Contribution, DependencyContext } from "@eclipse-docks/core";
 import type {
     ChatMessage, ChatHistory, ChatProvider, ToolDefinition, StreamChunk, ToolCall,
     WorkflowExecution, ApiMessage, TokenUsage, ArtifactType, TaskPlan, TaskStep,

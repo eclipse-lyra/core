@@ -12,9 +12,9 @@ Object.defineProperty(LitElement.prototype, "model", {
     writable: true
 });
 
-const LyraWidgetBase = SignalWatcher(LitElement) as unknown as typeof LitElement;
+const DocksWidgetBase = SignalWatcher(LitElement) as unknown as typeof LitElement;
 
-export abstract class LyraWidget extends LyraWidgetBase {
+export abstract class DocksWidget extends DocksWidgetBase {
     static finalizeStyles(styles?: CSSResultGroup) {
         return [waTreeLabelSlotStretch, ...super.finalizeStyles(styles)];
     }

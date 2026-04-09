@@ -10,7 +10,7 @@ const TEMPLATE_DIR = join(__dirname, 'template');
 
 function parseArgs() {
   const args = process.argv.slice(2).filter((a) => !a.startsWith('--'));
-  const projectDir = args[0] || 'my-lyra-app';
+  const projectDir = args[0] || 'my-docks-app';
   const yes = process.argv.includes('--yes') || process.argv.includes('-y');
   return { projectDir, yes };
 }
@@ -26,14 +26,14 @@ function main() {
   }
 
   if (!existsSync(TEMPLATE_DIR)) {
-    console.error('Error: Template directory not found. Reinstall @eclipse-lyra/create-app.');
+    console.error('Error: Template directory not found. Reinstall @eclipse-docks/create-app.');
     process.exit(1);
   }
 
   console.log(`Creating app in ${targetDir}...`);
   mkdirSync(targetDir, { recursive: true });
   cpSync(TEMPLATE_DIR, targetDir, { recursive: true });
-  const appDescription = `${appName} – Application built with Eclipse Lyra.`;
+  const appDescription = `${appName} – Application built with Eclipse Docks.`;
 
   const rootPkgPath = join(targetDir, 'package.json');
   const rootPkg = JSON.parse(readFileSync(rootPkgPath, 'utf8'));

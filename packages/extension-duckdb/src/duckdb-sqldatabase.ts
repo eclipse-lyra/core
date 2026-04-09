@@ -7,7 +7,7 @@ import type {
   SqlConnectionInfo,
   SqlDatabase,
   SqlDatabaseExtensionInfo,
-} from '@eclipse-lyra/extension-sqleditor';
+} from '@eclipse-docks/extension-sqleditor';
 
 class DuckdbSqlDatabase implements SqlDatabase {
   readonly engineId = 'duckdb';

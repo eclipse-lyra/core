@@ -1,4 +1,4 @@
-import { css, html, LitElement, customElement } from "@eclipse-lyra/core/externals/lit";
+import { css, html, LitElement, customElement } from "@eclipse-docks/core/externals/lit";
 
 interface Meeting {
     title: string;
@@ -16,7 +16,7 @@ const SAMPLE_MEETINGS: Meeting[] = [
     { title: "Retrospective", start: "11:00", end: "12:00", day: "Fri", location: "Room A" },
 ];
 
-@customElement("lyra-dashboard-meetings")
+@customElement("docks-dashboard-meetings")
 export class DashboardMeetings extends LitElement {
     static styles = css`
         :host {

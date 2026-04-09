@@ -1,18 +1,18 @@
 import { css, html, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { createRef, ref, Ref } from 'lit/directives/ref.js'
-import { LyraWidget } from '../widgets/widget'
+import { DocksWidget } from '../widgets/widget'
 import { icon } from '../core/icon-utils'
 import { contributionRegistry, TabContribution, ContributionChangeEvent, TOPIC_CONTRIBUTEIONS_CHANGED } from '../core/contributionregistry'
 import { subscribe } from '../core/events'
 import { Signal } from '@lit-labs/signals'
-import { LyraTabs } from '../parts/tabs'
+import { DocksTabs } from '../parts/tabs'
 import { i18n } from '../core/i18n'
 
 const t = await i18n(import.meta.glob('./fastviews*.json'));
 
-@customElement('lyra-fastviews')
-export class LyraFastViews extends LyraWidget {
+@customElement('docks-fastviews')
+export class DocksFastViews extends DocksWidget {
     @property()
     target: string = ''
 
@@ -47,7 +47,7 @@ export class LyraFastViews extends LyraWidget {
     private drawerSize: string = '50vw'
 
     private drawerRef: Ref<HTMLElement> = createRef()
-    private tabsRef: Ref<LyraTabs> = createRef()
+    private tabsRef: Ref<DocksTabs> = createRef()
     private resizeHandleRef: Ref<HTMLElement> = createRef()
 
     private resizing: {
@@ -66,7 +66,7 @@ export class LyraFastViews extends LyraWidget {
         if (this.disabled) return
 
         if (this.containerId) {
-            const tabContainer = document.querySelector(`lyra-tabs#${this.containerId}`) as LyraTabs | null
+            const tabContainer = document.querySelector(`docks-tabs#${this.containerId}`) as DocksTabs | null
             if (!tabContainer) {
                 console.error(`fastviews: Tab container with id "${this.containerId}" not found`)
                 return
@@ -259,11 +259,11 @@ export class LyraFastViews extends LyraWidget {
                         class="resize-handle"
                         @mousedown=${this.startResize}>
                     </div>
-                    <lyra-tabs 
+                    <docks-tabs 
                         ${ref(this.tabsRef)}
                         id="${this.getDrawerTabsId()}"
                         style="width: 100%; height: 100%; display: flex; flex-direction: column;">
-                    </lyra-tabs>
+                    </docks-tabs>
                 </wa-drawer>
             ` : nothing}
         `
@@ -308,7 +308,7 @@ export class LyraFastViews extends LyraWidget {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-fastviews': LyraFastViews
+        'docks-fastviews': DocksFastViews
     }
 }
 

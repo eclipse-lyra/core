@@ -1,5 +1,5 @@
-import type { Command, ExecutionContext } from "@eclipse-lyra/core";
-import { commandRegistry } from "@eclipse-lyra/core";
+import type { Command, ExecutionContext } from "@eclipse-docks/core";
+import { commandRegistry } from "@eclipse-docks/core";
 import type { ToolCall, ToolResult } from "../core/types";
 import { ToolCallAccumulator } from "./tool-call-accumulator";
 import { sanitizeFunctionName } from "./tool-name-utils";

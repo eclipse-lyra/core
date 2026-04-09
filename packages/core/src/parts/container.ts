@@ -1,4 +1,4 @@
-import {LyraElement} from "./element";
+import {DocksElement} from "./element";
 
-export abstract class LyraContainer extends LyraElement {
+export abstract class DocksContainer extends DocksElement {
 }

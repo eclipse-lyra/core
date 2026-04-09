@@ -2,17 +2,17 @@ import { css, html, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { PropertyValues } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { LyraWidget } from '@eclipse-lyra/core';
+import { DocksWidget } from '@eclipse-docks/core';
 import { howToService } from './howto-service';
 import { HowToContribution, HowToStep } from './howto-contribution';
-import { subscribe } from '@eclipse-lyra/core';
-import { commandRegistry } from '@eclipse-lyra/core';
-import { toastError, toastInfo } from '@eclipse-lyra/core';
+import { subscribe } from '@eclipse-docks/core';
+import { commandRegistry } from '@eclipse-docks/core';
+import { toastError, toastInfo } from '@eclipse-docks/core';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
-import { TOPIC_CONTRIBUTEIONS_CHANGED } from '@eclipse-lyra/core';
+import { TOPIC_CONTRIBUTEIONS_CHANGED } from '@eclipse-docks/core';
 import { HOWTO_CONTRIBUTION_TARGET } from './howto-service';
-import { appSettings } from '@eclipse-lyra/core';
-import { workspaceService, TOPIC_WORKSPACE_CONNECTED } from '@eclipse-lyra/core';
+import { appSettings } from '@eclipse-docks/core';
+import { workspaceService, TOPIC_WORKSPACE_CONNECTED } from '@eclipse-docks/core';
 
 // Event topic for showing the HowTo panel
 export const TOPIC_SHOW_HOWTO_PANEL = 'howto/show-panel';
@@ -30,8 +30,8 @@ interface StepState {
     postConditionMet?: boolean;
 }
 
-@customElement('lyra-howto-panel')
-export class LyraHowToPanel extends LyraWidget {
+@customElement('docks-howto-panel')
+export class DocksHowToPanel extends DocksWidget {
     @state()
     private contributions: HowToContribution[] = [];
 

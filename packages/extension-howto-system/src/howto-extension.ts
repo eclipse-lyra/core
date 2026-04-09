@@ -1,13 +1,13 @@
-import { createLogger } from '@eclipse-lyra/core';
-import { rootContext } from '@eclipse-lyra/core';
+import { createLogger } from '@eclipse-docks/core';
+import { rootContext } from '@eclipse-docks/core';
 import { howToService } from './howto-service';
 import { HOWTO_CONTRIBUTION_TARGET } from './howto-service';
 import './contributions/onboarding-howto-contributions';
 import './contributions/ai-setup-howto-contributions';
 import { TOPIC_SHOW_HOWTO_PANEL, TOPIC_TOGGLE_HOWTO_PANEL } from './howto-panel';
-import { registerAll } from '@eclipse-lyra/core';
-import { publish } from '@eclipse-lyra/core';
-import { TOOLBAR_BOTTOM_END } from '@eclipse-lyra/core';
+import { registerAll } from '@eclipse-docks/core';
+import { publish } from '@eclipse-docks/core';
+import { TOOLBAR_BOTTOM_END } from '@eclipse-docks/core';
 import './howto-panel';
 
 const logger = createLogger('HowToExtension');
@@ -34,12 +34,12 @@ export default function howToExtension(context: any) {
     // Ensure the panel is added to the DOM
     const ensurePanelInDOM = () => {
         // Check if panel already exists
-        if (document.querySelector('lyra-howto-panel')) {
+        if (document.querySelector('docks-howto-panel')) {
             return;
         }
 
         // Create and append the panel
-        const panel = document.createElement('lyra-howto-panel');
+        const panel = document.createElement('docks-howto-panel');
         document.body.appendChild(panel);
         logger.info('HowTo panel added to DOM');
     };

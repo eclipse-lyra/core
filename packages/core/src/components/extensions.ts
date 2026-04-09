@@ -1,7 +1,7 @@
 import {css, html} from 'lit'
 import {when} from "lit/directives/when.js";
 import {customElement, state} from 'lit/decorators.js'
-import { LyraPart } from "../parts/part";
+import { DocksPart } from "../parts/part";
 import {Extension, extensionRegistry, TOPIC_EXTENSIONS_CHANGED} from "../core/extensionregistry";
 import { icon } from '../core/icon-utils';
 import {subscribe} from "../core/events";
@@ -13,13 +13,13 @@ import {esmShService, EsmShSource} from "../core/esmsh-service";
 import {taskService} from "../core/taskservice";
 import {createLogger} from "../core/logger";
 
-const logger = createLogger('LyraExtensions');
+const logger = createLogger('DocksExtensions');
 
 const t = await i18n(import.meta.glob('./extensions*.json'));
 
 
-@customElement('lyra-extensions')
-export class LyraExtensions extends LyraPart {
+@customElement('docks-extensions')
+export class DocksExtensions extends DocksPart {
     @state()
     private selectedExtension?: Extension;
 
@@ -646,6 +646,6 @@ export class LyraExtensions extends LyraPart {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-extensions': LyraExtensions
+        'docks-extensions': DocksExtensions
     }
 }

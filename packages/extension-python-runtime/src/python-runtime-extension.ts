@@ -6,8 +6,8 @@ import {
     File,
     type EditorInput,
     contributionRegistry,
-} from "@eclipse-lyra/core";
-import { TARGET_NOTEBOOK_KERNELS } from "@eclipse-lyra/extension-notebook";
+} from "@eclipse-docks/core";
+import { TARGET_NOTEBOOK_KERNELS } from "@eclipse-docks/extension-notebook";
 import { html } from "lit";
 
 type EditorWithLanguage = { isLanguage?(lang: string): boolean };
@@ -71,7 +71,7 @@ registerAll({
 editorRegistry.registerEditorInputHandler({
     editorId: "system.python-editor",
     label: "Python",
-    icon: "lyra python",
+    icon: "docks python",
     lazyInit: async () => {
         await import("./python-editor");
     },
@@ -89,7 +89,7 @@ editorRegistry.registerEditorInputHandler({
         };
 
         editorInput.component = (id: string) =>
-            html`<lyra-python-editor id="${id}" .input=${editorInput}></lyra-python-editor>`;
+            html`<docks-python-editor id="${id}" .input=${editorInput}></docks-python-editor>`;
 
         return editorInput;
     },

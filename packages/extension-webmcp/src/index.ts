@@ -1,4 +1,4 @@
-import { extensionRegistry } from "@eclipse-lyra/core";
+import { extensionRegistry } from "@eclipse-docks/core";
 import pkg from "../package.json";
 
 function isModelContextAvailable(): boolean {
@@ -16,6 +16,6 @@ extensionRegistry.registerExtension({
     return import("./webmcp-extension");
   },
   icon: "plug",
-  dependencies: ["@eclipse-lyra/extension-ai-system"],
+  dependencies: ["@eclipse-docks/extension-ai-system"],
   experimental: true,
 });

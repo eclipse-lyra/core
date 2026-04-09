@@ -1,4 +1,4 @@
-import { appLoaderService, contributionRegistry, type HTMLContribution, TOOLBAR_MAIN } from '@eclipse-lyra/core';
+import { appLoaderService, contributionRegistry, type HTMLContribution, TOOLBAR_MAIN } from '@eclipse-docks/core';
 
 import './extensions';
 
@@ -12,15 +12,15 @@ const appRoot = document.getElementById('app-root') ?? document.body;
 appLoaderService.registerApp(
   {
     extensions: [
-      '@eclipse-lyra/extension-utils',
-      '@eclipse-lyra/extension-command-palette',
-      '@eclipse-lyra/extension-catalog',
-      '@eclipse-lyra/extension-md-editor',
-      '@eclipse-lyra/extension-monaco-editor',
-      '@eclipse-lyra/extension-media-viewer',
-      '@eclipse-lyra/extension-settings-tree',
-      '@eclipse-lyra/extension-memory-usage',
-      '@eclipse-lyra/extension-ai-system',
+      '@eclipse-docks/extension-utils',
+      '@eclipse-docks/extension-command-palette',
+      '@eclipse-docks/extension-catalog',
+      '@eclipse-docks/extension-md-editor',
+      '@eclipse-docks/extension-monaco-editor',
+      '@eclipse-docks/extension-media-viewer',
+      '@eclipse-docks/extension-settings-tree',
+      '@eclipse-docks/extension-memory-usage',
+      '@eclipse-docks/extension-ai-system',
       'example-extension',
     ],
   },

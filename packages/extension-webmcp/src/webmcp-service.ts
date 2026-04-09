@@ -3,9 +3,9 @@ import {
   subscribe,
   unsubscribe,
   TOPIC_COMMAND_REGISTERED,
-} from "@eclipse-lyra/core";
-import { ToolRegistry, type ToolDefinition } from "@eclipse-lyra/extension-ai-system/api";
-import type { Command } from "@eclipse-lyra/core";
+} from "@eclipse-docks/core";
+import { ToolRegistry, type ToolDefinition } from "@eclipse-docks/extension-ai-system/api";
+import type { Command } from "@eclipse-docks/core";
 
 export class WebMCPService {
   private readonly toolRegistry = new ToolRegistry();

@@ -1,6 +1,6 @@
-import { html } from '@eclipse-lyra/core/externals/lit';
-import { contributionRegistry, SIDEBAR_MAIN } from '@eclipse-lyra/core';
-import type { TabContribution } from '@eclipse-lyra/core';
+import { html } from '@eclipse-docks/core/externals/lit';
+import { contributionRegistry, SIDEBAR_MAIN } from '@eclipse-docks/core';
+import type { TabContribution } from '@eclipse-docks/core';
 
 contributionRegistry.registerContribution(SIDEBAR_MAIN, {
   name: 'example-view',

@@ -1,6 +1,6 @@
 import { html, render, css } from "lit";
 import { customElement } from "lit/decorators.js";
-import { LyraElement } from "../parts/element";
+import { DocksElement } from "../parts/element";
 import { currentLanguageSignal, supportedLocalesSignal, SETTINGS_KEY_LANGUAGE } from "../core/i18n";
 import { appSettings } from "../core/settingsservice";
 
@@ -117,8 +117,8 @@ export const showLanguageSelectorDialog = async (): Promise<void> => {
     });
 };
 
-@customElement('lyra-language-selector')
-export class LyraLanguageSelector extends LyraElement {
+@customElement('docks-language-selector')
+export class DocksLanguageSelector extends DocksElement {
     static styles = css`
         :host {
             display: inline-block;
@@ -144,7 +144,7 @@ export class LyraLanguageSelector extends LyraElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-language-selector': LyraLanguageSelector;
+        'docks-language-selector': DocksLanguageSelector;
     }
 }
 

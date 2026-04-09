@@ -5,8 +5,8 @@ import {
   contributionRegistry,
   File,
   type EditorInput,
-} from '@eclipse-lyra/core';
-import { PANEL_BOTTOM } from '@eclipse-lyra/core';
+} from '@eclipse-docks/core';
+import { PANEL_BOTTOM } from '@eclipse-docks/core';
 import { dataviewerService } from './dataviewer-service';
 import './dataview-part';
 import type { DataView } from './api';
@@ -19,7 +19,7 @@ contributionRegistry.registerContribution(PANEL_BOTTOM, {
   name: 'view.dataviewer',
   label: 'Data Views',
   icon: 'table',
-  component: (id: string) => html`<lyra-dataview id="${id}"></lyra-dataview>`,
+  component: (id: string) => html`<docks-dataview id="${id}"></docks-dataview>`,
 });
 
 editorRegistry.registerEditorInputHandler({
@@ -43,7 +43,7 @@ editorRegistry.registerEditorInputHandler({
       key: input.getWorkspacePath(),
       icon: 'table',
       state: {},
-      component: () => html`<lyra-data-table .data=${data}></lyra-data-table>`,
+      component: () => html`<docks-data-table .data=${data}></docks-data-table>`,
     };
     return editorInput;
   },

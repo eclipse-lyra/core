@@ -14,10 +14,10 @@ import {
     TOOLBAR_BOTTOM_CENTER,
     TOOLBAR_BOTTOM_END
 } from "../core/constants";
-import {LyraContainer} from "../parts/container";
+import {DocksContainer} from "../parts/container";
 
-@customElement('lyra-standard-layout')
-export class LyraStandardLayout extends LyraContainer {
+@customElement('docks-standard-layout')
+export class DocksStandardLayout extends DocksContainer {
     @property({type: Boolean, attribute: 'show-bottom-sidebar'})
     showBottomSidebar: boolean = false;
 
@@ -71,14 +71,14 @@ export class LyraStandardLayout extends LyraContainer {
                     flex-direction: column;
                 }
                 
-                lyra-standard-layout {
+                docks-standard-layout {
                     display: flex;
                     flex-direction: column;
                     height: 100vh;
                     width: 100%;
                 }
                 
-                lyra-standard-layout .toolbar-top {
+                docks-standard-layout .toolbar-top {
                     width: 100%;
                     display: grid;
                     grid-template-columns: 1fr 2fr 1fr;
@@ -87,7 +87,7 @@ export class LyraStandardLayout extends LyraContainer {
                     flex-shrink: 0;
                 }
                 
-                lyra-standard-layout .toolbar-bottom {
+                docks-standard-layout .toolbar-bottom {
                     width: 100%;
                     border-top: solid var(--wa-border-width-s) var(--wa-color-neutral-border-loud);
                     display: grid;
@@ -99,23 +99,23 @@ export class LyraStandardLayout extends LyraContainer {
                     box-sizing: border-box;
                 }
                 
-                lyra-standard-layout .main-layout {
+                docks-standard-layout .main-layout {
                     flex: 1;
                     min-height: 0;
                 }
                 
-                lyra-standard-layout .toolbar-end {
+                docks-standard-layout .toolbar-end {
                     justify-self: end;
                 }
             </style>
             
             <div class="toolbar-top">
-                <lyra-toolbar id=${TOOLBAR_MAIN}></lyra-toolbar>
-                <lyra-toolbar id=${TOOLBAR_MAIN_CENTER}></lyra-toolbar>
-                <lyra-toolbar class="toolbar-end" id=${TOOLBAR_MAIN_RIGHT}></lyra-toolbar>
+                <docks-toolbar id=${TOOLBAR_MAIN}></docks-toolbar>
+                <docks-toolbar id=${TOOLBAR_MAIN_CENTER}></docks-toolbar>
+                <docks-toolbar class="toolbar-end" id=${TOOLBAR_MAIN_RIGHT}></docks-toolbar>
             </div>
             
-            <lyra-resizable-grid 
+            <docks-resizable-grid 
                 class="main-layout"
                 id="main-layout" 
                 orientation="horizontal" 
@@ -125,15 +125,15 @@ export class LyraStandardLayout extends LyraContainer {
                     ? html`
                         ${this.showBottomSidebar
                             ? html`
-                                <lyra-resizable-grid 
+                                <docks-resizable-grid 
                                     id="left-sidebar-split" 
                                     orientation="vertical" 
                                     sizes="50%, 50%">
-                                    <lyra-tabs id="${SIDEBAR_MAIN}"></lyra-tabs>
-                                    <lyra-tabs id="${SIDEBAR_MAIN_BOTTOM}"></lyra-tabs>
-                                </lyra-resizable-grid>
+                                    <docks-tabs id="${SIDEBAR_MAIN}"></docks-tabs>
+                                    <docks-tabs id="${SIDEBAR_MAIN_BOTTOM}"></docks-tabs>
+                                </docks-resizable-grid>
                             `
-                            : html`<lyra-tabs id="${SIDEBAR_MAIN}"></lyra-tabs>`
+                            : html`<docks-tabs id="${SIDEBAR_MAIN}"></docks-tabs>`
                         }
                     `
                     : nothing
@@ -141,27 +141,27 @@ export class LyraStandardLayout extends LyraContainer {
                 
                 ${this.showBottomPanel
                     ? html`
-                        <lyra-resizable-grid 
+                        <docks-resizable-grid 
                             id="editor-area-split" 
                             orientation="vertical" 
                             sizes="70%, 30%">
-                            <lyra-tabs id="${EDITOR_AREA_MAIN}"></lyra-tabs>
-                            <lyra-tabs id="${PANEL_BOTTOM}"></lyra-tabs>
-                        </lyra-resizable-grid>
+                            <docks-tabs id="${EDITOR_AREA_MAIN}"></docks-tabs>
+                            <docks-tabs id="${PANEL_BOTTOM}"></docks-tabs>
+                        </docks-resizable-grid>
                     `
-                    : html`<lyra-tabs id="${EDITOR_AREA_MAIN}"></lyra-tabs>`
+                    : html`<docks-tabs id="${EDITOR_AREA_MAIN}"></docks-tabs>`
                 }
                 
                 ${this.showAuxSidebar
-                    ? html`<lyra-tabs id="${SIDEBAR_AUXILIARY}"></lyra-tabs>`
+                    ? html`<docks-tabs id="${SIDEBAR_AUXILIARY}"></docks-tabs>`
                     : nothing
                 }
-            </lyra-resizable-grid>
+            </docks-resizable-grid>
             
             <div class="toolbar-bottom">
-                <lyra-toolbar id=${TOOLBAR_BOTTOM}></lyra-toolbar>
-                <lyra-toolbar id=${TOOLBAR_BOTTOM_CENTER}></lyra-toolbar>
-                <lyra-toolbar class="toolbar-end" id=${TOOLBAR_BOTTOM_END}></lyra-toolbar>
+                <docks-toolbar id=${TOOLBAR_BOTTOM}></docks-toolbar>
+                <docks-toolbar id=${TOOLBAR_BOTTOM_CENTER}></docks-toolbar>
+                <docks-toolbar class="toolbar-end" id=${TOOLBAR_BOTTOM_END}></docks-toolbar>
             </div>
         `;
     }
@@ -169,6 +169,6 @@ export class LyraStandardLayout extends LyraContainer {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'lyra-standard-layout': LyraStandardLayout;
+        'docks-standard-layout': DocksStandardLayout;
     }
 }

@@ -1,7 +1,7 @@
 import { EDITOR_AREA_MAIN } from "./constants";
 import { subscribe } from "./events";
 import { TOPIC_WORKSPACE_CONNECTED } from "./filesys";
-import { LyraTabs } from "../parts/tabs";
+import { DocksTabs } from "../parts/tabs";
 import { TabContribution, IconContribution, contributionRegistry, TOPIC_CONTRIBUTEIONS_CHANGED } from "./contributionregistry";
 import { rootContext } from "./di";
 
@@ -185,8 +185,8 @@ class EditorRegistry {
         }
     }
 
-    getEditorArea(): LyraTabs | null {
-        return document.querySelector(`lyra-tabs#${EDITOR_AREA_MAIN}`) as LyraTabs | null
+    getEditorArea(): DocksTabs | null {
+        return document.querySelector(`docks-tabs#${EDITOR_AREA_MAIN}`) as DocksTabs | null
     }
 
     async loadEditor(editorInput: EditorInput | any, preferredEditorId?: string) {

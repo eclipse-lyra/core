@@ -1,10 +1,10 @@
-import { html } from "@eclipse-lyra/core/externals/lit";
-import { contributionRegistry, SIDEBAR_MAIN } from "@eclipse-lyra/core";
-import "./lyra-catalog";
+import { html } from "@eclipse-docks/core/externals/lit";
+import { contributionRegistry, SIDEBAR_MAIN } from "@eclipse-docks/core";
+import "./docks-catalog";
 
 contributionRegistry.registerContribution(SIDEBAR_MAIN, {
     name: "catalog",
     label: "Catalog",
     icon: "book",
-    component: (id: string) => html`<lyra-catalog id="${id}"></lyra-catalog>`,
+    component: (id: string) => html`<docks-catalog id="${id}"></docks-catalog>`,
 } as any);

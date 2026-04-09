@@ -1,5 +1,5 @@
 {
-  "name": "@eclipse-lyra/extension-settings-tree",
+  "name": "@eclipse-docks/extension-settings-tree",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,7 +10,7 @@
     }
   },
   "dependencies": {
-    "@eclipse-lyra/core": "*"
+    "@eclipse-docks/core": "*"
   },
   "devDependencies": {
     "typescript": "^6.0.0",
@@ -27,6 +27,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eclipse-lyra/core"
+    "url": "https://github.com/eclipse-docks/core"
   }
 }

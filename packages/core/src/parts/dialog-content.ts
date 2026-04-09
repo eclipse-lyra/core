@@ -1,9 +1,9 @@
 import { html, TemplateResult, css } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { marked } from "marked";
-import { LyraElement } from "./element";
+import { DocksElement } from "./element";
 
-export abstract class LyraDialogContent extends LyraElement {
+export abstract class DocksDialogContent extends DocksElement {
     static styles = [
         css`
             .dialog-message {

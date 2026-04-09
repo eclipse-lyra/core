@@ -122,7 +122,7 @@ registerAll({
                 key: "system.extensions",
                 icon: "puzzle-piece",
                 state: {},
-                component: (id: string) => html`<lyra-extensions id="${id}"></lyra-extensions>`,
+                component: (id: string) => html`<docks-extensions id="${id}"></docks-extensions>`,
             }
             editorRegistry.loadEditor(editorInput, "extensions-editor").then()
         }

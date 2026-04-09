@@ -1,4 +1,4 @@
-import { extensionRegistry } from '@eclipse-lyra/core';
+import { extensionRegistry } from '@eclipse-docks/core';
 import pkg from '../package.json';
 export type {
   SqlConnectionInfo,

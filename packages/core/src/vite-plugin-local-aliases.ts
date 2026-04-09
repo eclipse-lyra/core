@@ -9,7 +9,7 @@ export interface PackagePattern {
   folderPrefix: string;
 
   /**
-   * Optional package name prefix filter, e.g. "@eclipse-lyra/".
+   * Optional package name prefix filter, e.g. "@eclipse-docks/".
    */
   packageNamePrefix?: string;
 }

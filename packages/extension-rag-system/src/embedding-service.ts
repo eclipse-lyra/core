@@ -1,5 +1,5 @@
-import { createLogger } from '@eclipse-lyra/core';
-import { inBrowserMLService, MLModel, MLTask, type FeatureExtractionPipeline } from '@eclipse-lyra/extension-in-browser-ml/api';
+import { createLogger } from '@eclipse-docks/core';
+import { inBrowserMLService, MLModel, MLTask, type FeatureExtractionPipeline } from '@eclipse-docks/extension-in-browser-ml/api';
 
 const logger = createLogger('EmbeddingService');
 

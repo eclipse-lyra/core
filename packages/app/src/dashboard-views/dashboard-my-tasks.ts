@@ -1,4 +1,4 @@
-import { css, html, LitElement, customElement, state } from "@eclipse-lyra/core/externals/lit";
+import { css, html, LitElement, customElement, state } from "@eclipse-docks/core/externals/lit";
 
 interface TaskItem {
     id: string;
@@ -15,7 +15,7 @@ const SAMPLE_TASKS: TaskItem[] = [
     { id: "5", title: "Sync with design team", done: true },
 ];
 
-@customElement("lyra-dashboard-my-tasks")
+@customElement("docks-dashboard-my-tasks")
 export class DashboardMyTasks extends LitElement {
     @state() private tasks = [...SAMPLE_TASKS];
 
