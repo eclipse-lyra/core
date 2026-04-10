@@ -17,7 +17,7 @@ const deleteDisabled = () => {
 contributionRegistry.registerContribution("filebrowser.create", {
     name: "filebrowser.create.file",
     command: "touch",
-    icon: "file-plus",
+    icon: "docks file-plus",
     label: "Create File...",
     params: { ask: true }
 });

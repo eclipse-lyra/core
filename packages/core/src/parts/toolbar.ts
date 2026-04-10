@@ -209,7 +209,7 @@ export class DocksToolbar extends DocksElement {
             const commandContribution = contribution as CommandContribution;
             const showLabel = !this.compact && !!commandContribution.showLabel;
             return html`
-                <wa-button @click=${() => this.executeCommand(commandContribution.command, commandContribution.params || {})}
+                <wa-button @click=${() => void this.executeCommand(commandContribution.command, commandContribution.params || {})}
                            title=${commandContribution.label}
                            ?disabled="${(commandContribution.disabled as Signal.Computed<boolean>)?.get()}"
                            appearance="plain" size=${this.size}>

@@ -83,7 +83,7 @@ editorRegistry.registerEditorInputHandler({
             title: input.getWorkspacePath(),
             data: input,
             key: input.getWorkspacePath(),
-            icon: "python",
+            icon: editorRegistry.getFileIcon(input.getName()),
             state: {},
             component: () => null as any,
         };

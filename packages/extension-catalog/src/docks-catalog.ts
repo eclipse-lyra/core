@@ -23,6 +23,9 @@ import {
 
 export const CID_CATALOG_ROOT = "catalog.root";
 
+const CATALOG_EMPTY_MESSAGE =
+    "No catalog entries yet. Install or enable extensions that contribute catalog items.";
+
 @customElement("docks-catalog")
 export class DocksCatalog extends DocksPart {
     @state()
@@ -108,7 +111,7 @@ export class DocksCatalog extends DocksPart {
         if (!node) return;
         const wgetParams = this.wgetParamsFromCatalogData(node.data);
         if (wgetParams) {
-            this.executeCommand("wget", wgetParams);
+            void this.executeCommand("wget", wgetParams);
             return;
         }
         if (!node.leaf && "expanded" in item) {
@@ -120,7 +123,7 @@ export class DocksCatalog extends DocksPart {
         const item = activeSelectionSignal.get();
         const wgetParams = item && this.wgetParamsFromCatalogData(item as { url?: string; filename?: string });
         if (wgetParams) {
-            this.executeCommand("wget", wgetParams);
+            void this.executeCommand("wget", wgetParams);
         }
     }
 
@@ -173,16 +176,28 @@ export class DocksCatalog extends DocksPart {
     }
 
     protected renderContent() {
+        const hasItems = (this.rootNodes?.length ?? 0) > 0;
         return html`
-            <wa-tree
-                ${ref(this.treeRef)}
-                @wa-selection-change=${this.nobubble(this.onSelectionChanged)}
-                style="--indent-guide-width: 1px;"
-            >
-                ${this.rootNodes?.map((node) =>
-                    this.createTreeItems(node, true)
-                )}
-            </wa-tree>
+            <div class="catalog-root">
+                ${hasItems
+                    ? html`
+                          <wa-tree
+                              ${ref(this.treeRef)}
+                              @wa-selection-change=${this.nobubble(this.onSelectionChanged)}
+                              style="--indent-guide-width: 1px;"
+                          >
+                              ${this.rootNodes!.map((node) =>
+                                  this.createTreeItems(node, true)
+                              )}
+                          </wa-tree>
+                      `
+                    : html`
+                          <docks-no-content
+                              message=${CATALOG_EMPTY_MESSAGE}
+                              icon="book"
+                          ></docks-no-content>
+                      `}
+            </div>
         `;
     }
 
@@ -190,6 +205,18 @@ export class DocksCatalog extends DocksPart {
         :host {
             display: flex;
             flex-direction: column;
+        }
+
+        .catalog-root {
+            height: 100%;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .catalog-root wa-tree {
+            flex: 1;
+            min-height: 0;
         }
     `;
 }

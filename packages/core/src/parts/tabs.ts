@@ -206,8 +206,10 @@ export class DocksTabs extends DocksContainer {
     }
 
     private ensureTabGroupListenersAndActivate(): void {
-        if (!this.tabGroup.value || this.tabGroupListenersAttached) {
-            this.activateNextAvailableTab();
+        if (!this.tabGroup.value) {
+            return;
+        }
+        if (this.tabGroupListenersAttached) {
             return;
         }
         this.tabGroupListenersAttached = true;

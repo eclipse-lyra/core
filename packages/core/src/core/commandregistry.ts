@@ -58,12 +58,33 @@ export interface ExecuteParams {
 
 export interface Handler {
     canExecute?: (context: ExecutionContext) => boolean;
-    execute: (context: ExecutionContext) => any;
+    execute: (context: ExecutionContext) => any | Promise<any>;
     ranking?: number;  // Higher ranking = higher priority (default: 0)
 }
 
 export interface Commands {
     [commandId: string]: Command
+}
+
+function formatCommandResultForLog(value: unknown): string {
+    if (value === undefined) {
+        return "undefined";
+    }
+    if (value === null) {
+        return "null";
+    }
+    if (typeof value === "string") {
+        return value.length > 300 ? `${value.slice(0, 300)}…` : value;
+    }
+    if (typeof value === "number" || typeof value === "boolean") {
+        return String(value);
+    }
+    try {
+        const s = JSON.stringify(value);
+        return s.length > 300 ? `${s.slice(0, 300)}…` : s;
+    } catch {
+        return String(value);
+    }
 }
 
 export class CommandStack {
@@ -116,7 +137,7 @@ export class CommandRegistry {
         return context;
     }
 
-    execute(commandId: string, context: ExecutionContext = {}) {
+    async execute(commandId: string, context: ExecutionContext = {}) {
         const handlers = this.getHandler(commandId);
 
         if (!handlers) {
@@ -132,8 +153,11 @@ export class CommandRegistry {
         for (const handler of handlers) {
             if (handler.canExecute === undefined || handler.canExecute(context)) {
                 try {
-                    const result: any | Promise<any> = handler.execute(context);
-                    logger.debug(`[CommandRegistry] Command executed successfully: ${commandId} (result: ${result})`);
+                    const raw = handler.execute(context);
+                    const result = await Promise.resolve(raw);
+                    logger.debug(
+                        `[CommandRegistry] Command executed successfully: ${commandId} (result: ${formatCommandResultForLog(result)})`,
+                    );
                     return result;
                 } catch (error) {
                     const errorMsg = error instanceof Error ? error.message : String(error);

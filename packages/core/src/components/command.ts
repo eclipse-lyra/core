@@ -66,7 +66,7 @@ export class DocksCommand extends DocksWidget {
             if (dropdown && dropdown.open !== undefined) {
                 dropdown.open = false;
             }
-            this.executeCommand(this.cmd, this.params);
+            void this.executeCommand(this.cmd, this.params);
         }
     }
 

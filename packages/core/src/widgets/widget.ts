@@ -28,6 +28,7 @@ export abstract class DocksWidget extends DocksWidgetBase {
     }
 
     disconnectedCallback() {
+        this.doClose();
         super.disconnectedCallback();
         this.eventSubscriptions.forEach(token => event_unsubscribe(token));
         this.eventSubscriptions.clear();
@@ -57,13 +58,13 @@ export abstract class DocksWidget extends DocksWidgetBase {
 
     protected command(command: string, state: {} = {}) {
         return () => {
-            this.executeCommand(command, state)
+            void this.executeCommand(command, state);
         };
     }
 
-    protected executeCommand(command: string, params: ExecuteParams) {
+    protected async executeCommand(command: string, params: ExecuteParams) {
         const execContext = commandRegistry.createExecutionContext(params);
-        commandRegistry.execute(command, execContext);
+        await commandRegistry.execute(command, execContext);
     }
 
     protected watch(signal: Signal.State<any> | Signal.Computed<any>, callback: (value: any) => void): void {
@@ -88,6 +89,12 @@ export abstract class DocksWidget extends DocksWidgetBase {
     }
 
     protected doInitUI() {
+    }
+
+    /**
+     * Override to release resources when the element is disconnected (called from {@link disconnectedCallback}).
+     */
+    protected doClose() {
     }
 
     withRefresh(callback: () => void) {

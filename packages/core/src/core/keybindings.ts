@@ -222,15 +222,18 @@ export class KeyBindingManager {
 
         if (bindings && bindings.length > 0) {
             const binding = bindings[0];
-            try {
-                event.preventDefault();
-                event.stopPropagation();
-                const context = commandRegistry.createExecutionContext({});
-                commandRegistry.execute(binding.commandId, context);
-                logger.debug(`Executed command via key binding: ${binding.commandId}`);
-            } catch (error: any) {
-                logger.error(`Failed to execute command ${binding.commandId}: ${error.message}`);
-            }
+            event.preventDefault();
+            event.stopPropagation();
+            const context = commandRegistry.createExecutionContext({});
+            void commandRegistry.execute(binding.commandId, context).then(
+                () => {
+                    logger.debug(`Executed command via key binding: ${binding.commandId}`);
+                },
+                (error: unknown) => {
+                    const msg = error instanceof Error ? error.message : String(error);
+                    logger.error(`Failed to execute command ${binding.commandId}: ${msg}`);
+                },
+            );
         }
     }
 

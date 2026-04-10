@@ -43,22 +43,32 @@ describe('CommandRegistry', () => {
     });
 
     describe('registerHandler / execute', () => {
-        it('throws when executing command with no handlers', () => {
+        it('throws when executing command with no handlers', async () => {
             const cmd = new Command(TEST_ID + '.nohandler', 'Name', 'Desc');
             commandRegistry.registerCommand(cmd);
-            expect(() => commandRegistry.execute(cmd.id, {})).toThrow('No handlers registered');
+            await expect(commandRegistry.execute(cmd.id, {})).rejects.toThrow('No handlers registered');
         });
 
-        it('runs handler and returns result', () => {
+        it('runs handler and returns result', async () => {
             const cmd = new Command(TEST_ID + '.run', 'Name', 'Desc');
             commandRegistry.registerCommand(cmd);
             const handler: Handler = { execute: (ctx: ExecutionContext) => ctx.params?.x };
             commandRegistry.registerHandler(cmd.id, handler);
-            const result = commandRegistry.execute(cmd.id, { params: { x: 42 } });
+            const result = await commandRegistry.execute(cmd.id, { params: { x: 42 } });
             expect(result).toBe(42);
         });
 
-        it('uses first handler that canExecute', () => {
+        it('awaits async handler and returns resolved value', async () => {
+            const cmd = new Command(TEST_ID + '.async', 'Name', 'Desc');
+            commandRegistry.registerCommand(cmd);
+            commandRegistry.registerHandler(cmd.id, {
+                execute: async () => Promise.resolve({ ok: true }),
+            });
+            const result = await commandRegistry.execute(cmd.id, {});
+            expect(result).toEqual({ ok: true });
+        });
+
+        it('uses first handler that canExecute', async () => {
             const cmd = new Command(TEST_ID + '.canExecute', 'Name', 'Desc');
             commandRegistry.registerCommand(cmd);
             commandRegistry.registerHandler(cmd.id, {
@@ -68,26 +78,26 @@ describe('CommandRegistry', () => {
             commandRegistry.registerHandler(cmd.id, {
                 execute: () => 'second',
             });
-            const result = commandRegistry.execute(cmd.id, {});
+            const result = await commandRegistry.execute(cmd.id, {});
             expect(result).toBe('second');
         });
 
-        it('sorts handlers by ranking and uses highest first', () => {
+        it('sorts handlers by ranking and uses highest first', async () => {
             const cmd = new Command(TEST_ID + '.ranking', 'Name', 'Desc');
             commandRegistry.registerCommand(cmd);
             commandRegistry.registerHandler(cmd.id, { execute: () => 'low', ranking: 0 });
             commandRegistry.registerHandler(cmd.id, { execute: () => 'high', ranking: 10 });
-            const result = commandRegistry.execute(cmd.id, {});
+            const result = await commandRegistry.execute(cmd.id, {});
             expect(result).toBe('high');
         });
 
-        it('rethrows when handler execute throws', () => {
+        it('rethrows when handler execute throws', async () => {
             const cmd = new Command(TEST_ID + '.throw', 'Name', 'Desc');
             commandRegistry.registerCommand(cmd);
             commandRegistry.registerHandler(cmd.id, {
                 execute: () => { throw new Error('handler error'); },
             });
-            expect(() => commandRegistry.execute(cmd.id, {})).toThrow('handler error');
+            await expect(commandRegistry.execute(cmd.id, {})).rejects.toThrow('handler error');
         });
     });
 
@@ -123,12 +133,12 @@ describe('CommandRegistry', () => {
     });
 
     describe('createAndRegisterCommand', () => {
-        it('registers command and handler together', () => {
+        it('registers command and handler together', async () => {
             const id = TEST_ID + '.createAndRegister';
             const handler: Handler = { execute: () => 'done' };
             commandRegistry.createAndRegisterCommand(id, 'N', 'D', [], handler);
             expect(commandRegistry.hasCommand(id)).toBe(true);
-            expect(commandRegistry.execute(id, {})).toBe('done');
+            expect(await commandRegistry.execute(id, {})).toBe('done');
         });
     });
 });

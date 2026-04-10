@@ -6,3 +6,4 @@
 - layout-standard-bottom-sidebar.svg: Licence=Project-internal, Author=Eclipse Docks Team
 - layout-standard-full.svg: Licence=Project-internal, Author=Eclipse Docks Team
 - mark-github.svg: Licence=MIT, Author=GitHub, Source=https://github.com/primer/octicons (icons/mark-github-16.svg)
+- file-plus.svg: Licence=Project-internal, Author=Eclipse Docks Team

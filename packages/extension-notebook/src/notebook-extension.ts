@@ -66,7 +66,7 @@ export default ({ editorRegistry, commandRegistry, contributionRegistry }: any) 
                 title: input.getWorkspacePath(),
                 data: input,
                 key: input.getWorkspacePath(),
-                icon: "docks jupyter",
+                icon: editorRegistry.getFileIcon(input.getName()),
                 state: {},
             } as EditorInput;
             editorInput.component = (id: string) => html`

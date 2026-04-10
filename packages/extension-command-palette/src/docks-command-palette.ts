@@ -2,11 +2,7 @@ import { html } from "lit";
 import { css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { createRef, ref, type Ref } from "lit/directives/ref.js";
-import { DocksPart } from "@eclipse-docks/core";
-import { subscribe } from "@eclipse-docks/core";
-import { commandRegistry, type ExecutionContext } from "@eclipse-docks/core";
-import { i18n } from "@eclipse-docks/core";
-import { toastError } from "@eclipse-docks/core";
+import { DocksWidget, commandRegistry, type ExecutionContext, i18n, toastError } from "@eclipse-docks/core";
 
 export const t = await i18n(import.meta.glob("./commandpalette*.json"));
 
@@ -14,7 +10,7 @@ export const t = await i18n(import.meta.glob("./commandpalette*.json"));
 export const TOPIC_OPEN_COMMAND_PALETTE = "commandpalette/open";
 
 @customElement("docks-command-palette")
-export class DocksCommandPalette extends DocksPart {
+export class DocksCommandPalette extends DocksWidget {
   @state()
   private inputValue: string = "";
 
@@ -41,8 +37,8 @@ export class DocksCommandPalette extends DocksPart {
   private boundDocumentClickHandler?: (e: MouseEvent) => void;
   private executionContext: ExecutionContext | undefined;
 
-  protected async doInitUI() {
-    subscribe(TOPIC_OPEN_COMMAND_PALETTE, () => {
+  protected doInitUI() {
+    this.subscribe(TOPIC_OPEN_COMMAND_PALETTE, () => {
       this.openPalette();
     });
 
@@ -178,13 +174,13 @@ export class DocksCommandPalette extends DocksPart {
       this.parameterValues = {};
       this.showParameterPrompt = true;
     } else {
-      this.executeCommandWithParams(command.id, {});
+      void this.executeCommandWithParams(command.id, {});
     }
   }
 
-  private executeCommandWithParams(commandId: string, params: any) {
+  private async executeCommandWithParams(commandId: string, params: any) {
     try {
-      commandRegistry.execute(commandId, { ...(this.executionContext || {}), params });
+      await commandRegistry.execute(commandId, { ...(this.executionContext || {}), params });
       this.closePalette();
       this.closeParameterPrompt();
     } catch (error: any) {
@@ -217,10 +213,10 @@ export class DocksCommandPalette extends DocksPart {
       return;
     }
 
-    this.executeCommandWithParams(this.selectedCommand.id, this.parameterValues);
+    void this.executeCommandWithParams(this.selectedCommand.id, this.parameterValues);
   }
 
-  protected renderContent() {
+  protected render() {
     return html`
       <wa-input
       appearance="filled"
@@ -307,6 +303,7 @@ export class DocksCommandPalette extends DocksPart {
   protected doClose() {
     if (this.boundDocumentClickHandler) {
       document.removeEventListener("click", this.boundDocumentClickHandler);
+      this.boundDocumentClickHandler = undefined;
     }
   }
 

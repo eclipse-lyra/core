@@ -85,6 +85,8 @@ export class DocksStandardLayout extends DocksContainer {
                     align-items: center;
                     border-bottom: solid var(--wa-border-width-s) var(--wa-color-neutral-border-loud);
                     flex-shrink: 0;
+                    position: relative;
+                    z-index: 100;
                 }
                 
                 docks-standard-layout .toolbar-bottom {

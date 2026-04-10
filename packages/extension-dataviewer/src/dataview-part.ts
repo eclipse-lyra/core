@@ -61,7 +61,7 @@ export class DataViewPart extends DocksPart {
       const fileName = `${safeTitle.replace(/[^a-zA-Z0-9-_]+/g, '_')}-${timestamp}.csv`;
       const targetDir = await filebrowserDialog('directory');
       if (!targetDir) return;
-      this.executeCommand('touch', {
+      await this.executeCommand('touch', {
         path: `${targetDir}/${fileName}`,
         contents: csv,
       });

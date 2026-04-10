@@ -1,6 +1,6 @@
 import { EDITOR_AREA_MAIN } from "./constants";
 import { subscribe } from "./events";
-import { TOPIC_WORKSPACE_CONNECTED } from "./filesys";
+import { File, TOPIC_WORKSPACE_CONNECTED } from "./filesys";
 import { DocksTabs } from "../parts/tabs";
 import { TabContribution, IconContribution, contributionRegistry, TOPIC_CONTRIBUTEIONS_CHANGED } from "./contributionregistry";
 import { rootContext } from "./di";
@@ -189,6 +189,17 @@ class EditorRegistry {
         return document.querySelector(`docks-tabs#${EDITOR_AREA_MAIN}`) as DocksTabs | null
     }
 
+    /**
+     * Tab label for the main editor area: basename for workspace files, otherwise the input title
+     * (e.g. virtual editors like settings or AI config keep their full title).
+     */
+    private tabLabelForEditorInput(editorInput: EditorInput): string {
+        if (editorInput.data instanceof File) {
+            return editorInput.data.getName();
+        }
+        return editorInput.title;
+    }
+
     async loadEditor(editorInput: EditorInput | any, preferredEditorId?: string) {
         if (!editorInput) {
             return
@@ -208,7 +219,7 @@ class EditorRegistry {
         await this.openTab({
             name: editorInput.key,
             editorId,
-            label: editorInput.title,
+            label: this.tabLabelForEditorInput(editorInput as EditorInput),
             icon: editorInput.icon,
             closable: true,
             component: editorInput.component
@@ -267,7 +278,8 @@ contributionRegistry.registerContribution<IconContribution>('system.icons', {
         'jsx': 'code',
         'json': 'file-code',
         'geojson': 'file-code',
-        'py': 'python',
+        'py': 'docks python',
+        'ipynb': 'docks jupyter',
         'html': 'code',
         'htm': 'code',
         'css': 'code',

@@ -129,7 +129,9 @@ contributionRegistry.registerContribution(SYSTEM_LAYOUTS, {
     component: dashboardShellTemplate,
     onShow() {
         requestAnimationFrame(() => {
-            commandRegistry.execute("open_view_as_editor", { params: { name: "dashboard-home" } });
+            void commandRegistry
+                .execute("open_view_as_editor", { params: { name: "dashboard-home" } })
+                .catch(() => {});
         });
     },
 });

@@ -17,7 +17,7 @@ editorRegistry.registerEditorInputHandler({
             title: input.getWorkspacePath(),
             data: input,
             key: input.getWorkspacePath(),
-            icon: "file-pen",
+            icon: editorRegistry.getFileIcon(input.getName()),
             state: {},
         } as EditorInput
         editorInput.component = (id: string) => html`
