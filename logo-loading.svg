@@ -1,0 +1,16 @@
+<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <!-- SMIL &lt;animate&gt; — https://www.w3schools.com/graphics/svg_animation.asp — also used by app splash &lt;img src="/logo-loading.svg"&gt; -->
+  <rect x="4" y="4" width="14" height="14" rx="3" fill="#cfe2ff" stroke="#000" stroke-width="1">
+    <animate attributeName="fill" values="#cfe2ff;#0d6efd;#cfe2ff" keyTimes="0;0.5;1" dur="2s" repeatCount="indefinite" begin="0s"/>
+  </rect>
+  <rect x="22" y="4" width="14" height="14" rx="3" fill="#cfe2ff" stroke="#000" stroke-width="1">
+    <animate attributeName="fill" values="#cfe2ff;#0d6efd;#cfe2ff" keyTimes="0;0.5;1" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+  </rect>
+  <rect x="4" y="22" width="14" height="14" rx="3" fill="#cfe2ff" stroke="#000" stroke-width="1">
+    <animate attributeName="fill" values="#cfe2ff;#0d6efd;#cfe2ff" keyTimes="0;0.5;1" dur="2s" repeatCount="indefinite" begin="1s"/>
+  </rect>
+  <rect x="22" y="22" width="14" height="14" rx="3" fill="#cfe2ff" stroke="#000" stroke-width="1">
+    <animate attributeName="fill" values="#cfe2ff;#0d6efd;#cfe2ff" keyTimes="0;0.5;1" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+  </rect>
+  <text x="48" y="26" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#0d6efd">Eclipse Docks</text>
+</svg>
