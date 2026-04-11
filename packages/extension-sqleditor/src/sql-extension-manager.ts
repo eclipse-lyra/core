@@ -2,10 +2,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { rootContext, taskService, toastError } from '@eclipse-docks/core';
-import type {
-  SqlDatabase,
-  SqlDatabaseExtensionInfo,
-} from '@eclipse-docks/extension-sqleditor';
+import type { SqlDatabase, SqlDatabaseExtensionInfo } from './sql-api';
 
 export interface SqlExtensionManagerOptions {
   db: SqlDatabase | null;

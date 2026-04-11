@@ -1,10 +1,6 @@
 import { customElement, property, state } from 'lit/decorators.js';
 import { DocksPart, type EditorInput, type EditorContentProvider, toastError, toastInfo, confirmDialog, publish, contributionRegistry, subscribe, unsubscribe, TOPIC_CONTRIBUTEIONS_CHANGED, taskService } from '@eclipse-docks/core';
-import type {
-  SqlAdapterContribution,
-  SqlConnectionInfo,
-  SqlDatabase,
-} from '@eclipse-docks/extension-sqleditor';
+import type { SqlAdapterContribution, SqlConnectionInfo, SqlDatabase } from './sql-api';
 import { sqlExtensionManagerService } from './sql-extension-manager';
 import { css, html } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
