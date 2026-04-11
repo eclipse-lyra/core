@@ -84,8 +84,14 @@ export class DocksSwUpdateIndicator extends DocksElement {
     this.updateAvailable = false;
   }
 
+  /**
+   * Show only when a new worker is waiting and an older version is already controlling
+   * the page (real update). Avoid treating the first install as an “update”.
+   */
   private syncUpdateState(registration: ServiceWorkerRegistration): void {
-    this.updateAvailable = Boolean(registration.waiting);
+    const waiting = Boolean(registration.waiting);
+    const hasActiveController = Boolean(navigator.serviceWorker.controller);
+    this.updateAvailable = waiting && hasActiveController;
   }
 
   private readonly onUpdateFound = (): void => {
@@ -93,6 +99,10 @@ export class DocksSwUpdateIndicator extends DocksElement {
     if (!registration) {
       return;
     }
+    // Fast installs (common in standalone PWA): worker may already be `waiting` when
+    // this runs, with `installing` already null — still an update if a controller exists.
+    this.syncUpdateState(registration);
+
     const installing = registration.installing;
     if (!installing) {
       return;
@@ -133,6 +143,13 @@ export class DocksSwUpdateIndicator extends DocksElement {
     this.periodicInterval = window.setInterval(() => {
       void registration.update().catch(() => {});
     }, 60 * 60 * 1000);
+
+    queueMicrotask(() => {
+      if (this.registration !== registration) {
+        return;
+      }
+      this.syncUpdateState(registration);
+    });
   }
 
   private onActivateClick(): void {
@@ -151,14 +168,27 @@ export class DocksSwUpdateIndicator extends DocksElement {
     }
 
     return html`
-      <wa-button
-        appearance="plain"
-        title="A new version is available. Click to reload."
-        aria-label="A new version is available. Reload to update."
-        @click=${this.onActivateClick}
+      <wa-animation
+        style="display: inline-flex; align-items: center;"
+        name="zoomIn"
+        duration="1400"
+        easing="ease-out"
+        iterations="Infinity"
+        ?play=${true}
       >
-        <wa-icon name="arrows-rotate" label=""></wa-icon>
-      </wa-button>
+        <wa-button
+          appearance="plain"
+          title="A new version is available. Click to reload."
+          aria-label="A new version is available. Reload to update."
+          @click=${this.onActivateClick}
+        >
+          <wa-icon
+            name="arrows-rotate"
+            label=""
+            style="color: var(--wa-color-danger-fill-loud)"
+          ></wa-icon>
+        </wa-button>
+      </wa-animation>
     `;
   }
 }

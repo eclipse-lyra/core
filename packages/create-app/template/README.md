@@ -23,4 +23,4 @@ Then open the URL shown in the terminal (e.g. https://localhost:5173/).
 
 ## PWA
 
-The app is set up with **vite-plugin-pwa** (injectManifest), a **service worker** at `packages/app/src/sw.ts`, and **`@eclipse-docks/extension-pwa`** for install / update controls in the bottom toolbar. Production `npm run build` emits the web app manifest and precached assets. To opt out, remove the PWA extension from `packages/app/src/main.ts` and `extensions.ts`, delete `src/sw.ts`, and strip the `VitePWA(...)` block from `packages/app/vite.config.ts`.
+The app is set up with **vite-plugin-pwa** (injectManifest), a **service worker** at `packages/app/src/sw.ts`, and **`@eclipse-docks/extension-pwa`** for install / update controls in the main center toolbar. Production `npm run build` emits the web app manifest and precached assets. To opt out, remove the PWA extension from `packages/app/src/main.ts` and `extensions.ts`, delete `src/sw.ts`, and strip the `VitePWA(...)` block from `packages/app/vite.config.ts`.
