@@ -44,7 +44,7 @@ describe('editorregistry', () => {
   });
 
   it('sorts icon contributions by priority and resolves icon', async () => {
-    getContributionsMock.mockReturnValue([
+    (getContributionsMock as any).mockReturnValue([
       { label: 'low', priority: 1, mappings: { py: 'file-low' } },
       { label: 'high', priority: 10, mappings: { py: 'file-high' } },
     ]);
