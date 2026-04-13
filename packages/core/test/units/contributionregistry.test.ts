@@ -142,17 +142,16 @@ describe('ContributionRegistry', () => {
       contributionRegistry.registerContribution(slotA, contrib);
 
       const publishCalls = vi.mocked(publish).mock.calls.filter(
-        (c) => c[0] === TOPIC_CONTRIBUTEIONS_CHANGED
+        ([topic]) => topic === TOPIC_CONTRIBUTEIONS_CHANGED
       );
-      const targetsPublished = publishCalls.map((c) => (c[1] as { target: string }).target);
+      const targetsPublished = publishCalls.map(([, payload]) => (payload as { target: string }).target);
       expect(targetsPublished).toContain(slotA);
       expect(targetsPublished).toContain(slotB);
-      const eventForB = publishCalls.find((c) => (c[1] as { target: string }).target === slotB)?.[1] as {
-        target: string;
-        contributions: Contribution[];
-      };
-      expect(eventForB.contributions).toHaveLength(1);
-      expect(eventForB.contributions[0].name).toBe('view.remapPublish');
+      const [, eventForB] =
+        publishCalls.find(([, payload]) => (payload as { target: string }).target === slotB) ?? [];
+      const eventPayload = eventForB as { target: string; contributions: Contribution[] } | undefined;
+      expect(eventPayload?.contributions).toHaveLength(1);
+      expect(eventPayload?.contributions[0].name).toBe('view.remapPublish');
     });
 
     it('getContributions aggregates from multiple original slots into one effective slot', () => {

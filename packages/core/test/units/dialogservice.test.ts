@@ -80,9 +80,8 @@ describe('dialogservice', () => {
     expect(dialogService.hasDialog('a')).toBe(true);
     expect(dialogService.hasDialog('b')).toBe(false);
 
-    const onContribChanged = subscribeMock.mock.calls.find(
-      (c) => c[0] === 'events/contributions/changed'
-    )?.[1];
+    const [, onContribChanged] =
+      subscribeMock.mock.calls.find(([topic]) => topic === 'events/contributions/changed') ?? [];
     expect(onContribChanged).toBeTypeOf('function');
     onContribChanged({ target: 'dialogs' });
     await Promise.resolve();
@@ -98,9 +97,8 @@ describe('dialogservice', () => {
     expect(dialogService.hasDialog('a')).toBe(true);
 
     const beforeCalls = getContributionsMock.mock.calls.length;
-    const onContribChanged = subscribeMock.mock.calls.find(
-      (c) => c[0] === 'events/contributions/changed'
-    )?.[1];
+    const [, onContribChanged] =
+      subscribeMock.mock.calls.find(([topic]) => topic === 'events/contributions/changed') ?? [];
     onContribChanged({ target: 'system.icons' });
     await Promise.resolve();
 

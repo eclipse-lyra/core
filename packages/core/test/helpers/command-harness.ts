@@ -13,11 +13,12 @@ export function createCommandHarness() {
     registerAllMock,
     toastErrorMock,
     getRegistered(commandId: string): RegisteredCommand {
-      const call = registerAllMock.mock.calls.find((c) => c[0]?.command?.id === commandId)?.[0];
-      if (!call) {
-        throw new Error(`Command not registered: ${commandId}`);
+      for (const [registration] of registerAllMock.mock.calls) {
+        if (registration?.command?.id === commandId) {
+          return registration as RegisteredCommand;
+        }
       }
-      return call as RegisteredCommand;
+      throw new Error(`Command not registered: ${commandId}`);
     },
   };
 }

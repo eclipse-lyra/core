@@ -112,9 +112,8 @@ describe('Marketplace + Extension integration flow', () => {
     expect(extensionRegistry.isEnabled('toggle.ext')).toBe(false);
 
     persisted.extensions = [{ id: 'toggle.ext', enabled: true }];
-    const settingsChangedHandler = subscribeMock.mock.calls.find(
-      (c) => c[0] === 'events/settings/changed'
-    )?.[1];
+    const [, settingsChangedHandler] =
+      subscribeMock.mock.calls.find(([topic]) => topic === 'events/settings/changed') ?? [];
     expect(settingsChangedHandler).toBeTypeOf('function');
     await settingsChangedHandler();
     await Promise.resolve();
