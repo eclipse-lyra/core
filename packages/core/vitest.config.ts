@@ -4,7 +4,11 @@ export default defineConfig({
   test: {
     environment: 'node',
     setupFiles: ['test/setup-indexeddb.ts'],
-    include: ['test/units/**/*.test.ts', 'test/integration/**/*.test.ts'],
+    include: [
+      'test/units/**/*.test.ts',
+      'test/integration/**/*.test.ts',
+      'test/components/**/*.test.ts',
+    ],
     exclude: ['node_modules', 'dist'],
     globals: false,
     coverage: {
