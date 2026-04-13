@@ -98,9 +98,10 @@ export const VIRTUAL_EXTENSION_IMPORTS = 'virtual:eclipse-docks-extension-import
 
 const RESOLVED_VIRTUAL_EXTENSION_IMPORTS = `\0${VIRTUAL_EXTENSION_IMPORTS}`;
 
-const DEFAULT_EXTENSION_PATTERN = /^@eclipse-docks\/extension-/;
+/** Unscoped `extension-*` or scoped `@namespace/extension-*` (any npm scope). */
+const DEFAULT_EXTENSION_PATTERN = /^(?:@[^/]+\/)?extension-/;
 
-const DEFAULT_PRIORITY_FIRST = ['@eclipse-docks/extension-pwa'];
+const DEFAULT_PRIORITY_FIRST = ['@eclipse-docks/extension-pwa', 'extension-pwa'];
 
 /** Matches Vite’s default app entry in index.html. */
 const MAIN_TS_SCRIPT_RE =
@@ -119,8 +120,8 @@ export interface ExtensionSideEffectsOptions {
    */
   priorityFirst?: string[];
   /**
-   * Which direct `dependencies` keys qualify as Eclipse Docks extensions.
-   * @default /^@eclipse-docks\/extension-/
+   * Which direct `dependencies` keys qualify as Docks-style extensions (`extension-*`, with an optional npm scope).
+   * @default /^(?:@[^/]+\/)?extension-/
    */
   packageNamePattern?: RegExp;
 }

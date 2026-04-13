@@ -16,8 +16,8 @@ const minimalCtx = {
 
 const defaultSideEffects = {
   exclude: new Set<string>(),
-  priorityFirst: ['@eclipse-docks/extension-pwa'],
-  pattern: /^@eclipse-docks\/extension-/,
+  priorityFirst: ['@eclipse-docks/extension-pwa', 'extension-pwa'],
+  pattern: /^(?:@[^/]+\/)?extension-/,
 };
 
 describe('listExtensionSideEffectPackages', () => {
@@ -58,6 +58,20 @@ describe('listExtensionSideEffectPackages', () => {
         priorityFirst: ['@eclipse-docks/extension-b', '@eclipse-docks/extension-a'],
       }),
     ).toEqual(['@eclipse-docks/extension-b', '@eclipse-docks/extension-a']);
+  });
+
+  it('matches unscoped extension-* and sorts with scoped packages', () => {
+    const deps = {
+      'extension-zebra': '*',
+      '@eclipse-docks/extension-a': '*',
+      'extension-mine': '*',
+      'not-extension': '*',
+    };
+    expect(listExtensionSideEffectPackages(deps, defaultSideEffects)).toEqual([
+      '@eclipse-docks/extension-a',
+      'extension-mine',
+      'extension-zebra',
+    ]);
   });
 });
 

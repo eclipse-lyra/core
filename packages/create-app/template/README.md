@@ -23,7 +23,7 @@ Then open the URL shown in the terminal (e.g. https://localhost:5173/).
 
 ## Extensions
 
-Add `@eclipse-docks/extension-*` packages to `packages/app/package.json`, then list them in `packages/app/src/main.ts` (`registerApp({ extensions: [...] })`). Vite loads their side-effect entry points automatically via `resolveDepVersionsPlugin()` in `vite.config.ts` (no separate `extensions.ts` file). Pass `extensionSideEffects: false` if you need to disable that.
+Add packages named `extension-*` or `@your-scope/extension-*` to `packages/app/package.json`, then list them in `packages/app/src/main.ts` (`registerApp({ extensions: [...] })`). Vite loads their side-effect entry points automatically via `resolveDepVersionsPlugin()` in `vite.config.ts` (no separate `extensions.ts` file). Pass `extensionSideEffects: false` if you need to disable that.
 
 ## PWA
 
