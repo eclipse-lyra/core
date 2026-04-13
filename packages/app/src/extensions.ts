@@ -10,6 +10,7 @@ import '@eclipse-docks/extension-pwa';
 import '@eclipse-docks/extension-ai-system';
 import '@eclipse-docks/extension-command-palette';
 import '@eclipse-docks/extension-command-shell';
+import '@eclipse-docks/extension-cereusdb';
 import '@eclipse-docks/extension-catalog';
 import '@eclipse-docks/extension-dataviewer';
 import '@eclipse-docks/extension-duckdb';
