@@ -15,21 +15,13 @@ async function loadWorkerFactoryForVariant(
 ): Promise<WorkerFactory> {
   switch (variant) {
     case 'minimal':
-      return (
-        await import('./cereusdb-worker-minimal.ts?worker')
-      ).default;
+      return (await import('./cereusdb-worker-minimal.ts?worker')).default;
     case 'standard':
-      return (
-        await import('./cereusdb-worker-standard.ts?worker')
-      ).default;
+      return (await import('./cereusdb-worker-standard.ts?worker')).default;
     case 'full':
-      return (
-        await import('./cereusdb-worker-full.ts?worker')
-      ).default;
+      return (await import('./cereusdb-worker-full.ts?worker')).default;
     case 'global':
-      return (
-        await import('./cereusdb-worker-global.ts?worker')
-      ).default;
+      return (await import('./cereusdb-worker-global.ts?worker')).default;
     default: {
       const neverVariant: never = variant;
       throw new Error(`Unknown CereusDB variant: ${String(neverVariant)}`);

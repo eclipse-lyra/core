@@ -1,10 +1,19 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
+import type { PluginOption } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+
+export type CreateDocksPwaPluginOptions = {
+  basePath: string;
+  appName: string;
+  appDescription: string;
+  maximumFileSizeToCacheInBytes: number;
+  shortName?: string;
+};
 
 const DEFAULT_GLOB_PATTERNS = ['**/*.{js,css,html,ico,png,svg,webp,woff2,woff,ttf,wasm}'];
 const DEFAULT_ASSETS = ['favicon.svg', 'logo.svg', 'logo-loading.svg'];
-const pwaSwPath = fileURLToPath(new URL('./sw.ts', import.meta.url));
+const pwaSwPath = fileURLToPath(import.meta.resolve('@eclipse-docks/extension-pwa/sw'));
 const pwaSwDir = path.dirname(pwaSwPath);
 const pwaSwFilename = path.basename(pwaSwPath);
 
@@ -14,7 +23,7 @@ export function createDocksPwaPlugin({
   appDescription,
   maximumFileSizeToCacheInBytes,
   shortName = appName,
-}) {
+}: CreateDocksPwaPluginOptions): PluginOption {
   return VitePWA({
     registerType: 'autoUpdate',
     injectRegister: 'inline',

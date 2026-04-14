@@ -1,4 +1,5 @@
 /** Shared surface used by each variant worker entry. */
+import pkg from '../package.json';
 
 export type CereusDbApi = {
   sqlJSON: (sql: string) => Promise<Record<string, unknown>[]>;
@@ -12,6 +13,25 @@ type CereusWorkerMessage = {
 };
 
 type CreateDb = () => Promise<CereusDbApi>;
+const DEFAULT_CEREUS_CDN_BASE = 'https://cdn.jsdelivr.net/npm';
+const CEREUS_DEPENDENCIES = (pkg.dependencies ?? {}) as Record<string, string>;
+
+export function cereusWasmUrl(
+  packageName:
+    | '@cereusdb/minimal'
+    | '@cereusdb/standard'
+    | '@cereusdb/full'
+    | '@cereusdb/global',
+): string {
+  const configuredBase = (self as unknown as { __cereusdbCdnBase?: string })
+    .__cereusdbCdnBase;
+  const base = (configuredBase && configuredBase.trim()) || DEFAULT_CEREUS_CDN_BASE;
+  const normalized = base.replace(/\/+$/, '');
+  const spec = (CEREUS_DEPENDENCIES[packageName] ?? '').trim();
+  const resolvedVersion = spec.replace(/^[~^><=\s]*/, '');
+  const packageRef = resolvedVersion ? `${packageName}@${resolvedVersion}` : packageName;
+  return `${normalized}/${packageRef}/dist/wasm/cereusdb_bg.wasm`;
+}
 
 export function runCereusWorker(createDb: CreateDb): void {
   let db: CereusDbApi | null = null;

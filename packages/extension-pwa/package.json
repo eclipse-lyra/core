@@ -9,8 +9,8 @@
       "import": "./dist/index.js"
     },
     "./vite": {
-      "types": "./src/vite-pwa-plugin.d.ts",
-      "import": "./src/vite-pwa-plugin.js"
+      "types": "./dist/vite-pwa-plugin.d.ts",
+      "import": "./dist/vite-pwa-plugin.js"
     },
     "./sw": {
       "import": "./src/sw.ts"
@@ -29,9 +29,7 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "src/sw.ts",
-    "src/vite-pwa-plugin.js",
-    "src/vite-pwa-plugin.d.ts"
+    "src/sw.ts"
   ],
   "scripts": {
     "build": "vite build"
