@@ -42,7 +42,6 @@ appLoaderService.registerApp(
       '@eclipse-docks/extension-command-palette',
       '@eclipse-docks/extension-command-shell',
       '@eclipse-docks/extension-catalog',
-      '@eclipse-docks/extension-cereusdb',
       '@eclipse-docks/extension-md-editor',
       '@eclipse-docks/extension-plain-editor',
       '@eclipse-docks/extension-media-viewer',

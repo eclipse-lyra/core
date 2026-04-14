@@ -137,6 +137,16 @@ class DuckdbSqlDatabase implements SqlDatabase {
     this.enabledExtensions.add(id);
   }
 
+  async readVersion(): Promise<string> {
+    try {
+      if (!this.current) return '';
+      const result = await this.current.runQuery('SELECT version()');
+      return String((result.rows[0]?.[0] as string) ?? '');
+    } catch {
+      return '';
+    }
+  }
+
   async close(): Promise<void> {
     if (!this.current) return;
     await this.current.close();

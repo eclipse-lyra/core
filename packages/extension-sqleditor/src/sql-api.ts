@@ -50,6 +50,9 @@ export interface SqlDatabase {
   selectConnection(id: string | null): Promise<void>;
   runQuery(sql: string): Promise<{ columns: string[]; rows: unknown[][] }>;
 
+  /** Optional engine/database version string for toolbar display after a connection is active. */
+  readVersion?(): Promise<string>;
+
   createConnection?(): Promise<SqlConnectionInfo | null>;
   deleteConnection?(id: string): Promise<void>;
 

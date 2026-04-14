@@ -80,6 +80,18 @@ class PgliteSqlDatabase implements SqlDatabase {
     this.currentId = id;
   }
 
+  async readVersion(): Promise<string> {
+    try {
+      if (!this.db) return '';
+      const result = await this.runQuery('SELECT version()');
+      const full = (result.rows[0]?.[0] as string) ?? '';
+      const short = full.match(/^PostgreSQL \d+\.\d+/)?.[0];
+      return short ?? full;
+    } catch {
+      return '';
+    }
+  }
+
   async runQuery(sql: string): Promise<{ columns: string[]; rows: unknown[][] }> {
     if (!this.db) {
       await this.selectConnection(null);

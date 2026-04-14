@@ -1,9 +1,16 @@
-import { customElement, property, state } from 'lit/decorators.js';
 import { DocksPart, type EditorInput, type EditorContentProvider, toastError, toastInfo, confirmDialog, publish, contributionRegistry, subscribe, unsubscribe, TOPIC_CONTRIBUTEIONS_CHANGED, taskService } from '@eclipse-docks/core';
+import {
+  createRef,
+  css,
+  customElement,
+  html,
+  property,
+  ref,
+  state,
+  styleMap,
+} from '@eclipse-docks/core/externals/lit';
 import type { SqlAdapterContribution, SqlConnectionInfo, SqlDatabase } from './sql-api';
 import { sqlExtensionManagerService } from './sql-extension-manager';
-import { css, html } from 'lit';
-import { createRef, ref } from 'lit/directives/ref.js';
 import { DocksMonacoWidget } from '@eclipse-docks/extension-monaco-editor/widget';
 
 const MAX_TAB_LABEL = 28;
@@ -40,8 +47,15 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
   @state()
   private availableConnections: SqlConnectionInfo[] = [];
 
+  /** `undefined` = user has not chosen a connection yet (placeholder). */
   @state()
-  private selectedConnectionId: string | null = null;
+  private selectedConnectionId: string | null | undefined = undefined;
+
+  @state()
+  private sqlEngineLoading = false;
+
+  @state()
+  private dbVersion: string | undefined = undefined;
 
   private widgetRef = createRef<DocksMonacoWidget>();
   private databases = new Map<string, SqlDatabase>();
@@ -50,7 +64,12 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
   protected async doInitUI() {
     const file = this.input!.data;
     const textContents = await file.getContents();
-    this.initialContent = textContents;
+    this.initialContent =
+      typeof textContents === 'string'
+        ? textContents
+        : textContents == null
+          ? ''
+          : String(textContents);
     this.initialUri = file.getWorkspacePath();
     this.unsubscribeContributionsToken = subscribe(TOPIC_CONTRIBUTEIONS_CHANGED, (event: { target?: string } | undefined) => {
       if (event?.target === 'system.sqladapters') {
@@ -58,8 +77,10 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
       }
     });
 
-    await this.refreshAdapters();
-    this.requestUpdate();
+    await this.updateComplete;
+    void this.refreshAdapters().catch((err) => {
+      toastError(err instanceof Error ? err.message : String(err));
+    });
   }
 
   private async refreshAdapters(): Promise<void> {
@@ -68,7 +89,8 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     if (!contributions.length) {
       this.selectedEngineId = null;
       this.availableConnections = [];
-      this.selectedConnectionId = null;
+      this.selectedConnectionId = undefined;
+      this.dbVersion = undefined;
       await this.updateComplete;
       return;
     }
@@ -104,31 +126,50 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const engineId = this.selectedEngineId;
     if (!engineId) {
       this.availableConnections = [];
-      this.selectedConnectionId = null;
+      this.selectedConnectionId = undefined;
+      this.dbVersion = undefined;
+      this.sqlEngineLoading = false;
       await this.updateComplete;
       return;
     }
-    const db = await this.getOrLoadDatabase(engineId);
-    if (!db) {
-      this.availableConnections = [];
-      this.selectedConnectionId = null;
+    this.sqlEngineLoading = true;
+    this.dbVersion = undefined;
+    this.requestUpdate();
+    try {
+      const db = await this.getOrLoadDatabase(engineId);
+      if (!db) {
+        this.availableConnections = [];
+        this.selectedConnectionId = undefined;
+        return;
+      }
+      const infos = await db.listConnections();
+      this.availableConnections = infos;
+      const currentId = db.currentConnectionId;
+      if (currentId !== null && currentId !== undefined) {
+        this.selectedConnectionId = currentId;
+        await this.updateDbVersion();
+      } else {
+        this.selectedConnectionId = undefined;
+      }
+    } finally {
+      this.sqlEngineLoading = false;
       await this.updateComplete;
-      return;
+      this.requestUpdate();
     }
-    const infos = await db.listConnections();
-    this.availableConnections = infos;
-    const currentId = db.currentConnectionId;
-    if (currentId !== null) {
-      this.selectedConnectionId = currentId;
-      await this.updateComplete;
-      return;
+  }
+
+  private async updateDbVersion(): Promise<void> {
+    this.dbVersion = undefined;
+    const engineId = this.selectedEngineId;
+    if (!engineId || this.selectedConnectionId === undefined) return;
+    const db = this.databases.get(engineId);
+    if (!db?.readVersion) return;
+    try {
+      this.dbVersion = await db.readVersion();
+    } catch {
+      this.dbVersion = undefined;
     }
-    const preferred = infos.find((info: SqlConnectionInfo) => info.isDefault) ?? infos[0];
-    this.selectedConnectionId = preferred ? preferred.id : null;
-    if (preferred) {
-      await db.selectConnection(preferred.id ?? null);
-    }
-    await this.updateComplete;
+    this.requestUpdate();
   }
 
   private async onEngineChange(e: Event): Promise<void> {
@@ -136,6 +177,8 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const value = select?.value ?? '';
     if (this.selectedEngineId === value) return;
     this.selectedEngineId = value || null;
+    this.selectedConnectionId = undefined;
+    this.dbVersion = undefined;
     await this.refreshConnections();
     this.requestUpdate();
   }
@@ -151,6 +194,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const db = await this.getOrLoadDatabase(engineId);
     if (!db) return;
     await db.selectConnection(next);
+    await this.updateDbVersion();
     this.requestUpdate();
   }
 
@@ -160,6 +204,8 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const value = e.detail?.item?.value ?? '';
     if (this.selectedEngineId === value) return;
     this.selectedEngineId = value || null;
+    this.selectedConnectionId = undefined;
+    this.dbVersion = undefined;
     await this.refreshConnections();
     this.requestUpdate();
   }
@@ -176,6 +222,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const db = await this.getOrLoadDatabase(engineId);
     if (!db) return;
     await db.selectConnection(next);
+    await this.updateDbVersion();
     this.requestUpdate();
   }
 
@@ -268,12 +315,9 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
       return;
     }
 
-    if (!this.selectedConnectionId && this.availableConnections.length) {
-      const preferred = this.availableConnections.find(
-        (info: SqlConnectionInfo) => info.isDefault,
-      ) ?? this.availableConnections[0];
-      this.selectedConnectionId = preferred.id;
-      await db.selectConnection(preferred.id ?? null);
+    if (this.selectedConnectionId === undefined) {
+      toastError('Select a connection');
+      return;
     }
 
     this.running = true;
@@ -316,6 +360,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     await this.refreshConnections();
     this.selectedConnectionId = info.id;
     await db.selectConnection(info.id ?? null);
+    await this.updateDbVersion();
     toastInfo(`Connection "${info.label}" created`);
     this.requestUpdate();
   }
@@ -323,6 +368,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
   private async deleteConnection(): Promise<void> {
     const engineId = this.selectedEngineId;
     if (!engineId) return;
+    if (this.selectedConnectionId === undefined) return;
     const db = await this.getOrLoadDatabase(engineId);
     if (!db || !db.deleteConnection) return;
     const id = this.selectedConnectionId;
@@ -342,8 +388,8 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
 
   private getCurrentConnectionLabel(): string | null {
     const id = this.selectedConnectionId;
+    if (id === undefined) return null;
     if (id === null) return 'In-memory';
-    if (!id) return null;
     const info = this.availableConnections.find((c) => c.id === id);
     return info?.label ?? id;
   }
@@ -351,6 +397,10 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
   private async openExtensionManager(): Promise<void> {
     const engineId = this.selectedEngineId;
     if (!engineId) return;
+    if (this.selectedConnectionId === undefined) {
+      toastError('Select a connection');
+      return;
+    }
     const db = await this.getOrLoadDatabase(engineId);
     if (!db || !db.listDbExtensions) {
       toastInfo('Extensions are not available for the selected SQL engine.');
@@ -376,8 +426,78 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const engineId = this.selectedEngineId;
     const dbForEngine = engineId ? this.databases.get(engineId) : null;
     const supportsExtensions = Boolean(dbForEngine?.listDbExtensions);
+    const connectionButtonLabel = this.sqlEngineLoading
+      ? 'Loading…'
+      : this.selectedConnectionId === undefined
+        ? 'Select connection'
+        : this.selectedConnectionId === null
+          ? 'In-memory'
+          : this.availableConnections.find(
+              (c) => c.id === this.selectedConnectionId,
+            )?.label ?? 'Connection';
+    const runDisabled =
+      this.running ||
+      this.sqlEngineLoading ||
+      this.selectedConnectionId === undefined;
+
+    const sqlConnected =
+      this.selectedConnectionId !== undefined && !this.sqlEngineLoading;
+    const statusTitle = this.sqlEngineLoading
+      ? 'Connecting…'
+      : sqlConnected
+        ? 'SQL engine connected'
+        : 'No connection selected';
+    const statusIconColor = this.sqlEngineLoading
+      ? 'var(--wa-color-warning-500)'
+      : sqlConnected
+        ? 'var(--wa-color-green-40)'
+        : 'var(--wa-color-red-40)';
+    const statusText = this.sqlEngineLoading
+      ? ''
+      : this.dbVersion
+        ? this.dbVersion
+        : sqlConnected
+          ? 'Connected'
+          : 'Not connected';
+
+    // Toolbar markup renders under docks-toolbar; host static styles do not apply there.
+    const sqlToolbarPartStyle = {
+      display: 'flex',
+      flex: '1',
+      minWidth: '0',
+      alignItems: 'center',
+      gap: 'var(--wa-space-2xs)',
+      flexWrap: 'nowrap',
+    } as const;
+    const sqlToolbarLeadStyle = {
+      display: 'flex',
+      flex: '1',
+      minWidth: '0',
+      flexWrap: 'nowrap',
+      alignItems: 'center',
+      gap: 'var(--wa-space-2xs)',
+      overflowX: 'auto',
+    } as const;
+    const sqlToolbarStatusStyle = {
+      flexShrink: '0',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      minHeight: '1.25rem',
+      whiteSpace: 'nowrap',
+    } as const;
+    const sqlToolbarVersionStyle = {
+      fontSize: '0.8rem',
+      opacity: '0.85',
+      whiteSpace: 'nowrap',
+      maxWidth: '14rem',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    } as const;
 
     return html`
+      <div class="sql-toolbar-part" style=${styleMap(sqlToolbarPartStyle)}>
+        <div class="sql-toolbar-lead" style=${styleMap(sqlToolbarLeadStyle)}>
       <wa-dropdown
         class="engine-select"
         placement="bottom-start"
@@ -423,13 +543,9 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
           size="small"
           with-caret
           title="Connection"
-          ?disabled=${!hasEngines || !hasConnections}
+          ?disabled=${!hasEngines || !hasConnections || this.sqlEngineLoading}
         >
-          ${this.selectedConnectionId === null
-            ? 'In-memory'
-            : this.availableConnections.find(
-                (c) => c.id === this.selectedConnectionId,
-              )?.label ?? 'Select connection'}
+          ${connectionButtonLabel}
         </wa-button>
         ${this.availableConnections.map(
           (info) => html`
@@ -461,6 +577,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
         size="small"
         appearance="plain"
         title="New connection"
+        ?disabled=${this.sqlEngineLoading}
         @click=${() => void this.createConnection()}
       >
         <wa-icon name="plus" label="New"></wa-icon>
@@ -471,7 +588,10 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
               size="small"
               appearance="plain"
               title="Manage extensions"
-              ?disabled=${!hasEngines || !hasConnections}
+              ?disabled=${!hasEngines ||
+              !hasConnections ||
+              this.selectedConnectionId === undefined ||
+              this.sqlEngineLoading}
               @click=${() => void this.openExtensionManager()}
             >
               <wa-icon name="puzzle-piece" label="Extensions"></wa-icon>
@@ -482,7 +602,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
       <wa-button
         size="small"
         appearance="plain"
-        ?disabled=${this.running}
+        ?disabled=${runDisabled}
         @click=${() => void this.runQuery(true)}
         title="Run selection only"
       >
@@ -492,13 +612,34 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
       <wa-button
         size="small"
         appearance="plain"
-        ?disabled=${this.running}
+        ?disabled=${runDisabled}
         @click=${() => void this.runQuery(false)}
         title="Run all SQL"
       >
         <wa-icon name="play" label="Run"></wa-icon>
         ${this.running ? 'Running…' : 'Run all'}
       </wa-button>
+        </div>
+      <span
+        class="sql-toolbar-status"
+        aria-live="polite"
+        title=${statusTitle}
+        style=${styleMap(sqlToolbarStatusStyle)}
+      >
+        <wa-icon
+          name="circle"
+          label="SQL engine status"
+          style=${styleMap({ color: statusIconColor })}
+        ></wa-icon>
+        ${this.sqlEngineLoading
+          ? html`<wa-spinner style="font-size: 0.9rem"></wa-spinner>`
+          : html`<span
+              class="sql-toolbar-version"
+              style=${styleMap(sqlToolbarVersionStyle)}
+              >${statusText}</span
+            >`}
+      </span>
+      </div>
     `;
   }
 
