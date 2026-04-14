@@ -57,6 +57,9 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
   @state()
   private dbVersion: string | undefined = undefined;
 
+  @state()
+  private sqlVersionLoading = false;
+
   private widgetRef = createRef<DocksMonacoWidget>();
   private databases = new Map<string, SqlDatabase>();
   private unsubscribeContributionsToken?: string;
@@ -91,6 +94,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
       this.availableConnections = [];
       this.selectedConnectionId = undefined;
       this.dbVersion = undefined;
+      this.sqlVersionLoading = false;
       await this.updateComplete;
       return;
     }
@@ -129,6 +133,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
       this.selectedConnectionId = undefined;
       this.dbVersion = undefined;
       this.sqlEngineLoading = false;
+      this.sqlVersionLoading = false;
       await this.updateComplete;
       return;
     }
@@ -160,14 +165,18 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
 
   private async updateDbVersion(): Promise<void> {
     this.dbVersion = undefined;
+    this.sqlVersionLoading = false;
     const engineId = this.selectedEngineId;
     if (!engineId || this.selectedConnectionId === undefined) return;
     const db = this.databases.get(engineId);
     if (!db?.readVersion) return;
+    this.sqlVersionLoading = true;
     try {
       this.dbVersion = await db.readVersion();
     } catch {
       this.dbVersion = undefined;
+    } finally {
+      this.sqlVersionLoading = false;
     }
     this.requestUpdate();
   }
@@ -179,6 +188,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     this.selectedEngineId = value || null;
     this.selectedConnectionId = undefined;
     this.dbVersion = undefined;
+    this.sqlVersionLoading = false;
     await this.refreshConnections();
     this.requestUpdate();
   }
@@ -189,6 +199,8 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const next = value === '' ? null : value;
     if (this.selectedConnectionId === next) return;
     this.selectedConnectionId = next;
+    this.dbVersion = undefined;
+    this.sqlVersionLoading = false;
     const engineId = this.selectedEngineId;
     if (!engineId) return;
     const db = await this.getOrLoadDatabase(engineId);
@@ -206,6 +218,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     this.selectedEngineId = value || null;
     this.selectedConnectionId = undefined;
     this.dbVersion = undefined;
+    this.sqlVersionLoading = false;
     await this.refreshConnections();
     this.requestUpdate();
   }
@@ -217,6 +230,8 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const next = value === '' ? null : value;
     if (this.selectedConnectionId === next) return;
     this.selectedConnectionId = next;
+    this.dbVersion = undefined;
+    this.sqlVersionLoading = false;
     const engineId = this.selectedEngineId;
     if (!engineId) return;
     const db = await this.getOrLoadDatabase(engineId);
@@ -438,21 +453,28 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
     const runDisabled =
       this.running ||
       this.sqlEngineLoading ||
+      this.sqlVersionLoading ||
       this.selectedConnectionId === undefined;
 
+    const dbSupportsVersion = Boolean(dbForEngine?.readVersion);
+    const awaitingVersion =
+      this.selectedConnectionId !== undefined &&
+      dbSupportsVersion &&
+      (this.sqlEngineLoading || this.sqlVersionLoading || !this.dbVersion);
+    const isConnecting = this.sqlEngineLoading || awaitingVersion;
     const sqlConnected =
-      this.selectedConnectionId !== undefined && !this.sqlEngineLoading;
-    const statusTitle = this.sqlEngineLoading
+      this.selectedConnectionId !== undefined && !isConnecting;
+    const statusTitle = isConnecting
       ? 'Connecting…'
       : sqlConnected
         ? 'SQL engine connected'
         : 'No connection selected';
-    const statusIconColor = this.sqlEngineLoading
+    const statusIconColor = isConnecting
       ? 'var(--wa-color-warning-500)'
       : sqlConnected
         ? 'var(--wa-color-green-40)'
         : 'var(--wa-color-red-40)';
-    const statusText = this.sqlEngineLoading
+    const statusText = isConnecting
       ? ''
       : this.dbVersion
         ? this.dbVersion
@@ -631,7 +653,7 @@ export class DocksSqlEditor extends DocksPart implements EditorContentProvider {
           label="SQL engine status"
           style=${styleMap({ color: statusIconColor })}
         ></wa-icon>
-        ${this.sqlEngineLoading
+        ${isConnecting
           ? html`<wa-spinner style="font-size: 0.9rem"></wa-spinner>`
           : html`<span
               class="sql-toolbar-version"

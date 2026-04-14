@@ -3,11 +3,39 @@ import type {
   SqlConnectionInfo,
   SqlDatabase,
 } from '@eclipse-docks/extension-sqleditor';
-import CereusQueryWorker from './cereusdb-query-worker.ts?worker';
 import type { CereusVariantId } from './cereusdb-variants';
 
 export type { CereusVariantId } from './cereusdb-variants';
 export { CEREUS_VARIANTS } from './cereusdb-variants';
+
+type WorkerFactory = new () => Worker;
+
+async function loadWorkerFactoryForVariant(
+  variant: CereusVariantId,
+): Promise<WorkerFactory> {
+  switch (variant) {
+    case 'minimal':
+      return (
+        await import('./cereusdb-worker-minimal.ts?worker&inline')
+      ).default;
+    case 'standard':
+      return (
+        await import('./cereusdb-worker-standard.ts?worker&inline')
+      ).default;
+    case 'full':
+      return (
+        await import('./cereusdb-worker-full.ts?worker&inline')
+      ).default;
+    case 'global':
+      return (
+        await import('./cereusdb-worker-global.ts?worker&inline')
+      ).default;
+    default: {
+      const neverVariant: never = variant;
+      throw new Error(`Unknown CereusDB variant: ${String(neverVariant)}`);
+    }
+  }
+}
 
 function rowsToMatrix(rows: Record<string, unknown>[]): {
   columns: string[];
@@ -53,7 +81,8 @@ export class CereusSqlDatabase implements SqlDatabase {
 
   private async spawnWorker(): Promise<void> {
     if (this.worker) return;
-    const w = new CereusQueryWorker();
+    const WorkerCtor = await loadWorkerFactoryForVariant(this.variant);
+    const w = new WorkerCtor();
     w.onmessage = (ev: MessageEvent) => {
       const { id, ok, error, rows, version } = ev.data as {
         id: number;
@@ -86,7 +115,6 @@ export class CereusSqlDatabase implements SqlDatabase {
         id,
         type,
         sql,
-        variant: this.variant,
       });
     });
   }

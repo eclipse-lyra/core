@@ -25,6 +25,9 @@ const outputPath = (id: string): string => {
 };
 
 export default defineConfig({
+  worker: {
+    format: 'es',
+  },
   plugins: [
     dts({
       outDir: 'dist',
