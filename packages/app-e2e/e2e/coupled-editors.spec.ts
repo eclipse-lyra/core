@@ -28,8 +28,8 @@ async function openAiConfigWithAuxOnAiAssistant(page: Page) {
     await expect(decoyPanel).not.toHaveAttribute('active');
     await expect(auxTabs.locator('wa-tab-group')).toHaveAttribute('active', 'aiview');
 
-    // Open AI Config editor in the main area (the id the real tab couples to).
-    const aiConfigButton = page.getByRole('button', { name: /AI Config/i });
+    // Open AI Config editor from the AI view toolbar (same command as former main-right button).
+    const aiConfigButton = page.locator('docks-aiview').getByRole('button', { name: /AI Settings/i });
     await expect(aiConfigButton).toBeVisible({ timeout: 30_000 });
     await aiConfigButton.click();
 

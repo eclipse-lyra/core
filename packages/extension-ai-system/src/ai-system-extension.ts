@@ -6,7 +6,7 @@ import type { HTMLContribution } from '@eclipse-docks/core';
 import { editorRegistry } from '@eclipse-docks/core';
 import type { EditorInput } from '@eclipse-docks/core';
 import { registerAll, appSettings } from '@eclipse-docks/core';
-import { TOOLBAR_BOTTOM, TOOLBAR_MAIN_RIGHT, SIDEBAR_AUXILIARY } from '@eclipse-docks/core';
+import { TOOLBAR_BOTTOM, SIDEBAR_AUXILIARY } from '@eclipse-docks/core';
 import { CID_AGENTS, KEY_AI_CONFIG } from './core/constants';
 import type { AgentContribution, AgentToolsConfig } from './core/interfaces';
 import type { AIConfig } from './core/types';
@@ -77,11 +77,6 @@ registerAll({
             editorRegistry.loadEditor(editorInput).then();
         }
     },
-    contribution: {
-        target: TOOLBAR_MAIN_RIGHT,
-        icon: 'robot',
-        label: 'AI Config'
-    }
 });
 
 rootContext.put('aiService', aiService);
