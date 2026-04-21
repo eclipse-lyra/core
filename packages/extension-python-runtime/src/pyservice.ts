@@ -26,10 +26,12 @@ export class PyEnv {
 
         worker.onerror = (ev: ErrorEvent) => {
             const where = [ev.message, ev.filename, ev.lineno, ev.colno].filter(Boolean).join(' ');
-            logger.error(
-                `Python worker failed (script load or uncaught exception)${where ? `: ${where}` : ''}`,
-                ev.error,
-            );
+            const head = `Python worker failed (script load or uncaught exception)${where ? `: ${where}` : ''}`;
+            if (ev.error instanceof Error) {
+                logger.error(head, ev.error);
+            } else {
+                logger.error(head);
+            }
         };
 
         await this.sendMessage('init', { vars: this.vars });

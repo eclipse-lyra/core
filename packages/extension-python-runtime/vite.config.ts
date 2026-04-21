@@ -15,6 +15,12 @@ const isExternal = (id: string): boolean => {
 export default defineConfig({
   worker: {
     format: 'es',
+    // Blob/module workers cannot resolve sibling chunk URLs; everything must be one file.
+    rolldownOptions: {
+      output: {
+        codeSplitting: false,
+      },
+    },
   },
   plugins: [
     dts({
